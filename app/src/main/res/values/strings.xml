@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GestionInventariosSyM</string>
+    <string name="tittle">Gestion inventarios SyM</string>
+    <string name="textViewUser">Ingrese su usuario:</string>
+    <string name="textViewPass">Contraseña:</string>
+    <string name="loginButton">Iniciar sesión</string>
 </resources>

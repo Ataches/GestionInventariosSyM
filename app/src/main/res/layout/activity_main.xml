@@ -1,18 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout android:orientation="vertical"
+    android:gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:paddingLeft="16dp"
+    android:paddingTop="50dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
 
     <TextView
+        android:id="@+id/textViewPrincipal"
+        android:text="@string/tittle"
+        android:textSize="30sp"
+        android:textColor="@color/tittleColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="40dp"
+        android:gravity="center_horizontal"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textViewUser"
+        android:text="@string/textViewUser"
+        android:textSize="18sp"
+        android:textColor="@color/tittleColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:inputType="text"
+        android:textColor="@color/subtittleColor"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:hint="Ej: Su nombre"
+        android:layout_marginBottom="40dp"
+        />
+
+    <TextView
+        android:id="@+id/textViewPass"
+        android:text="@string/textViewPass"
+        android:textSize="18sp"
+        android:textColor="@color/tittleColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:inputType="textPassword"
+        android:textColor="@color/subtittleColor"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:hint="****"
+        android:layout_marginBottom="40dp"
+        />
+    <Button
+        android:textStyle="bold"
+        android:text="@string/loginButton"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/rounded_button"
+        android:layout_width="169dp"
+        android:layout_height="40dp"
+        android:drawableLeft="@drawable/ic_login"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:drawablePadding="14dp"
+        />
+</LinearLayout>
