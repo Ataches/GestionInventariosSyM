@@ -4,4 +4,9 @@
     <string name="textViewUser">Ingrese su usuario:</string>
     <string name="textViewPass">Contraseña:</string>
     <string name="loginButton">Iniciar sesión</string>
+    <string name="welcome">Bienvenid@</string>
+    <string name="productList">Listado de productos</string>
+    <string name="salesRegistered">Ventas registradas</string>
+    <string name="customersList">Listado clientes</string>
+
 </resources>

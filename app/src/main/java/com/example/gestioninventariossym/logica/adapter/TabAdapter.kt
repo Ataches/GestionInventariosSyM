@@ -13,12 +13,14 @@ class TabAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
         return "Carrito"
     }
 
-    override fun getItem(position: Int): Fragment {
-        return Fragment()
-    }
-
     override fun getCount(): Int {
         return 2
+    }
+
+    override fun getItem(position: Int): Fragment {
+        if(position == 0)
+            return ProductsListFragment()
+        return CartFragment()
     }
 
 }
