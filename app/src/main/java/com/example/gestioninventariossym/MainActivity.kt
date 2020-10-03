@@ -1,10 +1,10 @@
 package com.example.gestioninventariossym
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import com.example.gestioninventariossym.logica.fragments.ProductsListFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.gestioninventariossym.logica.ProductsList
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,26 +13,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         textViewWelcome.text = getString(R.string.welcome)+" "+intent.getStringExtra("userName")
+        buttonProductList.setOnClickListener{
+            var intent = Intent(this, ProductsList::class.java)
+            startActivity(intent)
+        }
     }
     fun startProductList(view: View){
-        var transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, ProductsListFragment())
-        transaction.commit()
-        showHome()
+        var intent = Intent(view.context, ProductsList::class.java)
+        startActivity(intent)
     }
 
     fun startSalesRegistered(view:View){
-        var transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, ProductsListFragment())
-        transaction.commit()
+        var intent = Intent(this, ProductsList::class.java)
+        startActivity(intent)
     }
     fun startCustomersList(view:View){
-        var transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, ProductsListFragment())
-        transaction.commit()
+        var intent = Intent(this, ProductsList::class.java)
+        startActivity(intent)
     }
     private fun showHome() {
         constraintLayoutHome.setVisibility(View.INVISIBLE)
     }
-    fun goToCart(view: View) {}
 }
