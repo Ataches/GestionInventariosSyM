@@ -1,14 +1,25 @@
+<<<<<<< HEAD:app/src/main/java/com/example/stockmanagementsym/logic/ProductList.kt
 package com.example.stockmanagementsym.logic
+=======
+package com.example.stocmanagementsym.logic
+>>>>>>> temp:app/src/main/java/com/example/gestioninventariossym/logica/fragments/ProductsListFragment.kt
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+<<<<<<< HEAD:app/src/main/java/com/example/stockmanagementsym/logic/ProductList.kt
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.data.Product
 import com.example.stockmanagementsym.logic.adapter.ProductsListAdapter
 import com.example.stockmanagementsym.R
+=======
+import com.example.stocmanagementsym.MainActivity
+import com.example.stocmanagementsym.data.Product
+import com.example.stocmanagementsym.logic.adapter.ProductsListAdapter
+import com.example.stocmanagementsym.R
+>>>>>>> temp:app/src/main/java/com/example/gestioninventariossym/logica/fragments/ProductsListFragment.kt
 import kotlinx.android.synthetic.main.activty_products.*
 
 class ProductsList : AppCompatActivity(){

@@ -1,4 +1,8 @@
+<<<<<<< HEAD:app/src/main/java/com/example/stockmanagementsym/data/Product.kt
 package com.example.stockmanagementsym.data
+=======
+package com.example.stocmanagementsym.data
+>>>>>>> temp:app/src/main/java/com/example/gestioninventariossym/datos/Product.kt
 
 data class Product(
     private val name: String,

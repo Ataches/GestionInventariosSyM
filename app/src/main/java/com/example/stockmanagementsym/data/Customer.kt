@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package com.example.stockmanagementsym.data
+=======
+package com.example.stocmanagementsym.data
+>>>>>>> temp
 
 data class Customer(private val name: String, private val address: String, private val phone: String){
     private lateinit var customerList : List<Customer>

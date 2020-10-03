@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 package com.example.stockmanagementsym.logic
 
 import android.util.Log
 import com.example.stockmanagementsym.data.Product
+=======
+package com.example.stocmanagementsym.logic
+
+import android.util.Log
+import com.example.stocmanagementsym.data.Product
+>>>>>>> temp
 
 object CartObject {
     private var list:MutableList<Product> = mutableListOf()

@@ -1,13 +1,23 @@
+<<<<<<< HEAD
 package com.example.stockmanagementsym.logic
+=======
+package com.example.stocmanagementsym.logic
+>>>>>>> temp
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+<<<<<<< HEAD
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.adapter.CartAdapter
+=======
+import com.example.stocmanagementsym.MainActivity
+import com.example.stocmanagementsym.R
+import com.example.stocmanagementsym.logic.adapter.CartAdapter
+>>>>>>> temp
 import kotlinx.android.synthetic.main.activity_cart.*
 
 class Cart : AppCompatActivity(), CartListener{
