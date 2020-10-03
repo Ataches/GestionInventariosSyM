@@ -1,12 +1,12 @@
-package com.example.gestioninventariossym.logica.adapter
+package com.example.stocmanagementsym.logic.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gestioninventariossym.datos.Product
-import com.example.gestioninventariossym.logica.fragments.CartListener
-import com.example.gestioninventariossym.R
+import com.example.stocmanagementsym.data.Product
+import com.example.stocmanagementsym.logic.CartListener
+import com.example.stocmanagementsym.R
 
 class CartAdapter(var listProducts: List<Product>, var listener: CartListener): RecyclerView.Adapter<CartViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

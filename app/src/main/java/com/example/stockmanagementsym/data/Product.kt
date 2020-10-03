@@ -1,4 +1,4 @@
-package com.example.gestioninventariossym.datos
+package com.example.stocmanagementsym.data
 
 data class Product(
     private val name: String,
@@ -6,7 +6,7 @@ data class Product(
     private val description: String,
     private var idIconDrawable: Int,
     private var quantity: Int
-    ){
+){
 
     fun getNombre():String{
         return name
