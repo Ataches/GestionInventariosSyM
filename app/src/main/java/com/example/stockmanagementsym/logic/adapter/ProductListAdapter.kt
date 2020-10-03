@@ -1,11 +1,11 @@
-package com.example.gestioninventariossym.logica.adapter
+package com.example.stockmanagementsym.logic.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gestioninventariossym.datos.Product
-import com.example.gestioninventariossym.R
+import com.example.stockmanagementsym.data.Product
+import com.example.stockmanagementsym.R
 
 
 class ProductsListAdapter(var listProducts: List<Product>): RecyclerView.Adapter<ProductViewHolder>() {

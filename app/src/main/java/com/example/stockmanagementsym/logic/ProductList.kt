@@ -1,11 +1,14 @@
-package com.example.gestioninventariossym.logica
+package com.example.stockmanagementsym.logic
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gestioninventariossym.datos.Product
-import com.example.gestioninventariossym.logica.adapter.ProductsListAdapter
-import com.example.gestioninventariossym.R
+import com.example.stockmanagementsym.MainActivity
+import com.example.stockmanagementsym.data.Product
+import com.example.stockmanagementsym.logic.adapter.ProductsListAdapter
+import com.example.stockmanagementsym.R
 import kotlinx.android.synthetic.main.activty_products.*
 
 class ProductsList : AppCompatActivity(){
@@ -35,5 +38,14 @@ class ProductsList : AppCompatActivity(){
 
         }
 
+    }
+
+    fun goToCart(view: View) {
+        var intent = Intent(view.context, Cart::class.java)
+        startActivity(intent)
+    }
+    fun goToHome(view: View) {
+        var intent = Intent(view.context, MainActivity::class.java)
+        startActivity(intent)
     }
 }
