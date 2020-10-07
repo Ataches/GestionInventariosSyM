@@ -25,6 +25,7 @@
 
             <ImageView
                 android:id="@+id/imageViewProduct"
+                android:background="@color/colorAccent"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
@@ -34,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textViewNombre"
+                android:id="@+id/textViewName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -45,27 +46,30 @@
                 android:id="@+id/textViewDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="@id/textViewNombre"
-                app:layout_constraintTop_toBottomOf="@id/textViewNombre" />
+                app:layout_constraintLeft_toLeftOf="@id/textViewName"
+                app:layout_constraintTop_toBottomOf="@id/textViewName" />
 
             <TextView
-                android:id="@+id/textViewQtty"
+                android:id="@+id/textViewQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="@id/textViewDescription"
                 app:layout_constraintTop_toBottomOf="@id/textViewDescription" />
 
             <TextView
-                android:id="@+id/textViewPrecio"
+                android:id="@+id/textViewPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonCart"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toTopOf="@+id/editTextQuantity"/>
 
             <Button
-                android:background="@color/warningColor"
+                android:background="@color/colorAccent"
+                android:drawableBottom="@drawable/ic_add_cart"
+                android:paddingBottom="5dp"
                 android:id="@+id/buttonCart"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -74,6 +78,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
+            <EditText
+                android:hint="@string/editTextQuantity"
+                android:id="@+id/editTextQuantity"
+                android:inputType="number"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintEnd_toStartOf="@id/buttonCart"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPrice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

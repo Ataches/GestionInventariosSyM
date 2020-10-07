@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+    <fragment
+        android:id="@+id/productsList"
+        android:name="com.example.stockmanagementsym.logic.ProductsListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list" >
+        <action
+            android:id="@+id/action_productsList_to_cart"
+            app:destination="@id/cart" />
+        <action
+            android:id="@+id/action_productsList_to_home"
+            app:destination="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/cart"
+        android:name="com.example.stockmanagementsym.logic.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cart_to_productsList"
+            app:destination="@id/productsList" />
+        <action
+            android:id="@+id/action_cart_to_home"
+            app:destination="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.stockmanagementsym.Home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_cart"
+            app:destination="@id/cart" />
+        <action
+            android:id="@+id/action_home_to_productsList"
+            app:destination="@id/productsList" />
+        <action
+            android:id="@+id/action_home_to_salesRegistered"
+            app:destination="@id/salesRegistered" />
+        <action
+            android:id="@+id/action_home_to_customerListFragment"
+            app:destination="@id/customerListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/salesRegistered"
+        android:name="com.example.stockmanagementsym.logic.SalesRegistered"
+        android:label="fragment_sales_registered"
+        tools:layout="@layout/fragment_sales_registered" >
+        <action
+            android:id="@+id/action_salesRegistered_to_home"
+            app:destination="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/customerListFragment"
+        android:name="com.example.stockmanagementsym.logic.CustomerListFragment"
+        android:label="CustomerListFragment" >
+        <action
+            android:id="@+id/action_customerListFragment_to_home"
+            app:destination="@id/home" />
+    </fragment>
 </navigation>

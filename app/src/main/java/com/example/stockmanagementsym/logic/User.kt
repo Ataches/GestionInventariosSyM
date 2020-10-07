@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 package com.example.stockmanagementsym.logic
-=======
-package com.example.stocmanagementsym.logic
->>>>>>> temp
 
 object User {
     private lateinit var name: String

@@ -1,8 +1,4 @@
-<<<<<<< HEAD:app/src/main/java/com/example/stockmanagementsym/data/Product.kt
 package com.example.stockmanagementsym.data
-=======
-package com.example.stocmanagementsym.data
->>>>>>> temp:app/src/main/java/com/example/gestioninventariossym/datos/Product.kt
 
 data class Product(
     private val name: String,
@@ -12,14 +8,14 @@ data class Product(
     private var quantity: Int
 ){
 
-    fun getNombre():String{
+    fun getName():String{
         return name
     }
 
-    fun getPrecio():Int{
+    fun getPrice():Int{
         return price
     }
-    fun getDescripcion():String{
+    fun getDescription():String{
         return description
     }
 

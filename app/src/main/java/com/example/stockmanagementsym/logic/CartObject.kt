@@ -1,29 +1,25 @@
-<<<<<<< HEAD
 package com.example.stockmanagementsym.logic
 
-import android.util.Log
 import com.example.stockmanagementsym.data.Product
-=======
-package com.example.stocmanagementsym.logic
-
-import android.util.Log
-import com.example.stocmanagementsym.data.Product
->>>>>>> temp
 
 object CartObject {
     private var list:MutableList<Product> = mutableListOf()
-    fun addProduct(item:Product):String{
-        Log.d("PRUEBA", "Por ENTRA")
+    private lateinit var listSearched:List<Product>
 
-        for(itemList in list) {
-            Log.d("PRUEBA", "Por aqui paso "+itemList.getNombre()+" "+item.getNombre())
-            if (itemList.getNombre().equals(item.getNombre()))
-                return "El producto ya está en el carrito"
+    fun addProduct(item:Product):String{
+        if(item.getQuantity()==0) item.setQuantity(1)
+        listSearched = list.filter{
+            product -> product.getName().equals(item.getName())
         }
+        if(listSearched.isNotEmpty())
+            return "El producto ya está en el carrito"
         list.add(item)
         return "Producto añadido al carrito"
     }
     fun getList():MutableList<Product>{
         return list
+    }
+    fun getTotalPrice():Int{
+        return list.map{it.getPrice()*it.getQuantity()}.reduce{acc, it -> acc + it}
     }
 }

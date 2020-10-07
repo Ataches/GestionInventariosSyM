@@ -8,5 +8,10 @@
     <string name="productList">Listado de productos</string>
     <string name="salesRegistered">Ventas registradas</string>
     <string name="customersList">Listado clientes</string>
+    <string name="editTextQuantity">Units</string>
+    <string name="backHome">Volver al inicio</string>
+    <string name="backProductList">Volver a productos</string>
+    <string name="goToCart">Ir al carrito</string>
+    <string name="search">Buscar</string>
 
 </resources>

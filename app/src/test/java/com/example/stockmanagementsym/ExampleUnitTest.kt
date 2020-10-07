@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 package com.example.stockmanagementsym
-=======
-package com.example.stocmanagementsym
->>>>>>> temp
+
 
 import org.junit.Test
 
