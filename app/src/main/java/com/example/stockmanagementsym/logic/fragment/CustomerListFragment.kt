@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic
+package com.example.stockmanagementsym.logic.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.adapter.CustomerListAdapter
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 
-class CustomerListFragment : Fragment(){
+class CustomerListFragment : Fragment(), View.OnClickListener {
 
     private lateinit var navController: NavController
 
@@ -40,12 +40,12 @@ class CustomerListFragment : Fragment(){
         }
 
         navController = Navigation.findNavController(view)
-        buttonBackHome.setOnClickListener {
-            goToHome()
-        }
+        buttonBackHome.setOnClickListener (this)
     }
 
-    private fun goToHome(){
-        navController.navigate(R.id.action_customerListFragment_to_home)
+    override fun onClick(view: View) {
+        when(view.id){
+            R.id.buttonBackHome -> navController.navigate(R.id.action_customerListFragment_to_home)
+        }
     }
 }

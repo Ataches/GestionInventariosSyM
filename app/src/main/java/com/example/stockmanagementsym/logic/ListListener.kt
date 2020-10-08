@@ -1,5 +1,5 @@
 package com.example.stockmanagementsym.logic
 
-interface CartListener {
-    fun reloadCart()
+interface ListListener {
+    fun reloadList()
 }

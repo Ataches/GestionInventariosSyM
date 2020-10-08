@@ -1,8 +1,11 @@
-package com.example.stockmanagementsym.logic.adapter
+package com.example.stockmanagementsym.logic.view_holder
 
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.data.Customer
+import com.example.stockmanagementsym.data.Data
+import kotlinx.android.synthetic.main.item_client.*
 import kotlinx.android.synthetic.main.item_client.view.*
 
 class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -12,8 +15,12 @@ class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         itemView.textViewPhone.text = "Telefono: ${item.getPhone()}"
         itemView.textViewCity.text = "Ciudad: ${item.getCity()}"
         //itemView.buttonCart.setBackgroundDrawable(itemView.context.resources.getDrawable(item.getIDiconDrawable()))
-        itemView.buttonEdit.setOnClickListener{
-
+        itemView.buttonEditCustomer.setOnClickListener{
+            try{
+                Data.editCustomer()
+            }catch (e:Exception){
+                Toast.makeText(it.context, "Ingrese datos correctos", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

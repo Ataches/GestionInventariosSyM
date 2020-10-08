@@ -7,7 +7,7 @@
     android:id="@+id/constraintLayoutSales"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".logic.SalesRegistered">
+    tools:context=".logic.fragment.SalesRegisteredFragment">
     <Button
         android:id="@+id/buttonBackHome"
         android:drawableLeft="@drawable/ic_home"

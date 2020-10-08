@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.stocmanagementsym"
+        applicationId "com.example.stockmanagementsym"
         minSdkVersion 18
         targetSdkVersion 30
         versionCode 1
@@ -27,6 +27,7 @@ android {
 dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def nav_version = "2.3.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])

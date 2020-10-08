@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic
+package com.example.stockmanagementsym.logic.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,12 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.logic.ListListener
+import com.example.stockmanagementsym.data.CartObject
 import com.example.stockmanagementsym.logic.adapter.CartAdapter
 import kotlinx.android.synthetic.main.fragment_cart.*
 
-class CartFragment : Fragment(), CartListener{
+class CartFragment : Fragment(), ListListener, View.OnClickListener {
 
     private lateinit var adapter:CartAdapter
     private lateinit var navController: NavController
@@ -34,30 +36,22 @@ class CartFragment : Fragment(), CartListener{
         recyclerViewCart.adapter = adapter
         recyclerViewCart.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
-        reloadCart()
-
         navController = Navigation.findNavController(view)
-        buttonBackHome.setOnClickListener {
-            goToHome()
-        }
-        buttonProductList.setOnClickListener {
-            goToProductList()
-        }
+        buttonBackHome.setOnClickListener (this)
+        buttonProductList.setOnClickListener (this)
 
     }
     
-    override fun reloadCart() {
+    override fun reloadList() {
         adapter.listProducts = CartObject.getList()
-        textViewTotal.text = "Total: ${CartObject?.getTotalPrice()}"
+        textViewTotal.text = "Total: ${CartObject.getTotalPrice()}"
         adapter.notifyDataSetChanged()
-
     }
 
-    private fun goToHome(){
-        navController.navigate(R.id.action_cart_to_home)
-    }
-
-    private fun goToProductList(){
-        navController.navigate(R.id.action_cart_to_productsList)
+    override fun onClick(view: View) {
+        when(view.id){
+            R.id.buttonBackHome -> navController.navigate(R.id.action_cart_to_home)
+            R.id.buttonProductList -> navController.navigate(R.id.action_cart_to_productsList)
+        }
     }
 }

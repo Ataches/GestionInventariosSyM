@@ -1,15 +1,15 @@
-package com.example.stockmanagementsym.logic.adapter
+package com.example.stockmanagementsym.logic.view_holder
 
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.data.Product
-import com.example.stockmanagementsym.logic.CartObject
-import com.example.stockmanagementsym.logic.CartListener
+import com.example.stockmanagementsym.data.CartObject
+import com.example.stockmanagementsym.logic.ListListener
 import kotlinx.android.synthetic.main.item_cart.view.*
 
 class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(item: Product, listener:CartListener) {
+    fun bind(item: Product, listener:ListListener) {
         itemView.textViewName.text = item.getName()
         itemView.textViewPrice.text = "$"+item.getPrice()
         itemView.textViewDescription.text = item.getDescription()
@@ -17,14 +17,14 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.editTextQuantity.setText("""${item.getQuantity()}""")
         itemView.buttonRemoveCart.setOnClickListener{
             CartObject.getList().remove(item)
-            listener.reloadCart()
+            listener.reloadList()
         }
         itemView.buttonAddProdCart.setOnClickListener{
-            var quantity:Int = 1
+            var quantity:Int
             try {
-                quantity = itemView.editTextQuantity.text.toString().toUInt().toInt()
+                quantity = itemView.editTextQuantity.text.toString().toInt()
                 item.setQuantity(quantity)
-                listener.reloadCart()
+                listener.reloadList()
             }catch (e:Exception){
                 Toast.makeText(it.context, "Digite un numero correcto", Toast.LENGTH_SHORT).show()
             }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.Customer
+import com.example.stockmanagementsym.logic.view_holder.CustomerListViewHolder
 
 
 class CustomerListAdapter(var customerList: List<Customer>): RecyclerView.Adapter<CustomerListViewHolder>() {

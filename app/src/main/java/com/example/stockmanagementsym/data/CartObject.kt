@@ -1,6 +1,4 @@
-package com.example.stockmanagementsym.logic
-
-import com.example.stockmanagementsym.data.Product
+package com.example.stockmanagementsym.data
 
 object CartObject {
     private var list:MutableList<Product> = mutableListOf()
@@ -20,6 +18,8 @@ object CartObject {
         return list
     }
     fun getTotalPrice():Int{
-        return list.map{it.getPrice()*it.getQuantity()}.reduce{acc, it -> acc + it}
+        if(list.isNullOrEmpty())
+            return 0
+        return list.map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
     }
 }

@@ -59,16 +59,16 @@
         android:layout_marginBottom="40dp"
         />
     <Button
+        android:id="@+id/buttonLogin"
         android:textStyle="bold"
-        android:text="@string/loginButton"
+        android:text="@string/buttonLogin"
         android:textColor="@color/colorPrimaryDark"
         android:background="@drawable/rounded_button"
         android:layout_width="169dp"
         android:layout_height="40dp"
-        android:drawableLeft="@drawable/ic_login"
+        android:drawableStart="@drawable/ic_login"
         android:paddingLeft="14dp"
         android:paddingRight="14dp"
         android:drawablePadding="14dp"
-        android:onClick="login"
         />
 </LinearLayout>

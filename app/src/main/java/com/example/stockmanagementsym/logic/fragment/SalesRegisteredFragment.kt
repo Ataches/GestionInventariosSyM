@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic
+package com.example.stockmanagementsym.logic.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.navigation.Navigation
 import com.example.stockmanagementsym.R
 import kotlinx.android.synthetic.main.fragment_sales_registered.*
 
-class SalesRegistered : Fragment(){
+class SalesRegisteredFragment : Fragment(){
 
     private lateinit var navController: NavController
 
