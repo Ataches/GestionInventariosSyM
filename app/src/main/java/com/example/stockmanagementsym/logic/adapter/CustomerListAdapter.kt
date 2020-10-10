@@ -11,7 +11,7 @@ import com.example.stockmanagementsym.logic.view_holder.CustomerListViewHolder
 
 class CustomerListAdapter(var customerList: List<Customer>): RecyclerView.Adapter<CustomerListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerListViewHolder {
-        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_client, parent, false)
+        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_customer, parent, false)
         return CustomerListViewHolder(view)
     }
 

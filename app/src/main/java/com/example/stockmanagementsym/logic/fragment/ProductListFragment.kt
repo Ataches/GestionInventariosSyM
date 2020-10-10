@@ -4,15 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.stockmanagementsym.data.Product
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.CartObject
 import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.ListListener
 import com.example.stockmanagementsym.logic.adapter.ProductsListAdapter
@@ -39,7 +35,7 @@ class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
         navController = Navigation.findNavController(view)
         buttonBackHome.setOnClickListener (this)
         buttonCart.setOnClickListener (this)
-        buttonCreateProduct.setOnClickListener (this)
+        buttonNewProduct.setOnClickListener (this)
     }
 
     override fun onClick(view: View?) {
@@ -47,9 +43,9 @@ class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
             R.id.buttonSearch -> searchProduct()
             R.id.buttonBackHome -> navController.navigate(R.id.action_productsList_to_home)
             R.id.buttonCart -> navController.navigate(R.id.action_productsList_to_cart)
-            R.id.buttonCreateProduct -> {
+            R.id.buttonNewProduct -> {
                 var transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.nav_host_fragment, CreateProductFragment(this))
+                transaction.replace(R.id.nav_host_fragment, NewProductFragment(this))
                 transaction.commit()
             }
         }

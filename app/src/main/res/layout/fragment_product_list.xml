@@ -58,12 +58,12 @@
 
 
     <Button
-        android:id="@+id/buttonCreateProduct"
+        android:id="@+id/buttonNewProduct"
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_add_quantity"
         android:paddingBottom="5dp"
-        android:text="@string/createProduct"
+        android:text="@string/uploadProduct"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewProductList"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

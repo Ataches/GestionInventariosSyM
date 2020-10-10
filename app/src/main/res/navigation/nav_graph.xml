@@ -16,8 +16,8 @@
             android:id="@+id/action_productsList_to_home"
             app:destination="@id/home" />
         <action
-            android:id="@+id/action_productsList_to_createProductFragment"
-            app:destination="@id/createProductFragment" />
+            android:id="@+id/action_productsList_to_newProductFragment"
+            app:destination="@id/newProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/cart"
@@ -67,14 +67,14 @@
             app:destination="@id/home" />
     </fragment>
     <fragment
-        android:id="@+id/createProductFragment"
-        android:name="com.example.stockmanagementsym.logic.fragment.CreateProductFragment"
-        android:label="CreateProductFragment" >
+        android:id="@+id/newProductFragment"
+        android:name="com.example.stockmanagementsym.logic.fragment.NewProductFragment"
+        android:label="NewProductFragment" >
         <action
-            android:id="@+id/action_createProductFragment_to_home"
+            android:id="@+id/action_newProductFragment_to_home"
             app:destination="@id/home" />
         <action
-            android:id="@+id/action_createProductFragment_to_productsList"
+            android:id="@+id/action_newProductFragment_to_productsList"
             app:destination="@id/productsList" />
     </fragment>
 </navigation>

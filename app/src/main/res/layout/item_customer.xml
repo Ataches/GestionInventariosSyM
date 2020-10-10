@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonEditCustomer"
                 app:layout_constraintTop_toTopOf="@id/buttonEditCustomer"/>
 

@@ -13,12 +13,27 @@
     <string name="backProductList">Volver a productos</string>
     <string name="goToCart">Ir al carrito</string>
     <string name="search">Buscar</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Product -->
     <string name="productName">Nombre producto:</string>
     <string name="productQuantity">"Cantidad: "</string>
     <string name="productDesc">"Descripción: "</string>
     <string name="productPrice">"Precio: "</string>
-    <string name="createProduct">Crear producto</string>
+    <string name="uploadProduct">Registrar nuevo producto</string>
+    <string name="titleAlertCreateProd">Crear nuevo producto</string>
+    <string name="messageAlertCreatedProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
+    <string name="uploadCustomer">Registrar nuevo cliente</string>
+
+
+    <!-- Customer -->
+    <string name="customerName">"Nombre del cliente: "</string>
+    <string name="customerNameHint">Ejemplo: Carlos Perez</string>
+    <string name="customerAddress">"Dirección: "</string>
+    <string name="customerAddressHint">Ejemplo: Calle falsa 123</string>
+    <string name="customerPhoneHint">Ejemplo: 3203992323</string>
+    <string name="customerPhone">Número telefonico</string>
+    <string name="customerCity">Ciudad:</string>
+    <string name="customerCityHint">Ejemplo: Bogotá</string>
+    <string name="uploadCustomerCancel">Cancelar</string>
 
 </resources>

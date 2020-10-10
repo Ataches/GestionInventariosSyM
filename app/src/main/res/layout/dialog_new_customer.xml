@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="320dp"
+    android:layout_height="600dp"
+    >
+
+    <TextView
+        android:id="@+id/textViewCustomerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/customerName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/editTextCustomerName"
+        />
+
+    <EditText
+        android:id="@+id/editTextCustomerName"
+        android:inputType="textPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/customerNameHint"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewCustomerName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCustomerName"
+        app:layout_constraintBottom_toTopOf="@id/textViewAddress"
+        />
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/customerAddress"
+        app:layout_constraintStart_toStartOf="@+id/editTextCustomerName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCustomerName"
+        app:layout_constraintBottom_toTopOf="@id/editTextCustomerAddress"
+        />
+
+    <EditText
+        android:id="@+id/editTextCustomerAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/customerAddressHint"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewAddress"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddress"
+        app:layout_constraintBottom_toTopOf="@id/textViewPhone"
+        />
+
+    <TextView
+        android:id="@+id/textViewPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/customerPhone"
+        app:layout_constraintStart_toStartOf="@+id/editTextCustomerAddress"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCustomerAddress"
+        app:layout_constraintBottom_toTopOf="@id/editTextPhone"
+        />
+
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:inputType="phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/customerPhoneHint"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewPhone"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPhone"
+        app:layout_constraintBottom_toTopOf="@id/textViewCity"
+        />
+
+    <TextView
+        android:id="@+id/textViewCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/customerCity"
+        app:layout_constraintStart_toStartOf="@+id/editTextPhone"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPhone"
+        app:layout_constraintBottom_toTopOf="@id/editTextCity"
+        />
+
+    <EditText
+        android:id="@+id/editTextCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/customerCityHint"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewCity"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCity"
+        app:layout_constraintBottom_toTopOf="@id/buttonNewProduct"
+        />
+
+    <Button
+        android:id="@+id/buttonNewProduct"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_edit"
+        android:text="@string/uploadCustomer"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNewProductCancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/buttonNewProductCancel"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/uploadCustomerCancel"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

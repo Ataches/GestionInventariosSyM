@@ -30,40 +30,45 @@
         android:id="@+id/textViewProductName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="40dp"
         android:text="@string/productName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonProductList" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonProductList"
+        app:layout_constraintBottom_toTopOf="@id/editTextProductName"
+        />
 
     <EditText
         android:id="@+id/editTextProductName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewProductName"
-        app:layout_constraintEnd_toStartOf="@+id/buttonBackHome"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewProductName"
+        android:hint="Ejemplo: Inyector"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewProductName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProductName"
+        app:layout_constraintBottom_toTopOf="@id/textViewProductPrice"
         />
 
     <TextView
         android:id="@+id/textViewProductPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:text="@string/productPrice"
-        app:layout_constraintStart_toStartOf="@+id/textViewProductName"
-        app:layout_constraintTop_toBottomOf="@+id/textViewProductName" />
+        app:layout_constraintStart_toStartOf="@+id/editTextProductName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProductName"
+        app:layout_constraintBottom_toTopOf="@id/editTextProductPrice"
+        />
 
     <EditText
         android:id="@+id/editTextProductPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewProductPrice"
-        app:layout_constraintEnd_toStartOf="@+id/buttonBackHome"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewProductPrice"
+        android:hint="Ejemplo: 20000"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewProductPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProductPrice"
+        app:layout_constraintBottom_toTopOf="@id/textViewProductDesc"
         />
 
     <TextView
@@ -71,45 +76,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/productDesc"
-        android:layout_marginTop="40dp"
-        app:layout_constraintStart_toStartOf="@+id/textViewProductPrice"
-        app:layout_constraintTop_toBottomOf="@+id/textViewProductPrice" />
+        app:layout_constraintStart_toStartOf="@+id/editTextProductPrice"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProductPrice"
+        app:layout_constraintBottom_toTopOf="@id/editTextProductDesc"
+        />
 
     <EditText
         android:id="@+id/editTextProductDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewProductDesc"
-        app:layout_constraintEnd_toStartOf="@+id/buttonBackHome"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewProductDesc" />
+        android:hint="Ejemplo: Pieza de repuesto para autos "
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewProductDesc"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProductDesc"
+        app:layout_constraintBottom_toTopOf="@id/textViewProductQuantity"
+        />
 
     <TextView
         android:id="@+id/textViewProductQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:text="@string/productQuantity"
-        app:layout_constraintStart_toStartOf="@+id/textViewProductDesc"
-        app:layout_constraintTop_toBottomOf="@+id/textViewProductDesc" />
+        app:layout_constraintStart_toStartOf="@+id/editTextProductDesc"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProductDesc"
+        app:layout_constraintBottom_toTopOf="@id/editTextProductQuantity"
+        />
 
     <EditText
         android:id="@+id/editTextProductQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewProductQuantity"
-        app:layout_constraintEnd_toStartOf="@+id/buttonBackHome"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewProductQuantity"
+        android:hint="Ejemplo: 20"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewProductQuantity"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProductQuantity"
+        app:layout_constraintBottom_toTopOf="@id/buttonNewProduct"
         />
+
     <Button
-        android:id="@+id/buttonCreateProduct"
-        android:layout_width="180dp"
+        android:id="@+id/buttonNewProduct"
+        android:layout_width="150dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_edit"
-        android:text="@string/createProduct"
-        app:layout_constraintTop_toBottomOf="@id/textViewProductQuantity"
+        android:text="@string/uploadProduct"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
