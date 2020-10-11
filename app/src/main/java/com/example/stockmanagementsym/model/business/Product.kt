@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.data
+package com.example.stockmanagementsym.model.business
 
 data class Product(
     private val name: String,

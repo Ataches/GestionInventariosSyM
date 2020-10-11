@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.Data
-import com.example.stockmanagementsym.data.Product
+import com.example.stockmanagementsym.model.data.Data
+import com.example.stockmanagementsym.model.business.Product
 import com.example.stockmanagementsym.logic.ListListener
 import kotlinx.android.synthetic.main.fragment_new_product.*
 
@@ -52,8 +52,8 @@ class NewProductFragment(private var listListener: ListListener): Fragment(), Vi
         "Description" to editTextProductDesc.text.toString(),"Image" to R.drawable.ic_login.toString(), "Quantity" to editTextProductQuantity.text.toString())
 
         val builder = AlertDialog.Builder(view.context)
-        builder.setTitle(getString(R.string.titleAlertCreateProd))
-        val message = getString(R.string.messageAlertCreatedProd)+
+        builder.setTitle(getString(R.string.titleAlertNewProd))
+        val message = getString(R.string.messageAlertNewProd)+
                              "\n"+dataProduct
         builder.setPositiveButton("Si"){ _,_ ->
             newProduct(view, dataProduct)
@@ -68,8 +68,10 @@ class NewProductFragment(private var listListener: ListListener): Fragment(), Vi
 
     private fun newProduct(view: View, dataProduct:Map<String,String>) {
         try{
-            Data.addProduct(Product(dataProduct.getValue("Name"),dataProduct.getValue("Price").toInt(),
-                                    dataProduct.getValue("Description"),dataProduct.getValue("Image").toInt(),dataProduct.getValue("Quantity").toInt()))
+            Data.addProduct(
+                Product(dataProduct.getValue("Name"),dataProduct.getValue("Price").toInt(),
+                                    dataProduct.getValue("Description"),dataProduct.getValue("Image").toInt(),dataProduct.getValue("Quantity").toInt())
+            )
             listListener.reloadList()
             Toast.makeText(view.context, "Producto registrado con exito", Toast.LENGTH_SHORT).show()
             goProductList()

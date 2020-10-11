@@ -1,13 +1,14 @@
-package com.example.stockmanagementsym.data
+package com.example.stockmanagementsym.model.data
+
+import com.example.stockmanagementsym.model.business.Product
 
 object CartObject {
     private var list:MutableList<Product> = mutableListOf()
     private lateinit var listSearched:List<Product>
 
-    fun addProduct(item:Product):String{
-        if(item.getQuantity()==0) item.setQuantity(1)
+    fun addProduct(item: Product):String{
         listSearched = list.filter{
-            product -> product.getName().equals(item.getName())
+            product -> product.getName() == item.getName()
         }
         if(listSearched.isNotEmpty())
             return "El producto ya está en el carrito"
@@ -21,5 +22,9 @@ object CartObject {
         if(list.isNullOrEmpty())
             return 0
         return list.map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
+    }
+
+    fun clearCart() {
+        list = mutableListOf()
     }
 }

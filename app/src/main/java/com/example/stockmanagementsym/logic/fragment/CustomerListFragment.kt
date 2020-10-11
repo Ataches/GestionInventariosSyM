@@ -11,8 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.Customer
-import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.model.business.Customer
+import com.example.stockmanagementsym.model.data.Data
 import com.example.stockmanagementsym.logic.adapter.CustomerListAdapter
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.fragment_customer_list.*
@@ -22,6 +22,7 @@ class CustomerListFragment : Fragment(), View.OnClickListener {
 
     private lateinit var navController: NavController
     private lateinit var adapter:CustomerListAdapter
+    private lateinit var customer:Customer
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,11 +58,14 @@ class CustomerListFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         when(view.id){
             R.id.buttonBackHome -> navController.navigate(R.id.action_customerListFragment_to_home)
-            R.id.buttonCreateCustomer -> dialogNewCustomer(view)
+            R.id.buttonCreateCustomer -> {
+                dialogNewCustomer(view, layoutInflater)
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
-    private fun dialogNewCustomer(view: View) {
+    fun dialogNewCustomer(view: View, layoutInflater: LayoutInflater):Customer {
         val viewNewCustomer = layoutInflater.inflate(R.layout.dialog_new_customer, null, false)
         var dialog: Dialog = Dialog(view.context)
 
@@ -69,35 +73,24 @@ class CustomerListFragment : Fragment(), View.OnClickListener {
         dialog.show()
 
         viewNewCustomer.buttonNewProduct.setOnClickListener {
-            val dataProduct = mapOf(
-                "Name" to viewNewCustomer.editTextCustomerName.text.toString(),
-                "Address" to viewNewCustomer.editTextCustomerAddress.text.toString(),
-                "Phone" to viewNewCustomer.editTextPhone.text.toString(),
-                "City" to viewNewCustomer.editTextCity.text.toString()
+
+            customer = Customer(
+                viewNewCustomer.editTextCustomerName.text.toString(),
+                viewNewCustomer.editTextCustomerAddress.text.toString(),
+                viewNewCustomer.editTextPhone.text.toString(),
+                viewNewCustomer.editTextCity.text.toString()
             )
-            newCustomer(view, dataProduct)
+            try{
+                Data.addCustomer(customer)
+                Toast.makeText(view.context, "Cliente registrado con exito", Toast.LENGTH_SHORT).show()
+            }catch (e: Exception){
+                Toast.makeText(view.context, "Ingrese datos correctos", Toast.LENGTH_SHORT).show()
+            }
             dialog.dismiss()
         }
         viewNewCustomer.buttonNewProductCancel.setOnClickListener {
             dialog.dismiss()
         }
-    }
-    private fun returnView(view: View){
-        val viewNewCustomer = layoutInflater.inflate(R.layout.fragment_customer_list, null)
-
-    }
-    private fun newCustomer(view: View, dataProduct: Map<String, String>) {
-        try{
-            Data.addCustomer(
-                Customer(
-                    dataProduct.getValue("Name"), dataProduct.getValue("Address"),
-                    dataProduct.getValue("Phone"), dataProduct.getValue("City")
-                )
-            )
-            adapter.notifyDataSetChanged()
-            Toast.makeText(view.context, "Cliente registrado con exito", Toast.LENGTH_SHORT).show()
-        }catch (e: Exception){
-            Toast.makeText(view.context, "Ingrese datos correctos", Toast.LENGTH_SHORT).show()
-        }
+        return customer
     }
 }

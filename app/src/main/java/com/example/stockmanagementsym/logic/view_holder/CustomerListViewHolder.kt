@@ -3,8 +3,8 @@ package com.example.stockmanagementsym.logic.view_holder
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.data.Customer
-import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.model.business.Customer
+import com.example.stockmanagementsym.model.data.Data
 import kotlinx.android.synthetic.main.item_customer.view.*
 
 class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

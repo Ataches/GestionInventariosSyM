@@ -109,7 +109,7 @@
         android:id="@+id/buttonNewProductCancel"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="@string/uploadCustomerCancel"
+        android:text="@string/Cancel"
         android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

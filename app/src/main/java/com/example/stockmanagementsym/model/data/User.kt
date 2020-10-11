@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.data
+package com.example.stockmanagementsym.model.data
 
 object User {
     private lateinit var name: String

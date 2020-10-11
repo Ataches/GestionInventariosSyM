@@ -3,8 +3,8 @@ package com.example.stockmanagementsym.logic.view_holder
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.data.Product
-import com.example.stockmanagementsym.data.CartObject
+import com.example.stockmanagementsym.model.business.Product
+import com.example.stockmanagementsym.model.data.CartObject
 import com.example.stockmanagementsym.logic.ListListener
 import kotlinx.android.synthetic.main.item_cart.view.*
 

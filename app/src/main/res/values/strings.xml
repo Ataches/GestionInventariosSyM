@@ -1,13 +1,19 @@
 <resources>
     <string name="app_name">GestionInventariosSyM</string>
     <string name="tittle">Gestion inventarios SyM</string>
+
+    <!-- Login -->
     <string name="textViewUser">Ingrese su usuario:</string>
     <string name="textViewPass">Contraseña:</string>
     <string name="buttonLogin">Iniciar sesión</string>
+
+    <!-- Fragment home -->
     <string name="welcome">Bienvenid@</string>
-    <string name="productList">Listado de productos</string>
+    <string name="productList">Listado de productos y registro de ventas</string>
     <string name="salesRegistered">Ventas registradas</string>
     <string name="customersList">Listado clientes</string>
+
+    <!-- Fragments text -->
     <string name="editTextQuantity">Units</string>
     <string name="backHome">Volver al inicio</string>
     <string name="backProductList">Volver a productos</string>
@@ -20,12 +26,12 @@
     <string name="productDesc">"Descripción: "</string>
     <string name="productPrice">"Precio: "</string>
     <string name="uploadProduct">Registrar nuevo producto</string>
-    <string name="titleAlertCreateProd">Crear nuevo producto</string>
-    <string name="messageAlertCreatedProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
+    <string name="titleAlertNewProd">Crear nuevo producto</string>
+    <string name="messageAlertNewProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
     <string name="uploadCustomer">Registrar nuevo cliente</string>
 
-
     <!-- Customer -->
+    <string name="customer">Cliente</string>
     <string name="customerName">"Nombre del cliente: "</string>
     <string name="customerNameHint">Ejemplo: Carlos Perez</string>
     <string name="customerAddress">"Dirección: "</string>
@@ -34,6 +40,13 @@
     <string name="customerPhone">Número telefonico</string>
     <string name="customerCity">Ciudad:</string>
     <string name="customerCityHint">Ejemplo: Bogotá</string>
-    <string name="uploadCustomerCancel">Cancelar</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="uploadSale">Nueva venta</string>
+    <string name="titleAlertNewSale">Registrar nueva venta</string>
+    <string name="messageAlertNewSale">¿Desea reistrar una nueva venta con los siguientes productos?:</string>
+    <string name="saleCustomerName">Seleccione el cliente</string>
+    <string name="dateSelected">No se ha seleccionado fecha de venta</string>
+    <string name="date">Fecha</string>
+    <string name="selectDate">Seleccionar fecha</string>
 
 </resources>

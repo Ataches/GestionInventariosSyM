@@ -9,9 +9,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.ListListener
 import com.example.stockmanagementsym.logic.adapter.ProductsListAdapter
+import com.example.stockmanagementsym.model.data.Data
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : Fragment(), ListListener, View.OnClickListener {

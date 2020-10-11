@@ -1,11 +1,11 @@
 package com.example.stockmanagementsym
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
-import com.example.stockmanagementsym.data.User
+import androidx.appcompat.app.AppCompatActivity
+import com.example.stockmanagementsym.model.data.User
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {

@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/salesRegistered"
-        android:name="com.example.stockmanagementsym.logic.fragment.SalesRegisteredFragment"
+        android:name="com.example.stockmanagementsym.logic.fragment.SaleRegisteredFragment"
         android:label="fragment_sales_registered"
         tools:layout="@layout/fragment_sales_registered" >
         <action
