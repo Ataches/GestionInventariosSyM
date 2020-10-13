@@ -6,7 +6,7 @@
     app:startDestination="@id/home">
     <fragment
         android:id="@+id/productsList"
-        android:name="com.example.stockmanagementsym.logic.fragment.ProductListFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.ProductListFragment"
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/cart"
-        android:name="com.example.stockmanagementsym.logic.fragment.CartFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/home"
-        android:name="com.example.stockmanagementsym.logic.fragment.HomeFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/salesRegistered"
-        android:name="com.example.stockmanagementsym.logic.fragment.SaleRegisteredFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.SaleRegisteredFragment"
         android:label="fragment_sales_registered"
         tools:layout="@layout/fragment_sales_registered" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/customerListFragment"
-        android:name="com.example.stockmanagementsym.logic.fragment.CustomerListFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.CustomerListFragment"
         android:label="CustomerListFragment" >
         <action
             android:id="@+id/action_customerListFragment_to_home"
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/newProductFragment"
-        android:name="com.example.stockmanagementsym.logic.fragment.NewProductFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.NewProductFragment"
         android:label="NewProductFragment" >
         <action
             android:id="@+id/action_newProductFragment_to_home"

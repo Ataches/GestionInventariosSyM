@@ -1,18 +1,16 @@
-package com.example.stockmanagementsym.logic.fragment
+package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.logic.adapter.SaleListAdapter
-import com.example.stockmanagementsym.model.data.Data
+import com.example.stockmanagementsym.presentation.adapter.SaleListAdapter
+import com.example.stockmanagementsym.data.Data
 import kotlinx.android.synthetic.main.fragment_sales_registered.*
 
 class SaleRegisteredFragment : Fragment(), View.OnClickListener {

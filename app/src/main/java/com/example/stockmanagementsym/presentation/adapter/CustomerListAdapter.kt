@@ -1,12 +1,12 @@
-package com.example.stockmanagementsym.logic.adapter
+package com.example.stockmanagementsym.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.model.business.Customer
-import com.example.stockmanagementsym.logic.view_holder.CustomerListViewHolder
+import com.example.stockmanagementsym.logic.business.Customer
+import com.example.stockmanagementsym.presentation.view_holder.CustomerListViewHolder
 
 
 class CustomerListAdapter(var customerList: List<Customer>): RecyclerView.Adapter<CustomerListViewHolder>() {

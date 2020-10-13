@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic.fragment
+package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.logic.ListListener
-import com.example.stockmanagementsym.logic.adapter.ProductsListAdapter
-import com.example.stockmanagementsym.model.data.Data
+import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
+import com.example.stockmanagementsym.data.Data
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
@@ -31,8 +30,10 @@ class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
         adapter = ProductsListAdapter(Data.getProductList())
         recyclerViewProductList.adapter = adapter
         recyclerViewProductList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
-        buttonSearch.setOnClickListener(this)
+
         navController = Navigation.findNavController(view)
+
+        buttonSearch.setOnClickListener(this)
         buttonBackHome.setOnClickListener (this)
         buttonCart.setOnClickListener (this)
         buttonNewProduct.setOnClickListener (this)
@@ -44,11 +45,18 @@ class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
             R.id.buttonBackHome -> navController.navigate(R.id.action_productsList_to_home)
             R.id.buttonCart -> navController.navigate(R.id.action_productsList_to_cart)
             R.id.buttonNewProduct -> {
-                var transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.nav_host_fragment, NewProductFragment(this))
+                val transaction = parentFragmentManager.beginTransaction()
+                val newProductFragment = NewProductFragment()
+                newProductFragment.setListListener(this)
+                transaction.replace(R.id.nav_host_fragment, newProductFragment)
                 transaction.commit()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        reloadList()
     }
     private fun searchProduct(){
         var searchText = editTextSearch.text.toString()

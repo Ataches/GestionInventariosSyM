@@ -61,21 +61,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonCart"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/editTextQuantity"/>
-
             <Button
+                android:id="@+id/buttonEditProduct"
                 android:background="@color/colorAccent"
-                android:drawableBottom="@drawable/ic_add_cart"
-                android:paddingBottom="5dp"
-                android:id="@+id/buttonCart"
+                android:drawableStart="@drawable/ic_edit"
+                android:paddingStart="5dp"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_margin="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCart"
+                />
+            <Button
+                android:id="@+id/buttonCart"
+                android:background="@color/colorAccent"
+                android:drawableBottom="@drawable/ic_add_cart"
+                android:paddingBottom="5dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonEditProduct"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
             <EditText

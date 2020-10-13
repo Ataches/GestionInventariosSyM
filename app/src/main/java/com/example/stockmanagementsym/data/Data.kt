@@ -1,9 +1,9 @@
-package com.example.stockmanagementsym.model.data
+package com.example.stockmanagementsym.data
 
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.model.business.Customer
-import com.example.stockmanagementsym.model.business.Product
-import com.example.stockmanagementsym.model.business.Sale
+import com.example.stockmanagementsym.logic.business.Customer
+import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.logic.business.Sale
 import java.util.*
 
 object Data {
@@ -58,9 +58,15 @@ object Data {
     fun addSale(sale: Sale){
         getSalesList().add(sale)
     }
-
-    fun editCustomer() {
-
+    fun updateCustomer(customerToEdit: Customer, customerEdited: Customer ){
+        getCustomerList().remove(getCustomerList().filter { it.getName() == customerToEdit.getName() && it.getAddress() == customerToEdit.getAddress() &&
+                                                            it.getCity() == customerToEdit.getCity() && it.getPhone() == customerToEdit.getPhone()}[0])
+        getCustomerList().add(customerEdited)
     }
 
+    fun updateProduct(productToEdit: Product, productEdited: Product) {
+        getProductList().remove(getProductList().filter { it.getName() == productToEdit.getName() && it.getDescription() == productToEdit.getDescription() &&
+                it.getPrice() == productToEdit.getPrice() && it.getQuantity() == productToEdit.getQuantity()}[0])
+        getProductList().add(productEdited)
+    }
 }

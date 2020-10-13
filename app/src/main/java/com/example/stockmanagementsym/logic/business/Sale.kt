@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.model.business
+package com.example.stockmanagementsym.logic.business
 
 import java.util.Calendar
 

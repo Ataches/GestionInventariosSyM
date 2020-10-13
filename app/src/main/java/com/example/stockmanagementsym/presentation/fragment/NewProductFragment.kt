@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic.fragment
+package com.example.stockmanagementsym.presentation.fragment
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -11,15 +11,19 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.model.data.Data
-import com.example.stockmanagementsym.model.business.Product
-import com.example.stockmanagementsym.logic.ListListener
+import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.logic.ProductLogic
+import com.example.stockmanagementsym.logic.business.Product
 import kotlinx.android.synthetic.main.fragment_new_product.*
 
-class NewProductFragment(private var listListener: ListListener): Fragment(), View.OnClickListener {
+class NewProductFragment: Fragment(), View.OnClickListener {
 
+    private lateinit var product:Product
     private lateinit var navController: NavController
     private lateinit var transaction: FragmentTransaction
+    private lateinit var listListener: ListListener
+    private var updateBoolean:Boolean=false
+    private lateinit var productLogic: ProductLogic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,20 +47,29 @@ class NewProductFragment(private var listListener: ListListener): Fragment(), Vi
         when(view.id){
             R.id.buttonBackHome -> goHome()
             R.id.buttonProductList -> goProductList()
-            R.id.buttonNewProduct -> confirmCreateProduct(view)
+            R.id.buttonNewProduct -> {
+                if(updateBoolean){
+                    setProduct(Product(editTextProductName.text.toString(), editTextProductPrice.text.toString().toInt(),
+                        editTextProductDesc.text.toString(), R.drawable.ic_login.toString().toInt(), editTextProductQuantity.text.toString().toInt()))
+                    getProductLogic().setProductEdited(getProduct())
+                    getProductLogic().editProduct()
+                    goProductList()
+                }else
+                    confirmCreateProduct(view)
+            }
         }
     }
 
     private fun confirmCreateProduct(view:View){
-        val dataProduct = mapOf("Name" to editTextProductName.text.toString(), "Price" to editTextProductPrice.text.toString(),
-        "Description" to editTextProductDesc.text.toString(),"Image" to R.drawable.ic_login.toString(), "Quantity" to editTextProductQuantity.text.toString())
+        setProduct(Product(editTextProductName.text.toString(), editTextProductPrice.text.toString().toInt(),
+            editTextProductDesc.text.toString(), R.drawable.ic_login.toString().toInt(), editTextProductQuantity.text.toString().toInt()))
 
         val builder = AlertDialog.Builder(view.context)
         builder.setTitle(getString(R.string.titleAlertNewProd))
         val message = getString(R.string.messageAlertNewProd)+
-                             "\n"+dataProduct
+                             "\n"+getProduct()
         builder.setPositiveButton("Si"){ _,_ ->
-            newProduct(view, dataProduct)
+            newProduct(view)
         }
         builder.setNegativeButton("No"){ _,_ ->
             Toast.makeText(view.context, "Modifique los datos si es necesario", Toast.LENGTH_SHORT).show()
@@ -66,12 +79,9 @@ class NewProductFragment(private var listListener: ListListener): Fragment(), Vi
         builder.show()
     }
 
-    private fun newProduct(view: View, dataProduct:Map<String,String>) {
+    private fun newProduct(view: View) {
         try{
-            Data.addProduct(
-                Product(dataProduct.getValue("Name"),dataProduct.getValue("Price").toInt(),
-                                    dataProduct.getValue("Description"),dataProduct.getValue("Image").toInt(),dataProduct.getValue("Quantity").toInt())
-            )
+            Data.addProduct(getProduct())
             listListener.reloadList()
             Toast.makeText(view.context, "Producto registrado con exito", Toast.LENGTH_SHORT).show()
             goProductList()
@@ -88,5 +98,24 @@ class NewProductFragment(private var listListener: ListListener): Fragment(), Vi
     private fun goProductList(){
         transaction.replace(this.id, ProductListFragment())
         transaction.commit()
+    }
+
+    fun setListListener(listListener: ListListener){
+        this.listListener = listListener
+    }
+    fun setUpdateBoolean(updateBoolean:Boolean){
+        this.updateBoolean = updateBoolean
+    }
+    fun setProduct(product: Product){
+        this.product = product
+    }
+    private fun getProduct(): Product {
+        return product
+    }
+    fun setProductLogic(productLogic: ProductLogic){
+        this.productLogic = productLogic
+    }
+    fun getProductLogic():ProductLogic{
+        return productLogic
     }
 }

@@ -1,15 +1,15 @@
-package com.example.stockmanagementsym.logic.view_holder
+package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.model.business.Product
-import com.example.stockmanagementsym.model.data.CartObject
-import com.example.stockmanagementsym.logic.ListListener
+import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.data.CartObject
+import com.example.stockmanagementsym.presentation.fragment.ListListener
 import kotlinx.android.synthetic.main.item_cart.view.*
 
 class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(item: Product, listener:ListListener) {
+    fun bind(item: Product, listener: ListListener) {
         itemView.textViewName.text = item.getName()
         itemView.textViewPrice.text = "$"+item.getPrice()
         itemView.textViewDescription.text = item.getDescription()

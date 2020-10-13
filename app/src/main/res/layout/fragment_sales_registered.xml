@@ -7,7 +7,7 @@
     android:id="@+id/constraintLayoutSales"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".logic.fragment.SaleRegisteredFragment">
+    tools:context=".presentation.fragment.SaleRegisteredFragment">
 
     <Button
         android:id="@+id/buttonBackHome"

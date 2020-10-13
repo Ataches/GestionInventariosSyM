@@ -1,6 +1,6 @@
-package com.example.stockmanagementsym.model.data
+package com.example.stockmanagementsym.data
 
-import com.example.stockmanagementsym.model.business.Product
+import com.example.stockmanagementsym.logic.business.Product
 
 object CartObject {
     private var list:MutableList<Product> = mutableListOf()

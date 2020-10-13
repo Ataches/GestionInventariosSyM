@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic.fragment
+package com.example.stockmanagementsym.presentation.fragment
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -14,12 +14,11 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.logic.ListListener
-import com.example.stockmanagementsym.logic.adapter.CartAdapter
-import com.example.stockmanagementsym.model.business.Customer
-import com.example.stockmanagementsym.model.business.Sale
-import com.example.stockmanagementsym.model.data.CartObject
-import com.example.stockmanagementsym.model.data.Data
+import com.example.stockmanagementsym.presentation.adapter.CartAdapter
+import com.example.stockmanagementsym.logic.business.Customer
+import com.example.stockmanagementsym.logic.business.Sale
+import com.example.stockmanagementsym.data.CartObject
+import com.example.stockmanagementsym.data.Data
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
 import java.text.DateFormat
@@ -97,8 +96,10 @@ class CartFragment : Fragment(), ListListener, View.OnClickListener {
         dialog.show()
         viewNewSale.buttonNewCustomer.setOnClickListener{
             Data.getCustomerList()
-            setCustomer(CustomerListFragment().dialogNewCustomer(viewNewSale, layoutInflater))
-            Toast.makeText(view.context,"Una vez registrado el cliente seleccionelo",Toast.LENGTH_SHORT).show()
+            var customerListFragment = CustomerListFragment()
+            customerListFragment.dialogNewCustomer(viewNewSale,true)
+            setCustomer(customerListFragment.getCustomer())
+            showCustomerName(viewNewSale,customer)
         }
         viewNewSale.buttonSelectCustomerName.setOnClickListener{
             selectCustomer(viewNewSale)
@@ -130,7 +131,7 @@ class CartFragment : Fragment(), ListListener, View.OnClickListener {
 
     private fun selectCustomer(view: View){
         val builder=AlertDialog.Builder(view.context)
-        var data =Data.getCustomerList().map {
+        val data =Data.getCustomerList().map {
             it.getName()+" "+
             it.getAddress()+" "+
             it.getPhone()+" "+
@@ -138,14 +139,18 @@ class CartFragment : Fragment(), ListListener, View.OnClickListener {
         }
         builder.setItems(data.toTypedArray()){ _, item ->
             setCustomer(Data.getCustomerList().get(item))
-            view.textViewSaleCustomerNameSelected.text = getCustomer().getName()
+            showCustomerName(view, customer)
         }
         builder.create()
         builder.show()
     }
 
+    private fun showCustomerName(view: View,customer: Customer) {
+        view.textViewSaleCustomerNameSelected.text = getCustomer().getName()
+    }
+
     private fun newSale(view: View, customer: Customer, date: Calendar) {
-        //try {
+        try {
             Data.addSale(
                 Sale(
                     customer, date, CartObject.getList()
@@ -153,9 +158,9 @@ class CartFragment : Fragment(), ListListener, View.OnClickListener {
             )
             CartObject.clearCart()
             Toast.makeText(view.context, "Venta registrada con exito", Toast.LENGTH_SHORT).show()
-        /*} catch (e: Exception) {
+        } catch (e: Exception) {
             Toast.makeText(view.context, "Ingrese datos correctos", Toast.LENGTH_SHORT).show()
-        }*/
+        }
     }
     private fun setCustomer(customer: Customer){
         this.customer = customer

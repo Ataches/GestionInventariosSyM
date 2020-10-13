@@ -119,7 +119,7 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_edit"
-        android:text="@string/uploadProduct"
+        android:text="@string/registerProduct"
         android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
