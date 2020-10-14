@@ -1,4 +1,5 @@
 package com.example.stockmanagementsym.presentation.view_holder
+
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.logic.business.Sale

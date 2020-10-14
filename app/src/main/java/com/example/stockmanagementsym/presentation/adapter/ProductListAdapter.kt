@@ -9,17 +9,17 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.view_holder.ProductViewHolder
 
 
-class ProductsListAdapter(var listProducts: List<Product>): RecyclerView.Adapter<ProductViewHolder>() {
+class ProductsListAdapter(var productsList: List<Product>): RecyclerView.Adapter<ProductViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
         return ProductViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.bind(listProducts[position])
+        holder.bind(productsList[position])
     }
 
     override fun getItemCount(): Int {
-        return listProducts.size
+        return productsList.size
     }
 }

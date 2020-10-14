@@ -43,19 +43,19 @@
             android:id="@+id/action_home_to_productsList"
             app:destination="@id/productsList" />
         <action
-            android:id="@+id/action_home_to_salesRegistered"
-            app:destination="@id/salesRegistered" />
+            android:id="@+id/action_home_to_saleList"
+            app:destination="@id/saleList" />
         <action
             android:id="@+id/action_home_to_customerListFragment"
             app:destination="@id/customerListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/salesRegistered"
-        android:name="com.example.stockmanagementsym.presentation.fragment.SaleRegisteredFragment"
+        android:id="@+id/saleList"
+        android:name="com.example.stockmanagementsym.presentation.fragment.SaleListFragment"
         android:label="fragment_sales_registered"
-        tools:layout="@layout/fragment_sales_registered" >
+        tools:layout="@layout/fragment_sale_list" >
         <action
-            android:id="@+id/action_salesRegistered_to_home"
+            android:id="@+id/action_saleList_to_home"
             app:destination="@id/home" />
     </fragment>
     <fragment

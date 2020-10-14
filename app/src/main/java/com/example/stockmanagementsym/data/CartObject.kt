@@ -18,11 +18,6 @@ object CartObject {
     fun getList():MutableList<Product>{
         return list
     }
-    fun getTotalPrice():Int{
-        if(list.isNullOrEmpty())
-            return 0
-        return list.map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
-    }
 
     fun clearCart() {
         list = mutableListOf()

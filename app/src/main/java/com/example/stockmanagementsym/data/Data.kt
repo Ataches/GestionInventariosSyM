@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.data
 
+import android.util.Log
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
@@ -49,13 +50,13 @@ object Data {
         salesListCreated=true
         return salesList
     }
-    fun addCustomer(customer: Customer){
+    fun createCustomer(customer: Customer){
         getCustomerList().add(customer)
     }
-    fun addProduct(product: Product){
+    fun createProduct(product: Product){
         getProductList().add(product)
     }
-    fun addSale(sale: Sale){
+    fun updateSale(sale: Sale){
         getSalesList().add(sale)
     }
     fun updateCustomer(customerToEdit: Customer, customerEdited: Customer ){

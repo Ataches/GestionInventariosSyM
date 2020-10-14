@@ -4,10 +4,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CartObject
 import com.example.stockmanagementsym.logic.ProductLogic
 import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.presentation.Controller
+import com.example.stockmanagementsym.presentation.FragmentData
+import com.example.stockmanagementsym.presentation.Model
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 import kotlinx.android.synthetic.main.item_product.view.*
@@ -25,7 +27,7 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewDescription.text = item.getDescription()
         itemView.textViewQuantity.text = "Cantidad: ${item.getQuantity()}"
         //itemView.buttonCart.setBackgroundDrawable(itemView.context.resources.getDrawable(item.getIDiconDrawable()))
-        itemView.buttonCart.setOnClickListener{
+        itemView.buttonProductListToCart.setOnClickListener{
             var quantity:Int
             try {
                 quantity = itemView.editTextQuantity.text.toString().toInt()
@@ -37,29 +39,18 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         itemView.buttonEditProduct.setOnClickListener {
 
-            val findFragment = itemView.findFragment<ProductListFragment>()
-            val transaction = findFragment.fragmentManager?.beginTransaction()
-            val newProductFragment= NewProductFragment()
-            newProductFragment.setUpdateBoolean(true)
-            getProductLogic().setProductToEdit(item)
-            newProductFragment.setProductLogic(getProductLogic())
-            transaction?.replace(R.id.nav_host_fragment, newProductFragment)
-            transaction?.commit()
+            val fragment = itemView.findFragment<ProductListFragment>()
+            val transaction = fragment.parentFragmentManager.beginTransaction()
+
+            Model.setNewProductFragment(NewProductFragment())
+            FragmentData.setUpdateBoolean(true)
+            FragmentData.setNewProductFragment(Model.getNewProductFragment())
+            Controller.setFragmentTransaction(transaction)
+            Controller.goNewProduct()
+
+
+            Model.setProductToEdit(item)
 
         }
-    }
-    private fun getProductLogic(): ProductLogic {
-        if(productLogicCreated)
-            return productLogic
-        productLogic = ProductLogic()
-        productLogicCreated = true
-        return productLogic
-    }
-    private fun getProductListFragment(): ProductListFragment {
-        if(productListFragmentCreated)
-            return productListFragment
-        productListFragment = ProductListFragment()
-        productListFragmentCreated = true
-        return productListFragment
     }
 }

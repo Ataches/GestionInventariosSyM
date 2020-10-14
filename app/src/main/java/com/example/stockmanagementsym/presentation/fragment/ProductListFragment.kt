@@ -5,16 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
 import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.presentation.Controller
+import com.example.stockmanagementsym.presentation.FragmentData
+import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
-class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
-    private lateinit var navController: NavController
+class ProductListFragment : Fragment(), ListListener{
+
     private lateinit var adapter:ProductsListAdapter
 
     override fun onCreateView(
@@ -31,41 +32,28 @@ class ProductListFragment : Fragment(), ListListener, View.OnClickListener {
         recyclerViewProductList.adapter = adapter
         recyclerViewProductList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
-        navController = Navigation.findNavController(view)
+        FragmentData.setProductListListener(this)
+        Controller.setFragmentTransaction(parentFragmentManager.beginTransaction())
 
-        buttonSearch.setOnClickListener(this)
-        buttonBackHome.setOnClickListener (this)
-        buttonCart.setOnClickListener (this)
-        buttonNewProduct.setOnClickListener (this)
-    }
-
-    override fun onClick(view: View?) {
-        when(view?.id){
-            R.id.buttonSearch -> searchProduct()
-            R.id.buttonBackHome -> navController.navigate(R.id.action_productsList_to_home)
-            R.id.buttonCart -> navController.navigate(R.id.action_productsList_to_cart)
-            R.id.buttonNewProduct -> {
-                val transaction = parentFragmentManager.beginTransaction()
-                val newProductFragment = NewProductFragment()
-                newProductFragment.setListListener(this)
-                transaction.replace(R.id.nav_host_fragment, newProductFragment)
-                transaction.commit()
-            }
-        }
+        buttonProductListToSearch.setOnClickListener(Controller)
+        buttonProductListToHome.setOnClickListener (Controller)
+        buttonProductListToCart.setOnClickListener (Controller)
+        buttonProductListToNewProduct.setOnClickListener (Controller)
     }
 
     override fun onResume() {
         super.onResume()
+        Controller.setFragmentTransaction(parentFragmentManager.beginTransaction())
         reloadList()
     }
-    private fun searchProduct(){
-        var searchText = editTextSearch.text.toString()
-        var filteredList = Data.getProductList().filter {product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
-        adapter.listProducts = filteredList
+
+    override fun reloadList() {
+        adapter.productsList = Data.getProductList()
         adapter.notifyDataSetChanged()
     }
-    override fun reloadList() {
-        adapter.listProducts = Data.getProductList()
+
+    override fun setList(list: MutableList<Any>) {
+        adapter.productsList = list as MutableList<Product>
         adapter.notifyDataSetChanged()
     }
 }

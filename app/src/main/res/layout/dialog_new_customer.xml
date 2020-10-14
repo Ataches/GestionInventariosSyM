@@ -92,11 +92,11 @@
         android:layout_marginBottom="70dp"
         app:layout_constraintStart_toStartOf="@+id/textViewCity"
         app:layout_constraintTop_toBottomOf="@+id/textViewCity"
-        app:layout_constraintBottom_toTopOf="@id/buttonNewProduct"
+        app:layout_constraintBottom_toTopOf="@id/buttonProductListToNewProduct"
         />
 
     <Button
-        android:id="@+id/buttonNewProduct"
+        android:id="@+id/buttonProductListToNewProduct"
         android:layout_width="180dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_edit"

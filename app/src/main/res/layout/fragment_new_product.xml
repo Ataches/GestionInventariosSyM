@@ -7,18 +7,17 @@
     android:layout_height="match_parent"
     >
     <Button
-        android:id="@+id/buttonProductList"
+        android:id="@+id/buttonNewProductToProductList"
         android:drawableLeft="@drawable/ic_store"
         android:text="@string/backProductList"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="goToProductList"
         />
 
     <Button
-        android:id="@+id/buttonBackHome"
+        android:id="@+id/buttonNewProductToHome"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:drawableLeft="@drawable/ic_home"
@@ -34,7 +33,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/productName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonProductList"
+        app:layout_constraintTop_toBottomOf="@+id/buttonNewProductToHome"
         app:layout_constraintBottom_toTopOf="@id/editTextProductName"
         />
 
@@ -111,15 +110,15 @@
         android:layout_marginBottom="70dp"
         app:layout_constraintStart_toStartOf="@+id/textViewProductQuantity"
         app:layout_constraintTop_toBottomOf="@+id/textViewProductQuantity"
-        app:layout_constraintBottom_toTopOf="@id/buttonNewProduct"
+        app:layout_constraintBottom_toTopOf="@id/buttonNewProductToNewProduct"
         />
 
     <Button
-        android:id="@+id/buttonNewProduct"
+        android:id="@+id/buttonNewProductToNewProduct"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_edit"
-        android:text="@string/registerProduct"
+        android:text="@string/updateProduct"
         android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

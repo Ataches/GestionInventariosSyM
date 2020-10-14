@@ -9,7 +9,7 @@ import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.view_holder.CartViewHolder
 
-class CartAdapter(var listProducts: List<Product>, var listener: ListListener): RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter(var listProducts: MutableList<Product>, var listener: ListListener): RecyclerView.Adapter<CartViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
         return CartViewHolder(view)

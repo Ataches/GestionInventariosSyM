@@ -10,7 +10,7 @@
     <!-- Fragment home -->
     <string name="welcome">Bienvenid@</string>
     <string name="productList">Listado de productos y registro de ventas</string>
-    <string name="salesRegistered">Ventas registradas</string>
+    <string name="saleList">Ventas registradas</string>
     <string name="customersList">Listado clientes</string>
 
     <!-- Fragments text -->
@@ -25,8 +25,8 @@
     <string name="productQuantity">"Cantidad: "</string>
     <string name="productDesc">"Descripción: "</string>
     <string name="productPrice">"Precio: "</string>
-    <string name="uploadProduct">Registrar nuevo producto</string>
-    <string name="registerProduct">Registrar producto</string>
+    <string name="createProduct">Registrar nuevo producto</string>
+    <string name="updateProduct">Registrar producto</string>
     <string name="titleAlertNewProd">Crear nuevo producto</string>
     <string name="messageAlertNewProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
     <string name="uploadCustomer">Registrar nuevo cliente</string>

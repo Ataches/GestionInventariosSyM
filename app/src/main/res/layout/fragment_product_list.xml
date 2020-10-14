@@ -7,7 +7,7 @@
     >
 
     <Button
-        android:id="@+id/buttonCart"
+        android:id="@+id/buttonProductListToCart"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:drawableLeft="@drawable/ic_add_cart"
@@ -20,7 +20,7 @@
         />
 
     <Button
-        android:id="@+id/buttonBackHome"
+        android:id="@+id/buttonProductListToHome"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:drawableLeft="@drawable/ic_home"
@@ -32,21 +32,21 @@
         />
 
     <EditText
-        android:id="@+id/editTextSearch"
+        android:id="@+id/editTextSearchProductList"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/buttonSearch"
+        app:layout_constraintEnd_toStartOf="@id/buttonProductListToSearch"
         />
     <Button
-        android:id="@+id/buttonSearch"
+        android:id="@+id/buttonProductListToSearch"
         android:drawableLeft="@drawable/ic_search"
         android:text="@string/search"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextSearch"
+        app:layout_constraintStart_toEndOf="@+id/editTextSearchProductList"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
@@ -54,16 +54,16 @@
         android:id="@+id/recyclerViewProductList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchProductList" />
 
 
     <Button
-        android:id="@+id/buttonNewProduct"
+        android:id="@+id/buttonProductListToNewProduct"
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_add_quantity"
         android:paddingBottom="5dp"
-        android:text="@string/uploadProduct"
+        android:text="@string/createProduct"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewProductList"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
