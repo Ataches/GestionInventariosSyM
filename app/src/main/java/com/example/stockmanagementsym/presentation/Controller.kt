@@ -36,7 +36,12 @@ object Controller: View.OnClickListener {
             //Cart
             R.id.buttonCartToHome -> navController.navigate(R.id.action_cart_to_home)
             R.id.buttonCartToProductList -> navController.navigate(R.id.action_cart_to_productsList)
-            R.id.buttonCartToNewSale -> DialogObject.alertNewSale(view)
+            R.id.buttonCartToNewSale -> {
+                if(FragmentData.getConfirmRegister())
+                    Model.newSale(view)
+                else
+                    Model.confirmNewSale(view)
+            }
 
             //Customer list
             R.id.buttonCustomerListToHome -> navController.navigate(R.id.action_customerListFragment_to_home)
@@ -49,6 +54,8 @@ object Controller: View.OnClickListener {
             //New product
             R.id.buttonNewProductToHome -> goHome()
             R.id.buttonNewProductToProductList -> goProductList()
+            R.id.buttonNewProductToGallery -> Model.getPhotoGallery(view)
+            R.id.buttonNewProductToCamera -> Model.getPhotoCamera(view)
             R.id.buttonNewProductToNewProduct -> {
                 if(FragmentData.getUpdateBoolean()){
                     Model.setProductEdited()
@@ -64,6 +71,11 @@ object Controller: View.OnClickListener {
             //Sale list
             R.id.buttonSaleListToSearch -> Model.searchSale(view)
             R.id.buttonSaleListToHome -> navController.navigate(R.id.action_saleList_to_home)
+
+            //Item views
+            // Item view product list sale
+            //R.id.buttonProductListSale
+
         }
     }
 

@@ -1,10 +1,10 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.data.CartObject
+import com.example.stockmanagementsym.presentation.DialogObject
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import kotlinx.android.synthetic.main.item_cart.view.*
 
@@ -26,7 +26,7 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 item.setQuantity(quantity)
                 listener.reloadList()
             }catch (e:Exception){
-                Toast.makeText(it.context, "Digite un numero correcto", Toast.LENGTH_SHORT).show()
+                DialogObject.showMessage(it.context, "Digite un numero correcto")
             }
         }
     }

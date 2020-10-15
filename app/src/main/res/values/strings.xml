@@ -22,20 +22,21 @@
 
     <!-- Product -->
     <string name="productName">Nombre producto:</string>
-    <string name="productQuantity">"Cantidad: "</string>
-    <string name="productDesc">"Descripción: "</string>
-    <string name="productPrice">"Precio: "</string>
+    <string name="productQuantity">Cantidad: </string>
+    <string name="productDesc">Descripción: </string>
+    <string name="productPrice">Precio: </string>
     <string name="createProduct">Registrar nuevo producto</string>
     <string name="updateProduct">Registrar producto</string>
     <string name="titleAlertNewProd">Crear nuevo producto</string>
     <string name="messageAlertNewProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
     <string name="uploadCustomer">Registrar nuevo cliente</string>
+    <string name="selectImage">Seleccione la imagen para el producto (opcional)</string>
 
     <!-- Customer -->
     <string name="customer">Cliente</string>
-    <string name="customerName">"Nombre del cliente: "</string>
+    <string name="customerName">Nombre del cliente: </string>
     <string name="customerNameHint">Ejemplo: Carlos Perez</string>
-    <string name="customerAddress">"Dirección: "</string>
+    <string name="customerAddress">Dirección: </string>
     <string name="customerAddressHint">Ejemplo: Calle falsa 123</string>
     <string name="customerPhoneHint">Ejemplo: 3203992323</string>
     <string name="customerPhone">Número telefonico</string>
@@ -49,5 +50,6 @@
     <string name="dateSelected">No se ha seleccionado fecha de venta</string>
     <string name="date">Fecha</string>
     <string name="selectDate">Seleccionar fecha</string>
+    <string name="saleDate">Fecha de compra:</string>
 
 </resources>

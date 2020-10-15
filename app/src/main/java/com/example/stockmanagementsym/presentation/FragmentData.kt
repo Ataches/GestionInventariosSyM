@@ -1,13 +1,18 @@
 package com.example.stockmanagementsym.presentation
 
 import androidx.fragment.app.Fragment
-import com.example.stockmanagementsym.presentation.fragment.*
+import com.example.stockmanagementsym.presentation.fragment.ListListener
+import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 object FragmentData {
 
+    private var confirmRegister: Boolean = false
     private lateinit var cartListener: ListListener
     private lateinit var productListListener: ListListener
-    private lateinit var customerListListener: ListListener
+    private var customerListListener: ListListener? = null
     private var updateBoolean: Boolean = false
 
     private lateinit var newProductFragment: NewProductFragment
@@ -45,7 +50,7 @@ object FragmentData {
     }
 
     fun reloadCustomerList(){
-        customerListListener.reloadList()
+        customerListListener?.reloadList()
     }
     fun reloadProductList(){
         productListListener.reloadList()
@@ -54,4 +59,15 @@ object FragmentData {
         cartListener.reloadList()
     }
 
+    fun setConfirmRegister(confirmRegister: Boolean) {
+        this.confirmRegister = confirmRegister
+    }
+    fun getConfirmRegister():Boolean{
+        return confirmRegister
+    }
+
+    fun getDate(date: Calendar): String {
+        val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
+        return df.format(date.time)
+    }
 }

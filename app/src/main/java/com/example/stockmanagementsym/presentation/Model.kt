@@ -10,7 +10,10 @@ import com.example.stockmanagementsym.logic.SaleLogic
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
-import com.example.stockmanagementsym.presentation.fragment.*
+import com.example.stockmanagementsym.presentation.fragment.CustomerListFragment
+import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
+import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
+import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
@@ -30,9 +33,9 @@ object Model {
         return getSaleLogic().getCustomerNewSale()
     }
 
-    fun updateNewSale() {
+    fun updateNewSale():Boolean {
         getSaleLogic().setCustomerNewSale(getCustomerNewSale())
-        getSaleLogic().updateNewSale()
+        return getSaleLogic().updateNewSale()
     }
     fun getSalesList(): List<Sale> {
         return getSaleLogic().getSaleList()
@@ -42,6 +45,23 @@ object Model {
         getSaleLogic().setDateSale(date)
     }
 
+    fun confirmNewSale(view:View) {
+
+        val confirmRegister =
+            DialogObject.dialogConfirmRegister(
+                                                view = view,
+                                                data = getCartList(),
+                                                title = view.context.getString(R.string.titleAlertNewSale),
+                                                message = view.context.getString(R.string.messageAlertNewSale)
+                                              )
+
+
+    }
+
+    fun newSale(view:View) {
+        DialogObject.dialogNewSale(view)
+        FragmentData.setConfirmRegister(false)
+    }
     //Cart
     fun getCartList(): MutableList<Product> {
         return getCartLogic().getCartList()
@@ -56,19 +76,24 @@ object Model {
         getCustomerLogic().setCustomerToEdit(item)
     }
 
-    fun editCustomer() {
+    fun editCustomer():Boolean {
         getCustomerLogic().setCustomerEdited(getCustomerNewSale())
-        getCustomerLogic().updateCustomer()
+        FragmentData.reloadCustomerList()
+        return getCustomerLogic().updateCustomer()
     }
-
     fun getCustomerList(): List<Customer> {
         return getCustomerLogic().getCustomerList()
     }
-    fun createNewCustomer() {
-        getCustomerLogic().setNewCustomer(getCustomerNewSale())
-        getCustomerLogic().createNewCustomer()
+    fun setCustomerSelected(view: View, item: Int){
+        setCustomerNewSale(getCustomerList().get(item))
+        DialogObject.showCustomerName(view, getCustomerNewSale())
     }
 
+    fun createNewCustomer():Boolean {
+        getCustomerLogic().setNewCustomer(getCustomerNewSale())
+        FragmentData.reloadCustomerList()
+        return getCustomerLogic().createNewCustomer()
+    }
     //Product
     //   Update product
     fun setProductToEdit(item: Product) {
@@ -90,16 +115,27 @@ object Model {
     fun getNewProduct(): Product {
         return getProductLogic().getNewProduct()
     }
-    fun createNewProduct(){
-        getProductLogic().createNewProduct()
-        FragmentData.reloadProductList()
-    }
 
+    fun createNewProduct():Boolean{
+        var result = getProductLogic().createNewProduct()
+        FragmentData.reloadProductList()
+        return result
+    }
     fun setNewProductFragment(newProductFragment: NewProductFragment) {
         this.newProductFragment = newProductFragment
     }
+
     fun getNewProductFragment(): NewProductFragment {
         return newProductFragment
+    }
+    fun getPhotoCamera(viewElement:View) {
+        val newProductFragment = viewElement.findFragment<NewProductFragment>()
+        newProductFragment.startCamera()
+    }
+
+    fun getPhotoGallery(viewElement:View) {
+        val newProductFragment = viewElement.findFragment<NewProductFragment>()
+        newProductFragment.startGallery()
     }
 
     //Searches
@@ -116,6 +152,7 @@ object Model {
         val view = viewElement.findFragment<ProductListFragment>()
         view.setList(getProductLogic().searchProduct(view.editTextSearchProductList.text.toString()).toMutableList())
     }
+
     //Logic classes
     private fun getCustomerLogic(): CustomerLogic {
         return CustomerLogic
