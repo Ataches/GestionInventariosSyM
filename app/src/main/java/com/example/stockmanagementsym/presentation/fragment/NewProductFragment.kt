@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.Controller
-import com.example.stockmanagementsym.presentation.FragmentData
+import com.example.stockmanagementsym.presentation.AndroidController
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_new_product.*
 
 class NewProductFragment: Fragment(){
@@ -19,19 +19,19 @@ class NewProductFragment: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Controller.setFragmentTransaction(parentFragmentManager.beginTransaction())
+        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
         FragmentData.setIdFragment(this.id)
 
-        buttonNewProductToHome.setOnClickListener (Controller)
-        buttonNewProductToProductList.setOnClickListener (Controller)
-        buttonNewProductToNewProduct.setOnClickListener (Controller)
-        buttonNewProductToGallery.setOnClickListener(Controller)
-        buttonNewProductToCamera.setOnClickListener(Controller)
+        buttonNewProductToHome.setOnClickListener (AndroidController)
+        buttonNewProductToProductList.setOnClickListener (AndroidController)
+        buttonNewProductToNewProduct.setOnClickListener (AndroidController)
+        buttonNewProductToGallery.setOnClickListener(AndroidController)
+        buttonNewProductToCamera.setOnClickListener(AndroidController)
     }
 
     override fun onResume() {
         super.onResume()
-        Controller.setFragmentTransaction(parentFragmentManager.beginTransaction())
+        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
         FragmentData.setIdFragment(this.id)
     }
 

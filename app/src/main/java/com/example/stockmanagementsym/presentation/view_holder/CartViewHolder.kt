@@ -2,10 +2,11 @@ package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.data.CartObject
-import com.example.stockmanagementsym.presentation.DialogObject
+import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
+import com.example.stockmanagementsym.presentation.view.DialogView
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_cart.view.*
 
 class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,7 +27,7 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 item.setQuantity(quantity)
                 listener.reloadList()
             }catch (e:Exception){
-                DialogObject.showMessage(it.context, "Digite un numero correcto")
+                FragmentData.showMessage(it.context, "Digite un numero correcto")
             }
         }
     }

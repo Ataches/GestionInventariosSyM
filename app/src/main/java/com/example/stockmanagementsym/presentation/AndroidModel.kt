@@ -1,0 +1,261 @@
+package com.example.stockmanagementsym.presentation
+
+import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.view.View
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.AndroidViewModel
+import com.example.stockmanagementsym.LoginActivity
+import com.example.stockmanagementsym.MainActivity
+import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.AppDataBase
+import com.example.stockmanagementsym.data.dao.CustomerDao
+import com.example.stockmanagementsym.data.dao.UserDao
+import com.example.stockmanagementsym.logic.*
+import com.example.stockmanagementsym.logic.business.Customer
+import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.logic.business.Sale
+import com.example.stockmanagementsym.presentation.fragment.CustomerListFragment
+import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
+import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
+import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
+import com.example.stockmanagementsym.presentation.view.AndroidView
+import com.example.stockmanagementsym.presentation.view.FragmentData
+import kotlinx.android.synthetic.main.fragment_customer_list.*
+import kotlinx.android.synthetic.main.fragment_new_product.*
+import kotlinx.android.synthetic.main.fragment_product_list.*
+import kotlinx.android.synthetic.main.fragment_sale_list.*
+import java.util.*
+
+class AndroidModel(application: Application) : AndroidViewModel(application) {
+
+
+    private var customerDao: CustomerDao
+    private var userDao: UserDao
+
+    private var androidView:AndroidView ?= null
+    private var customerLogic: CustomerLogic ?= null
+    private var productLogic: ProductLogic ?= null
+    private var saleLogic: SaleLogic ?= null
+    private var userLogic:UserLogic ?= null
+    private lateinit var newProductFragment: NewProductFragment
+
+    init{
+        customerDao = AppDataBase.getAppDataBase(application)!!.getCustomerDao()
+        userDao = AppDataBase.getAppDataBase(application)!!.getUserDao()
+        getAndroidView()
+        FragmentData.setModel(this)
+    }
+
+    //Sale
+    fun setCustomerNewSale(customer: Customer) {
+        getSaleLogic().setCustomerNewSale(customer)
+    }
+
+    fun getCustomerNewSale(): Customer {
+        return getSaleLogic().getCustomerNewSale()
+    }
+
+    fun updateNewSale(): Boolean {
+        getSaleLogic().setCustomerNewSale(getCustomerNewSale())
+        getSaleLogic().setId(generateID())
+        return getSaleLogic().updateNewSale()
+    }
+
+    fun getSalesList(): List<Sale> {
+        return getSaleLogic().getSaleList()
+    }
+
+    fun setDateSale(date: String) {
+        getSaleLogic().setDateSale(date)
+    }
+
+    fun confirmNewSale(view: View) {
+
+        val confirmRegister =
+            getAndroidView().dialogConfirmRegister(
+                view = view,
+                data = getCartList(),
+                title = view.context.getString(R.string.titleAlertNewSale),
+                message = view.context.getString(R.string.messageAlertNewSale)
+            )
+
+
+    }
+
+    fun newSale(view: View) {
+        getAndroidView().dialogNewSale(view)
+        FragmentData.setConfirmRegister(false)
+    }
+
+    //Cart
+    fun getCartList(): MutableList<Product> {
+        //Log.d("PRUEBA", "Llega"+getCustomerLogic().selectCustomer())
+        return getCartLogic().getCartList()
+    }
+
+    fun getTotalPrice(): Int {
+        return getCartLogic().getTotalPrice()
+    }
+
+    //Customer
+    fun setCustomerToEdit(item: Customer) {
+        getCustomerLogic().setCustomerToEdit(item)
+    }
+
+    fun updateCustomer(context: Context): Boolean {
+        getCustomerLogic().setCustomerEdited(getCustomerNewSale())
+        FragmentData.reloadCustomerList()
+        getCustomerLogic().setContext(context)
+        var bool = getCustomerLogic().updateCustomer()
+        FragmentData.showMessage(context, ""+getCustomerLogic().selectCustomer())
+        return bool
+    }
+
+    fun getCustomerList(): List<Customer> {
+        return getCustomerLogic().getCustomerList()
+    }
+
+    fun setCustomerSelected(view: View, item: Int) {
+        setCustomerNewSale(getCustomerList().get(item))
+        getAndroidView().showCustomerName(view, getCustomerNewSale())
+    }
+
+    fun createNewCustomer(): Boolean {
+        getCustomerLogic().setNewCustomer(getCustomerNewSale())
+        FragmentData.reloadCustomerList()
+        return getCustomerLogic().createNewCustomer()
+    }
+
+    //Product
+    //   Update product
+    fun setProductToEdit(item: Product) {
+        getProductLogic().setProductToEdit(item)
+    }
+
+    fun setProductEdited() {
+        getProductLogic().setProductEdited(
+            Product(
+                generateID(),
+                newProductFragment.editTextProductName.text.toString(),
+                newProductFragment.editTextProductPrice.text.toString().toInt(),
+                newProductFragment.editTextProductDesc.text.toString(),
+                R.drawable.ic_login.toString().toInt(),
+                newProductFragment.editTextProductQuantity.text.toString().toInt()
+            )
+        )
+    }
+
+    fun updateProduct() {
+        getProductLogic().updateProduct()
+    }
+
+    //   New product creation
+    fun setNewProduct(product: Product) {
+        getProductLogic().setNewProduct(product)
+    }
+
+    fun getNewProduct(): Product {
+        return getProductLogic().getNewProduct()
+    }
+
+    fun createNewProduct(): Boolean {
+        var result = getProductLogic().createNewProduct()
+        FragmentData.reloadProductList()
+        return result
+    }
+
+    fun setNewProductFragment(newProductFragment: NewProductFragment) {
+        this.newProductFragment = newProductFragment
+    }
+
+    fun getNewProductFragment(): NewProductFragment {
+        return newProductFragment
+    }
+
+    fun getPhotoCamera(viewElement: View) {
+        val newProductFragment = viewElement.findFragment<NewProductFragment>()
+        newProductFragment.startCamera()
+    }
+
+    fun getPhotoGallery(viewElement: View) {
+        val newProductFragment = viewElement.findFragment<NewProductFragment>()
+        newProductFragment.startGallery()
+    }
+
+    //Searches
+    fun searchSale(viewElement: View) {
+        val view = viewElement.findFragment<SaleListFragment>()
+        view.setList(
+            getSaleLogic().searchSales(view.editTextSearchSaleList.text.toString()).toMutableList()
+        )
+    }
+
+    fun searchCustomer(viewElement: View) {
+        val view = viewElement.findFragment<CustomerListFragment>()
+        view.setList(
+            getCustomerLogic().searchCustomer(view.editTextSearchCustomerList.text.toString())
+                .toMutableList()
+        )
+    }
+
+    fun searchProduct(viewElement: View) {
+        val view = viewElement.findFragment<ProductListFragment>()
+        view.setList(
+            getProductLogic().searchProduct(view.editTextSearchProductList.text.toString())
+                .toMutableList()
+        )
+    }
+
+    //Logic classes
+    private fun getCustomerLogic(): CustomerLogic {
+        if(customerLogic == null){
+            customerLogic = CustomerLogic(customerDao)
+            customerLogic!!.setContext(getApplication())
+        }
+        return customerLogic!!
+    }
+
+    private fun getUserLogic(): UserLogic {
+        if(userLogic==null) {
+            userLogic = UserLogic(userDao)
+            userLogic!!.setContext(getApplication())
+        }
+        return userLogic!!
+    }
+
+    private fun getSaleLogic(): SaleLogic {
+        return SaleLogic
+    }
+
+    private fun getProductLogic(): ProductLogic {
+        return ProductLogic
+    }
+
+    private fun getCartLogic(): CartLogic {
+        return CartLogic
+    }
+    fun getAndroidView(): AndroidView {
+        if(androidView == null){
+            androidView = AndroidView(this)
+        }
+        return androidView!!
+    }
+
+    fun generateID(): String {
+        return UUID.randomUUID().toString()
+    }
+
+    fun confirmLogin(login: LoginActivity, user: String, password: String) {
+        if(getUserLogic().confirmLogin(generateID(),user,password)){
+            FragmentData.setUser(userName = user)
+            getAndroidView().showMessage(login,login.getString(R.string.welcome)+" "+user)
+
+            val intent = Intent(login, MainActivity::class.java)
+            login.startActivity(intent)
+        }
+        else
+            getAndroidView().showMessage(login,"Usuario "+user+" no encontrado o contraseña incorrecta")
+    }
+}

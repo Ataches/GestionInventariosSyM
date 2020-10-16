@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.business.Customer
-import com.example.stockmanagementsym.presentation.Controller
-import com.example.stockmanagementsym.presentation.FragmentData
-import com.example.stockmanagementsym.presentation.Model
+import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 
 
@@ -40,9 +39,9 @@ class CustomerListFragment : Fragment(), ListListener {
 
         FragmentData.setCustomerListListener(this)
 
-        buttonCustomerToSearch.setOnClickListener(Controller)
-        buttonCustomerListToHome.setOnClickListener(Controller)
-        buttonCustomerListToCreateCustomer.setOnClickListener(Controller)
+        buttonCustomerToSearch.setOnClickListener(AndroidController)
+        buttonCustomerListToHome.setOnClickListener(AndroidController)
+        buttonCustomerListToCreateCustomer.setOnClickListener(AndroidController)
     }
 
     override fun onResume() {
@@ -51,7 +50,8 @@ class CustomerListFragment : Fragment(), ListListener {
     }
 
     override fun reloadList() {
-        adapter.customerList = Model.getCustomerList()
+        //adapter.customerList = Model.getCustomerList()
+        adapter.customerList = FragmentData.getCustomerList()
         adapter.notifyDataSetChanged()
     }
 

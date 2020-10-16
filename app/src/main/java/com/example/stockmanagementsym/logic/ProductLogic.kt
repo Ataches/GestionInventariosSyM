@@ -3,7 +3,6 @@ package com.example.stockmanagementsym.logic
 import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.business.Product
 
-
 object ProductLogic {
 
     private lateinit var productEdited: Product

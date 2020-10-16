@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.data
 
-import android.util.Log
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
@@ -19,9 +18,9 @@ object Data {
         if(productListCreated)
             return productList
         productList = mutableListOf(
-            Product("Inyector Peugeot", 75000, "Inyector para Peugeot", R.drawable.ic_login, 0),
-            Product("Inyector B2600", 120000, "Inyector para B2600", R.drawable.ic_login, 0),
-            Product("Inyector Sprint", 125000, "Inyector para Sprint", R.drawable.ic_login, 0)
+            Product("","Inyector Peugeot", 75000, "Inyector para Peugeot", R.drawable.ic_login, 0),
+            Product("","Inyector B2600", 120000, "Inyector para B2600", R.drawable.ic_login, 0),
+            Product("","Inyector Sprint", 125000, "Inyector para Sprint", R.drawable.ic_login, 0)
         )
         productListCreated=true
         return productList
@@ -31,9 +30,9 @@ object Data {
         if(customerListCreated)
             return customerList
         customerList = mutableListOf(
-            Customer("Carlos Gutierrez", "Cr 9 #20 68", "3203232321", "Bogotá D.C"),
-            Customer("Antonio Perez", "Cra 9 #30 60", "3001231231", "Bogotá D.C"),
-            Customer("Miguel Velasquez", "Calle 6a #20 22", "3103828329", "Bogotá D.C")
+            Customer("","Carlos Gutierrez", "Cr 9 #20 68", "3203232321", "Bogotá D.C"),
+            Customer("","Antonio Perez", "Cra 9 #30 60", "3001231231", "Bogotá D.C"),
+            Customer("","Miguel Velasquez", "Calle 6a #20 22", "3103828329", "Bogotá D.C")
         )
         customerListCreated=true
         return customerList
@@ -42,10 +41,8 @@ object Data {
     fun getSalesList():MutableList<Sale>{
         if(salesListCreated)
             return salesList
-        var date= Calendar.getInstance()
-        date.set(2020,10,8)
         salesList = mutableListOf(
-            Sale(getCustomerList()[0],date, mutableListOf(getProductList()[0], getProductList()[1]))
+            Sale("",getCustomerList()[0],"2020/10/10", mutableListOf(getProductList()[0], getProductList()[1]))
         )
         salesListCreated=true
         return salesList

@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.adapter.SaleListAdapter
 import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.business.Sale
-import com.example.stockmanagementsym.presentation.Controller
-import com.example.stockmanagementsym.presentation.Model
+import com.example.stockmanagementsym.presentation.AndroidController
+import com.example.stockmanagementsym.presentation.AndroidModel
+import com.example.stockmanagementsym.presentation.adapter.SaleListAdapter
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_sale_list.*
 
 class SaleListFragment : Fragment(), ListListener {
@@ -35,8 +34,8 @@ class SaleListFragment : Fragment(), ListListener {
         recyclerViewSaleList.adapter = adapter
         recyclerViewSaleList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
-        buttonSaleListToSearch.setOnClickListener(Controller)
-        buttonSaleListToHome.setOnClickListener (Controller)
+        buttonSaleListToSearch.setOnClickListener(AndroidController)
+        buttonSaleListToHome.setOnClickListener (AndroidController)
     }
 
     override fun onResume() {
@@ -45,7 +44,7 @@ class SaleListFragment : Fragment(), ListListener {
     }
 
     override fun reloadList() {
-        adapter.salesList = Model.getSalesList()
+        adapter.salesList = FragmentData.getSalesList()
         adapter.notifyDataSetChanged()
     }
 

@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.Controller
-import com.example.stockmanagementsym.presentation.FragmentData
+import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : Fragment(), ListListener{
@@ -33,17 +33,17 @@ class ProductListFragment : Fragment(), ListListener{
         recyclerViewProductList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
         FragmentData.setProductListListener(this)
-        Controller.setFragmentTransaction(parentFragmentManager.beginTransaction())
+        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
 
-        buttonProductListToSearch.setOnClickListener(Controller)
-        buttonProductListToHome.setOnClickListener (Controller)
-        buttonProductListToCart.setOnClickListener (Controller)
-        buttonProductListToNewProduct.setOnClickListener (Controller)
+        buttonProductListToSearch.setOnClickListener(AndroidController)
+        buttonProductListToHome.setOnClickListener (AndroidController)
+        buttonProductListToCart.setOnClickListener (AndroidController)
+        buttonProductListToNewProduct.setOnClickListener (AndroidController)
     }
 
     override fun onResume() {
         super.onResume()
-        Controller.setFragmentTransaction(parentFragmentManager.beginTransaction())
+        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
         reloadList()
     }
 

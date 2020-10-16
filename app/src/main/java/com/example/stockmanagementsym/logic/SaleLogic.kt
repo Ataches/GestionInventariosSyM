@@ -9,13 +9,14 @@ import java.util.*
 object SaleLogic {
 
     private lateinit var customerNewSale: Customer
-    private lateinit var date: Calendar
+    private lateinit var date: String
+    private lateinit var id: String
 
     fun updateNewSale(): Boolean {
         return try {
             Data.updateSale(
                 Sale(
-                    customerNewSale, date, CartObject.getList()
+                    id, customerNewSale, date, CartObject.getList()
                 )
             )
             CartObject.clearCart()
@@ -32,7 +33,7 @@ object SaleLogic {
         return Data.getSalesList()
     }
 
-    fun setDateSale(date: Calendar) {
+    fun setDateSale(date: String) {
         this.date = date
     }
 
@@ -42,5 +43,8 @@ object SaleLogic {
 
     fun getCustomerNewSale(): Customer {
         return customerNewSale
+    }
+    fun setId(id:String){
+        this.id = id
     }
 }

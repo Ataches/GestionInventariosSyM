@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.User
-import com.example.stockmanagementsym.presentation.Controller
+import com.example.stockmanagementsym.presentation.AndroidController
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -22,9 +22,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        textViewWelcome.text = getString(R.string.welcome)+" "+ User.getUser()
-        buttonHomeToProductList.setOnClickListener(Controller)
-        buttonHomeToSaleList.setOnClickListener(Controller)
-        buttonHomeToCustomersList.setOnClickListener(Controller)
+        textViewWelcome.text = getString(R.string.welcome)+" "+ FragmentData.getUser()
+        buttonHomeToProductList.setOnClickListener(AndroidController)
+        buttonHomeToSaleList.setOnClickListener(AndroidController)
+        buttonHomeToCustomersList.setOnClickListener(AndroidController)
     }
 }

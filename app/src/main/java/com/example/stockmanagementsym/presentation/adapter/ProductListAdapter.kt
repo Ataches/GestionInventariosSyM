@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view_holder.ProductViewHolder
 
 

@@ -1,24 +1,37 @@
 package com.example.stockmanagementsym.logic
 
+import android.content.Context
+import com.example.stockmanagementsym.data.AppDataBase
 import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.logic.business.Customer
-import com.example.stockmanagementsym.presentation.Model
 
-object CustomerLogic {
+class CustomerLogic(private val customerDao: CustomerDao) {
 
     private lateinit var newCustomer: Customer
     private lateinit var customerEdited: Customer
     private lateinit var customerToEdit: Customer
 
+    private lateinit var context: Context
+
+
+    fun setContext(context:Context){
+        this.context = context
+    }
+
+
     fun updateCustomer():Boolean {
         return try{
             Data.updateCustomer(customerToEdit,customerEdited)
+            customerDao.update(customerToEdit, customerEdited)
             true
         }catch (e:Exception){
             false
         }
     }
-
+    fun selectCustomer(): List<Customer> {
+        return customerDao.select()
+    }
     fun createNewCustomer(): Boolean {
         return try{
             Data.createCustomer(newCustomer)

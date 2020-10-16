@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.data.CartObject
 import com.example.stockmanagementsym.logic.ProductLogic
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.Controller
-import com.example.stockmanagementsym.presentation.DialogObject
-import com.example.stockmanagementsym.presentation.FragmentData
-import com.example.stockmanagementsym.presentation.Model
+import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_product.view.*
 
 class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,9 +30,9 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             try {
                 quantity = itemView.editTextQuantity.text.toString().toInt()
                 item.setQuantity(quantity)
-                DialogObject.showMessage(it.context, CartObject.addProduct(item))
+                FragmentData.showMessage(it.context, CartObject.addProduct(item))
             }catch (e: Exception){
-                DialogObject.showMessage(it.context, "Digite un numero correcto")
+                FragmentData.showMessage(it.context, "Digite un numero correcto")
             }
         }
         itemView.buttonEditProduct.setOnClickListener {
@@ -42,14 +40,14 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val fragment = itemView.findFragment<ProductListFragment>()
             val transaction = fragment.parentFragmentManager.beginTransaction()
 
-            Model.setNewProductFragment(NewProductFragment())
+            FragmentData.setNewProductFragment(NewProductFragment())
             FragmentData.setUpdateBoolean(true)
-            FragmentData.setNewProductFragment(Model.getNewProductFragment())
-            Controller.setFragmentTransaction(transaction)
-            Controller.goNewProduct()
+            FragmentData.setNewProductFragment(FragmentData.getNewProductFragment())
+            AndroidController.setFragmentTransaction(transaction)
+            AndroidController.goNewProduct()
 
-
-            Model.setProductToEdit(item)
+            FragmentData.setProductToEdit(item)
+            AndroidController.onClick(it)
 
         }
     }

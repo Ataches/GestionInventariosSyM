@@ -1,9 +1,10 @@
-package com.example.stockmanagementsym.presentation
+package com.example.stockmanagementsym.presentation.view
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.dialog_new_sale.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import java.util.*
 
-object DialogObject {
+class DialogView(private var androidView: AndroidView) {
 
     private lateinit var layoutInflater:LayoutInflater
 
@@ -32,8 +33,9 @@ object DialogObject {
 
         viewNewCustomer.buttonProductListToNewProduct.setOnClickListener {
 
-            Model.setCustomerNewSale(
+            androidView.setCustomerNewSale(
                 Customer(
+                    androidView.getID(),
                     viewNewCustomer.editTextCustomerName.text.toString(),
                     viewNewCustomer.editTextCustomerAddress.text.toString(),
                     viewNewCustomer.editTextPhone.text.toString(),
@@ -41,10 +43,11 @@ object DialogObject {
                 )
             )
             if(insert) {
-                showResultTransaction(Model.createNewCustomer(),view)
-                showCustomerName(view,Model.getCustomerNewSale())
+                showResultTransaction(androidView.createNewCustomer(),view)
+                showCustomerName(view,androidView.getCustomerNewSale())
             }else{
-                showResultTransaction(Model.editCustomer(), view)
+                Log.d("PRUEBA", "Llega")
+                showResultTransaction(androidView.updateCustomer(viewNewCustomer.context), view)
             }
 
             dialog.dismiss()
@@ -69,19 +72,15 @@ object DialogObject {
         viewNewSale.buttonSelectCustomerName.setOnClickListener{
                 dialogSelectList(
                                    viewNewSale,
-                                   data = Model.getCustomerList().map {
-                                                                        it.getName()+" "+
-                                                                        it.getAddress()+" "+
-                                                                        it.getPhone()+" "+
-                                                                        it.getCity()
-                                                                }.toTypedArray()
+                                   data = androidView.getCustomerList()
                                 )
         }
         viewNewSale.buttonDate.setOnClickListener {
-            Model.setDateSale(dialogGetDate(viewNewSale))
+            var date = dialogGetDate(viewNewSale)
+            androidView.setDateSale(date)
         }
         viewNewSale.buttonNewSale.setOnClickListener {
-            showResultTransaction(Model.updateNewSale(), view)
+            showResultTransaction(androidView.updateNewSale(), view)
             FragmentData.reloadCartList()
             dialog.dismiss()
         }
@@ -93,8 +92,9 @@ object DialogObject {
     //New product
     fun confirmCreateProduct(viewElement:View){
         val newProductFragment = viewElement.findFragment<NewProductFragment>()
-        Model.setNewProduct(
+        androidView.setNewProduct(
             Product(
+                androidView.getID(),
                 newProductFragment.editTextProductName.text.toString(),
                 newProductFragment.editTextProductPrice.text.toString().toInt(),
                 newProductFragment.editTextProductDesc.text.toString(),
@@ -106,9 +106,9 @@ object DialogObject {
         val builder = AlertDialog.Builder(newProductFragment.context)
         builder.setTitle(newProductFragment.getString(R.string.titleAlertNewProd))
         val message = newProductFragment.getString(R.string.messageAlertNewProd)+
-                "\n"+Model.getNewProduct()
+                "\n"+androidView.getNewProduct()
         builder.setPositiveButton("Si"){ _,_ ->
-            showResultTransaction(Model.createNewProduct(), viewElement)
+            showResultTransaction(androidView.createNewProduct(), viewElement)
         }
         builder.setNegativeButton("No"){ _,_ ->
             showMessage(newProductFragment.requireContext(), "Modifique los datos si es necesario")
@@ -127,7 +127,7 @@ object DialogObject {
                 "\n" + data
         builder.setPositiveButton("Si"){_,_ ->
             FragmentData.setConfirmRegister(true)
-            Controller.onClick(view)
+            androidView.getController().onClick(view)
         }
         builder.setNegativeButton("No") { _, _ ->
             FragmentData.setConfirmRegister(false)
@@ -137,20 +137,22 @@ object DialogObject {
         builder.create()
         builder.show()
     }
-    private fun dialogGetDate(view: View):Calendar{
+    private fun dialogGetDate(view: View):String{
         val date = Calendar.getInstance()
+        var dateSelected:String = ""
         val builder = DatePickerDialog(view.context, { _, yyyy, mm, dd ->
             date.set(yyyy,mm,dd)
-            view.textViewDateSelected.text = view.context.getString(R.string.date)+": "+FragmentData.getDate(date)
+            dateSelected = FragmentData.getDate(date)
+            view.textViewDateSelected.text = view.context.getString(R.string.date)+": "+ dateSelected
         }, 2020, 9, 1)
         builder.show()
-        return date
+        return dateSelected
     }
     fun dialogSelectList(view: View, data:Array<String> ){
         val builder=AlertDialog.Builder(view.context)
 
         builder.setItems(data){ _, item ->
-            Model.setCustomerSelected(view, item)
+            androidView.setCustomerSelected(view, item)
         }
 
         builder.create()
