@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
@@ -28,7 +27,7 @@ class ProductListFragment : Fragment(), ListListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ProductsListAdapter(Data.getProductList())
+        adapter = ProductsListAdapter(FragmentData.getProductList())
         recyclerViewProductList.adapter = adapter
         recyclerViewProductList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
@@ -48,7 +47,7 @@ class ProductListFragment : Fragment(), ListListener{
     }
 
     override fun reloadList() {
-        adapter.productsList = Data.getProductList()
+        adapter.productsList = FragmentData.getProductList()
         adapter.notifyDataSetChanged()
     }
 

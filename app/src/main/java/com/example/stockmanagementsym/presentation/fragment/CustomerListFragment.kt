@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
@@ -29,7 +28,7 @@ class CustomerListFragment : Fragment(), ListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CustomerListAdapter(Data.getCustomerList())
+        adapter = CustomerListAdapter(FragmentData.getCustomerList())
         recyclerViewCustomerList.adapter = adapter
         recyclerViewCustomerList.layoutManager = LinearLayoutManager(
             view.context,

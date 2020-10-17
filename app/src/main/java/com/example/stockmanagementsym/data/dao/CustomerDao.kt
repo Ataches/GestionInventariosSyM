@@ -13,10 +13,10 @@ interface CustomerDao {
     fun delete(customer: Customer)
 
     @Update
-    fun update(customerToEdit: Customer, customerEdited: Customer)
+    fun update(customerEdited: Customer)
 
     @Query("SELECT * FROM CUSTOMER")
-    fun select():List<Customer>
+    fun selectCustomerList():List<Customer>
 
 }
 

@@ -17,6 +17,7 @@ class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         itemView.textViewCity.text = "Ciudad: ${item.getCity()}"
         //itemView.buttonCart.setBackgroundDrawable(itemView.context.resources.getDrawable(item.getIDiconDrawable()))
         itemView.buttonEditCustomer.setOnClickListener{
+
             FragmentData.setCustomerToEdit(item)
             FragmentData.dialogNewCustomer(itemView,false)
         }

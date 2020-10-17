@@ -2,10 +2,8 @@ package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.data.CartObject
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
-import com.example.stockmanagementsym.presentation.view.DialogView
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_cart.view.*
 
@@ -17,7 +15,7 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewQuantity.text = "Cantidad: ${item.getQuantity()}"
         itemView.editTextQuantity.setText("""${item.getQuantity()}""")
         itemView.buttonRemoveCart.setOnClickListener{
-            CartObject.getList().remove(item)
+            FragmentData.removeElementCart(it.context,item)
             listener.reloadList()
         }
         itemView.buttonAddProdCart.setOnClickListener{

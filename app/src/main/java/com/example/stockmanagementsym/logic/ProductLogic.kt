@@ -1,26 +1,28 @@
 package com.example.stockmanagementsym.logic
 
-import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
 
-object ProductLogic {
+class ProductLogic(private var productDao: ProductDao) {
 
     private lateinit var productEdited: Product
     private lateinit var productToEdit: Product
-    private lateinit var newProduct:Product
+    private var productList:List<Product> ?= null
 
     fun updateProduct():Boolean {
         return try{
-            Data.updateProduct(productToEdit,productEdited)
+            productDao.update(productEdited)
+            updateProductList()
             true
         }catch (e:Exception){
             false
         }
     }
 
-    fun createNewProduct():Boolean{
+    fun createNewProduct(newProduct:Product):Boolean{
         return try{
-            Data.createProduct(newProduct)
+            productDao.insert(newProduct)
+            updateProductList()
             true
         }catch (e:Exception){
             false
@@ -35,16 +37,18 @@ object ProductLogic {
         this.productEdited = customerEdited
     }
 
-    fun setNewProduct(newProduct: Product) {
-        this.newProduct = newProduct
-    }
-
-    fun getNewProduct(): Product {
-        return newProduct
-    }
-
     fun searchProduct(searchText: String): List<Product> {
-        return Data.getProductList().filter {product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
+        return getProductList().filter {product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
+    }
+
+    fun getProductList(): List<Product> {
+        if(productList==null)
+            productList = productDao.selectProductList()
+        return productList!!
+    }
+
+    private fun updateProductList() {
+        productList = productDao.selectProductList()
     }
 
 }

@@ -3,39 +3,26 @@ package com.example.stockmanagementsym.presentation.view
 import android.content.Context
 import android.view.View
 import android.widget.Toast
-import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
-import java.util.*
 
 class AndroidView(private val androidModel: AndroidModel)  {
 
     private var dialogObject:DialogView ?= null
-    private var controller:AndroidController ?= null
+    var controller:AndroidController = AndroidController
 
     private lateinit var userName: String
 
-    fun getController(): AndroidController {
-        if(controller==null){
-            controller = AndroidController
-            controller!!.setViewClass(this)
-        }
-        return controller!!
+    init {
+        controller.setViewClass(this)
     }
 
     private fun getDialogView(): DialogView {
         if(dialogObject==null)
             dialogObject = DialogView(this)
         return dialogObject!!
-    }
-
-    fun setUser(userName:String){
-        this.userName = userName
-    }
-    fun getUser(): String {
-        return userName
     }
 
     fun showCustomerName(view: View, customerNewSale: Customer) {
@@ -55,8 +42,8 @@ class AndroidView(private val androidModel: AndroidModel)  {
         getDialogView().dialogConfirmRegister(
                                                 view = view,
                                                 data = data,
-                                                title = view.context.getString(R.string.titleAlertNewSale),
-                                                message = view.context.getString(R.string.messageAlertNewSale)
+                                                title = title,
+                                                message = message
                                             )
     }
 
@@ -99,20 +86,16 @@ class AndroidView(private val androidModel: AndroidModel)  {
         androidModel.searchSale(view)
     }
 
-    fun setCustomerNewSale(customer: Customer) {
-        androidModel.setCustomerNewSale(customer)
-    }
-
-    fun createNewCustomer(): Boolean {
-        return androidModel.createNewCustomer()
+    fun createNewCustomer(customer: Customer): Boolean {
+        return androidModel.createNewCustomer(customer)
     }
 
     fun getCustomerNewSale(): Customer {
         return androidModel.getCustomerNewSale()
     }
 
-    fun updateCustomer(context: Context): Boolean {
-        return androidModel.updateCustomer(context)
+    fun updateCustomer(customer: Customer): Boolean {
+        return androidModel.updateCustomer(customer)
     }
 
     fun getCustomerList(): Array<String> {
@@ -128,20 +111,8 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.setDateSale(date)
     }
 
-    fun updateNewSale(): Boolean {
-        return androidModel.updateNewSale()
-    }
-
-    fun setNewProduct(product: Product) {
-        return androidModel.setNewProduct(product)
-    }
-
-    fun getNewProduct(): Product {
-        return androidModel.getNewProduct()
-    }
-
-    fun createNewProduct(): Boolean {
-        return androidModel.createNewProduct()
+    fun createNewSale(): Boolean {
+        return androidModel.createNewSale()
     }
 
     fun setCustomerSelected(view: View, item: Int) {
@@ -150,6 +121,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
 
     fun setProductToEdit(item: Product) {
         androidModel.setProductToEdit(item)
+    }
+
+    fun createNewProduct(product: Product): Boolean {
+        return androidModel.createNewProduct(product)
     }
 
     fun getID(): String {

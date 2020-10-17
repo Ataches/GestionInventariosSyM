@@ -1,7 +1,6 @@
 package com.example.stockmanagementsym.presentation
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.fragment.app.findFragment
@@ -30,58 +29,52 @@ import java.util.*
 
 class AndroidModel(application: Application) : AndroidViewModel(application) {
 
-
-    private var customerDao: CustomerDao
-    private var userDao: UserDao
-
+    private var customerDao: CustomerDao = AppDataBase.getAppDataBase(application)!!.getCustomerDao()
+    private var userDao: UserDao = AppDataBase.getAppDataBase(application)!!.getUserDao()
+    private var productDao = AppDataBase.getAppDataBase(application)!!.getProductDao()
+    private var saleDao = AppDataBase.getAppDataBase(application)!!.getSaleDao()
     private var androidView:AndroidView ?= null
     private var customerLogic: CustomerLogic ?= null
+
     private var productLogic: ProductLogic ?= null
     private var saleLogic: SaleLogic ?= null
     private var userLogic:UserLogic ?= null
     private lateinit var newProductFragment: NewProductFragment
+    private lateinit var dateSale: String
+    private lateinit var customerSale: Customer
 
     init{
-        customerDao = AppDataBase.getAppDataBase(application)!!.getCustomerDao()
-        userDao = AppDataBase.getAppDataBase(application)!!.getUserDao()
         getAndroidView()
         FragmentData.setModel(this)
     }
 
     //Sale
-    fun setCustomerNewSale(customer: Customer) {
-        getSaleLogic().setCustomerNewSale(customer)
-    }
-
     fun getCustomerNewSale(): Customer {
-        return getSaleLogic().getCustomerNewSale()
+        return customerSale
     }
 
-    fun updateNewSale(): Boolean {
-        getSaleLogic().setCustomerNewSale(getCustomerNewSale())
-        getSaleLogic().setId(generateID())
-        return getSaleLogic().updateNewSale()
+    fun createNewSale(): Boolean {
+        return getSaleLogic().updateNewSale(generateID(),customerSale,dateSale)
     }
 
     fun getSalesList(): List<Sale> {
         return getSaleLogic().getSaleList()
     }
 
-    fun setDateSale(date: String) {
-        getSaleLogic().setDateSale(date)
+    fun setDateSale(dateSale: String) {
+        this.dateSale = dateSale
     }
 
     fun confirmNewSale(view: View) {
 
-        val confirmRegister =
-            getAndroidView().dialogConfirmRegister(
+        getAndroidView().dialogConfirmRegister(
                 view = view,
                 data = getCartList(),
                 title = view.context.getString(R.string.titleAlertNewSale),
                 message = view.context.getString(R.string.messageAlertNewSale)
             )
-
-
+        FragmentData.setConfirmRegister(true)
+        getAndroidView().controller.onClick(view)
     }
 
     fun newSale(view: View) {
@@ -89,28 +82,28 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
         FragmentData.setConfirmRegister(false)
     }
 
+    fun addProduct(item: Product): String {
+        return getSaleLogic().addProductToCart(item)
+    }
+
+    fun removeElementCart(item: Product): Boolean {
+        return getSaleLogic().removeElementCart(item)
+    }
+
     //Cart
     fun getCartList(): MutableList<Product> {
-        //Log.d("PRUEBA", "Llega"+getCustomerLogic().selectCustomer())
-        return getCartLogic().getCartList()
+        return getSaleLogic().getCartList()
     }
 
     fun getTotalPrice(): Int {
-        return getCartLogic().getTotalPrice()
+        return getSaleLogic().getTotalPriceCart()
     }
 
     //Customer
-    fun setCustomerToEdit(item: Customer) {
-        getCustomerLogic().setCustomerToEdit(item)
-    }
-
-    fun updateCustomer(context: Context): Boolean {
-        getCustomerLogic().setCustomerEdited(getCustomerNewSale())
-        FragmentData.reloadCustomerList()
-        getCustomerLogic().setContext(context)
-        var bool = getCustomerLogic().updateCustomer()
-        FragmentData.showMessage(context, ""+getCustomerLogic().selectCustomer())
-        return bool
+    fun updateCustomer(customer: Customer): Boolean {
+        var customerToEdit = FragmentData.getCustomerToEdit()
+        customer.idCustomer = customerToEdit.idCustomer
+        return getCustomerLogic().updateCustomer(customer)
     }
 
     fun getCustomerList(): List<Customer> {
@@ -118,14 +111,12 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setCustomerSelected(view: View, item: Int) {
-        setCustomerNewSale(getCustomerList().get(item))
-        getAndroidView().showCustomerName(view, getCustomerNewSale())
+        customerSale = getCustomerList().get(item)
+        getAndroidView().showCustomerName(view, getCustomerList().get(item))
     }
 
-    fun createNewCustomer(): Boolean {
-        getCustomerLogic().setNewCustomer(getCustomerNewSale())
-        FragmentData.reloadCustomerList()
-        return getCustomerLogic().createNewCustomer()
+    fun createNewCustomer(customer: Customer): Boolean {
+        return getCustomerLogic().createNewCustomer(customer)
     }
 
     //Product
@@ -147,31 +138,19 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
+    fun getProductList(): List<Product> {
+        return getProductLogic().getProductList()
+    }
+
     fun updateProduct() {
         getProductLogic().updateProduct()
     }
 
     //   New product creation
-    fun setNewProduct(product: Product) {
-        getProductLogic().setNewProduct(product)
-    }
-
-    fun getNewProduct(): Product {
-        return getProductLogic().getNewProduct()
-    }
-
-    fun createNewProduct(): Boolean {
-        var result = getProductLogic().createNewProduct()
+    fun createNewProduct(product: Product): Boolean {
+        var result = getProductLogic().createNewProduct(product)
         FragmentData.reloadProductList()
         return result
-    }
-
-    fun setNewProductFragment(newProductFragment: NewProductFragment) {
-        this.newProductFragment = newProductFragment
-    }
-
-    fun getNewProductFragment(): NewProductFragment {
-        return newProductFragment
     }
 
     fun getPhotoCamera(viewElement: View) {
@@ -210,36 +189,31 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
 
     //Logic classes
     private fun getCustomerLogic(): CustomerLogic {
-        if(customerLogic == null){
+        if(customerLogic == null)
             customerLogic = CustomerLogic(customerDao)
-            customerLogic!!.setContext(getApplication())
-        }
         return customerLogic!!
     }
 
     private fun getUserLogic(): UserLogic {
-        if(userLogic==null) {
+        if(userLogic==null)
             userLogic = UserLogic(userDao)
-            userLogic!!.setContext(getApplication())
-        }
         return userLogic!!
     }
 
     private fun getSaleLogic(): SaleLogic {
-        return SaleLogic
+        if(saleLogic==null)
+            saleLogic = SaleLogic(saleDao)
+        return saleLogic!!
     }
 
     private fun getProductLogic(): ProductLogic {
-        return ProductLogic
-    }
-
-    private fun getCartLogic(): CartLogic {
-        return CartLogic
+        if(productLogic==null)
+            productLogic = ProductLogic(productDao)
+        return productLogic!!
     }
     fun getAndroidView(): AndroidView {
-        if(androidView == null){
+        if(androidView == null)
             androidView = AndroidView(this)
-        }
         return androidView!!
     }
 
@@ -248,7 +222,7 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun confirmLogin(login: LoginActivity, user: String, password: String) {
-        if(getUserLogic().confirmLogin(generateID(),user,password)){
+        if(getUserLogic().confirmLogin(user,password)){
             FragmentData.setUser(userName = user)
             getAndroidView().showMessage(login,login.getString(R.string.welcome)+" "+user)
 
@@ -256,6 +230,11 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
             login.startActivity(intent)
         }
         else
-            getAndroidView().showMessage(login,"Usuario "+user+" no encontrado o contraseña incorrecta")
+            getAndroidView().showMessage(login,
+                                        "Usuario $user no encontrado o contraseña incorrecta"
+                                        )
     }
+
+
+
 }

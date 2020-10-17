@@ -51,5 +51,10 @@
     <string name="date">Fecha</string>
     <string name="selectDate">Seleccionar fecha</string>
     <string name="saleDate">Fecha de compra:</string>
+    <string name="elementAddedToCart">Elemento añadido al carrito</string>
+    <string name="elementNotAddedToCart">Elemento no añadido al carrito</string>
+
+    <!-- Dialogs -->
+    <string name="modifyIfIsNecessary">Modifique los datos si es necesario</string>
 
 </resources>

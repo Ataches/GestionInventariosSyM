@@ -1,64 +1,42 @@
 package com.example.stockmanagementsym.logic
 
-import android.content.Context
-import com.example.stockmanagementsym.data.AppDataBase
-import com.example.stockmanagementsym.data.Data
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.logic.business.Customer
 
 class CustomerLogic(private val customerDao: CustomerDao) {
 
-    private lateinit var newCustomer: Customer
-    private lateinit var customerEdited: Customer
-    private lateinit var customerToEdit: Customer
+    private var customerList: List<Customer> ?= null
 
-    private lateinit var context: Context
-
-
-    fun setContext(context:Context){
-        this.context = context
-    }
-
-
-    fun updateCustomer():Boolean {
+    fun updateCustomer(customer: Customer):Boolean {
         return try{
-            Data.updateCustomer(customerToEdit,customerEdited)
-            customerDao.update(customerToEdit, customerEdited)
+            customerDao.update(customer)
             true
         }catch (e:Exception){
             false
         }
     }
-    fun selectCustomer(): List<Customer> {
-        return customerDao.select()
-    }
-    fun createNewCustomer(): Boolean {
+
+    fun createNewCustomer(newCustomer: Customer): Boolean {
         return try{
-            Data.createCustomer(newCustomer)
+            customerDao.insert(newCustomer)
+            updateCustomerList()
             true
         }catch (e: Exception){
             false
         }
     }
 
-    fun setCustomerToEdit(customerToEdit : Customer) {
-        this.customerToEdit = customerToEdit
-    }
-
-    fun setCustomerEdited(customerEdited: Customer) {
-        this.customerEdited = customerEdited
+    fun searchCustomer(searchText: String): List<Customer> {
+        return getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText)}
     }
 
     fun getCustomerList(): List<Customer> {
-        return Data.getCustomerList()
+        if(customerList == null)
+            customerList = customerDao.selectCustomerList()
+        return customerList!!
     }
 
-    fun searchCustomer(searchText: String): List<Customer> {
-        return Data.getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText)}
+    private fun updateCustomerList(){
+        customerList = customerDao.selectCustomerList()
     }
-
-    fun setNewCustomer(newCustomer: Customer) {
-        this.newCustomer = newCustomer
-    }
-
 }

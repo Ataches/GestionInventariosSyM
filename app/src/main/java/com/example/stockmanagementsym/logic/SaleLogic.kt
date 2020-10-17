@@ -1,50 +1,63 @@
 package com.example.stockmanagementsym.logic
 
-import com.example.stockmanagementsym.data.CartObject
-import com.example.stockmanagementsym.data.Data
+import com.example.stockmanagementsym.data.dao.SaleDao
 import com.example.stockmanagementsym.logic.business.Customer
+import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
-import java.util.*
 
-object SaleLogic {
+class SaleLogic(private var saleDao: SaleDao) {
 
-    private lateinit var customerNewSale: Customer
-    private lateinit var date: String
-    private lateinit var id: String
+    private var cartLogic:CartLogic ?= null
+    private var saleList: List<Sale> ?= null
 
-    fun updateNewSale(): Boolean {
+    private fun getCartLogic(): CartLogic {
+        if(cartLogic==null)
+            cartLogic = CartLogic()
+        return cartLogic!!
+    }
+
+    fun getSaleList(): List<Sale> {
+        if(saleList==null)
+            saleList = saleDao.selectSaleList()
+        return saleList!!
+    }
+
+    fun updateNewSale(id: String, customerNewSale: Customer, date: String): Boolean {
         return try {
-            Data.updateSale(
+            saleDao.update(
                 Sale(
-                    id, customerNewSale, date, CartObject.getList()
+                    id, customerNewSale, date, getCartLogic().getCartList()
                 )
             )
-            CartObject.clearCart()
+            getCartLogic().clearCart()
+            updateSaleList()
             true
         } catch (e: Exception) {
             false
         }
     }
+
+    private fun updateSaleList() {
+        saleList = saleDao.selectSaleList()
+    }
+
     fun searchSales(searchText:String): List<Sale> {
-        return Data.getSalesList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase())}
+        return getSaleList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
-    fun getSaleList(): List<Sale> {
-        return Data.getSalesList()
+    fun addProductToCart(item: Product):String{
+        return getCartLogic().addProduct(item)
     }
 
-    fun setDateSale(date: String) {
-        this.date = date
+    fun getTotalPriceCart(): Int {
+        return getCartLogic().getTotalPrice()
     }
 
-    fun setCustomerNewSale(customerNewSale: Customer) {
-        this.customerNewSale = customerNewSale
+    fun getCartList(): MutableList<Product> {
+        return getCartLogic().getCartList()
+    }
+    fun removeElementCart(item: Product):Boolean{
+        return getCartLogic().removeElementCart(item)
     }
 
-    fun getCustomerNewSale(): Customer {
-        return customerNewSale
-    }
-    fun setId(id:String){
-        this.id = id
-    }
 }

@@ -12,8 +12,11 @@ interface SaleDao {
     @Delete
     fun delete(sale: Sale)
 
+    @Update
+    fun update(sale: Sale)
+
     @Query("SELECT * FROM SALE")
-    fun select():List<Sale>
+    fun selectSaleList():List<Sale>
 
 }
 

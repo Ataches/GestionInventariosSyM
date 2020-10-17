@@ -12,8 +12,11 @@ interface ProductDao {
     @Delete
     fun delete(product: Product)
 
+    @Update
+    fun update(productEdited: Product)
+
     @Query("SELECT * FROM PRODUCT")
-    fun select():List<Product>
+    fun selectProductList():List<Product>
 
 }
 

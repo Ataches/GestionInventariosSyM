@@ -3,7 +3,7 @@ package com.example.stockmanagementsym.presentation.view
 import android.content.Context
 import android.view.View
 import android.widget.Toast
-import com.example.stockmanagementsym.data.UserData
+import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
@@ -16,6 +16,7 @@ import java.util.*
 
 object FragmentData {
 
+    private lateinit var customerToEdit: Customer
     private lateinit var itemToEdit: Product
 
     private var confirmRegister: Boolean = false
@@ -119,8 +120,12 @@ object FragmentData {
         return androidModel.getCustomerList()
     }
 
-    fun setCustomerToEdit(item: Customer) {
-        androidModel.setCustomerToEdit(item)
+    fun setCustomerToEdit(customerToEdit: Customer) {
+        this.customerToEdit = customerToEdit
+    }
+
+    fun getCustomerToEdit(): Customer {
+        return customerToEdit
     }
 
     fun dialogNewCustomer(itemView: View, b: Boolean) {
@@ -131,5 +136,18 @@ object FragmentData {
         return androidModel.getSalesList()
     }
 
+    fun addProduct(item: Product): String {
+        return androidModel.addProduct(item)
+    }
 
+    fun removeElementCart(context: Context, item: Product) {
+        if(androidModel.removeElementCart(item))
+            showMessage(context,context.getString(R.string.elementAddedToCart))
+        else
+            showMessage(context,context.getString(R.string.elementNotAddedToCart))
+    }
+
+    fun getProductList(): List<Product> {
+        return androidModel.getProductList()
+    }
 }

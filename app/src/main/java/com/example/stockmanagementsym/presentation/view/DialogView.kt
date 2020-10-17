@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -32,8 +31,7 @@ class DialogView(private var androidView: AndroidView) {
         dialog.show()
 
         viewNewCustomer.buttonProductListToNewProduct.setOnClickListener {
-
-            androidView.setCustomerNewSale(
+            val newCustomer  =
                 Customer(
                     androidView.getID(),
                     viewNewCustomer.editTextCustomerName.text.toString(),
@@ -41,15 +39,12 @@ class DialogView(private var androidView: AndroidView) {
                     viewNewCustomer.editTextPhone.text.toString(),
                     viewNewCustomer.editTextCity.text.toString()
                 )
-            )
             if(insert) {
-                showResultTransaction(androidView.createNewCustomer(),view)
+                showResultTransaction(androidView.createNewCustomer(newCustomer),view)
                 showCustomerName(view,androidView.getCustomerNewSale())
             }else{
-                Log.d("PRUEBA", "Llega")
-                showResultTransaction(androidView.updateCustomer(viewNewCustomer.context), view)
+                showResultTransaction(androidView.updateCustomer(newCustomer), view)
             }
-
             dialog.dismiss()
         }
         viewNewCustomer.buttonNewProductCancel.setOnClickListener {
@@ -80,7 +75,7 @@ class DialogView(private var androidView: AndroidView) {
             androidView.setDateSale(date)
         }
         viewNewSale.buttonNewSale.setOnClickListener {
-            showResultTransaction(androidView.updateNewSale(), view)
+            showResultTransaction(androidView.createNewSale(), view)
             FragmentData.reloadCartList()
             dialog.dismiss()
         }
@@ -92,7 +87,7 @@ class DialogView(private var androidView: AndroidView) {
     //New product
     fun confirmCreateProduct(viewElement:View){
         val newProductFragment = viewElement.findFragment<NewProductFragment>()
-        androidView.setNewProduct(
+        var newProduct =
             Product(
                 androidView.getID(),
                 newProductFragment.editTextProductName.text.toString(),
@@ -101,21 +96,11 @@ class DialogView(private var androidView: AndroidView) {
                 R.drawable.ic_login.toString().toInt(),
                 newProductFragment.editTextProductQuantity.text.toString().toInt()
             )
-        )
-
-        val builder = AlertDialog.Builder(newProductFragment.context)
-        builder.setTitle(newProductFragment.getString(R.string.titleAlertNewProd))
-        val message = newProductFragment.getString(R.string.messageAlertNewProd)+
-                "\n"+androidView.getNewProduct()
-        builder.setPositiveButton("Si"){ _,_ ->
-            showResultTransaction(androidView.createNewProduct(), viewElement)
-        }
-        builder.setNegativeButton("No"){ _,_ ->
-            showMessage(newProductFragment.requireContext(), "Modifique los datos si es necesario")
-        }
-        builder.setMessage(message)
-        builder.create()
-        builder.show()
+        dialogConfirmRegister(  viewElement,
+                                newProduct,
+                                newProductFragment.getString(R.string.titleAlertNewProd),
+                                newProductFragment.getString(R.string.messageAlertNewProd)
+                             )
     }
 
     // Dialogs
@@ -126,8 +111,12 @@ class DialogView(private var androidView: AndroidView) {
         val messageDialog = message +
                 "\n" + data
         builder.setPositiveButton("Si"){_,_ ->
-            FragmentData.setConfirmRegister(true)
-            androidView.getController().onClick(view)
+            if(view.context.getString(R.string.titleAlertNewProd) == title)
+                showResultTransaction(androidView.createNewProduct(data as Product), view)
+            else{
+                FragmentData.setConfirmRegister(true)
+                androidView.controller.onClick(view)
+            }
         }
         builder.setNegativeButton("No") { _, _ ->
             FragmentData.setConfirmRegister(false)

@@ -3,7 +3,7 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.view.View
 import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.data.CartObject
+import com.example.stockmanagementsym.data.CartData
 import com.example.stockmanagementsym.logic.ProductLogic
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
@@ -30,7 +30,7 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             try {
                 quantity = itemView.editTextQuantity.text.toString().toInt()
                 item.setQuantity(quantity)
-                FragmentData.showMessage(it.context, CartObject.addProduct(item))
+                FragmentData.showMessage(it.context, FragmentData.addProduct(item))
             }catch (e: Exception){
                 FragmentData.showMessage(it.context, "Digite un numero correcto")
             }
