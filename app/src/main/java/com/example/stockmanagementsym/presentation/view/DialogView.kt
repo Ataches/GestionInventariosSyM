@@ -22,8 +22,9 @@ class DialogView(private var androidView: AndroidView) {
     private lateinit var layoutInflater:LayoutInflater
 
     //Customer
-    fun dialogNewCustomer(view: View, insert:Boolean) {
-        layoutInflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    fun dialogRegisterCustomer(view: View, updateBoolean: Boolean) {
+        layoutInflater =
+            view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val viewNewCustomer = layoutInflater.inflate(R.layout.dialog_new_customer, null, false)
         var dialog: Dialog = Dialog(view.context)
 
@@ -31,7 +32,7 @@ class DialogView(private var androidView: AndroidView) {
         dialog.show()
 
         viewNewCustomer.buttonProductListToNewProduct.setOnClickListener {
-            val newCustomer  =
+            val customer =
                 Customer(
                     androidView.getID(),
                     viewNewCustomer.editTextCustomerName.text.toString(),
@@ -39,12 +40,25 @@ class DialogView(private var androidView: AndroidView) {
                     viewNewCustomer.editTextPhone.text.toString(),
                     viewNewCustomer.editTextCity.text.toString()
                 )
-            if(insert) {
-                showResultTransaction(androidView.createNewCustomer(newCustomer),view)
-                showCustomerName(view,androidView.getCustomerNewSale())
-            }else{
-                showResultTransaction(androidView.updateCustomer(newCustomer), view)
+
+
+            if (updateBoolean){
+                dialogConfirmRegister(
+                    view,
+                    customer,
+                    view.context.getString(R.string.titleAlertUpdateCustomer),
+                    view.context.getString(R.string.messageAlertUpdateCustomer)
+                )
+                FragmentData.setBooleanUpdate(false)
             }
+            else
+                dialogConfirmRegister(
+                    view,
+                    customer,
+                    view.context.getString(R.string.titleAlertNewCustomer),
+                    view.context.getString(R.string.messageAlertNewCustomer)
+                )
+
             dialog.dismiss()
         }
         viewNewCustomer.buttonNewProductCancel.setOnClickListener {
@@ -55,14 +69,14 @@ class DialogView(private var androidView: AndroidView) {
     fun dialogNewSale(view: View) {
         layoutInflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val viewNewSale = layoutInflater.inflate(R.layout.dialog_new_sale, null, false)
-        var dialog: Dialog = Dialog(view.context)
+        val dialog: Dialog = Dialog(view.context)
 
 
         dialog.setContentView(viewNewSale)
         dialog.show()
 
         viewNewSale.buttonNewCustomer.setOnClickListener{
-            dialogNewCustomer(viewNewSale,true)
+            dialogRegisterCustomer(viewNewSale, true)
         }
         viewNewSale.buttonSelectCustomerName.setOnClickListener{
                 dialogSelectList(
@@ -71,11 +85,11 @@ class DialogView(private var androidView: AndroidView) {
                                 )
         }
         viewNewSale.buttonDate.setOnClickListener {
-            var date = dialogGetDate(viewNewSale)
+            val date = dialogGetDate(viewNewSale)
             androidView.setDateSale(date)
         }
         viewNewSale.buttonNewSale.setOnClickListener {
-            showResultTransaction(androidView.createNewSale(), view)
+            showResultTransaction(androidView.createSale(), view)
             FragmentData.reloadCartList()
             dialog.dismiss()
         }
@@ -84,10 +98,10 @@ class DialogView(private var androidView: AndroidView) {
         }
     }
 
-    //New product
-    fun confirmCreateProduct(viewElement:View){
-        val newProductFragment = viewElement.findFragment<NewProductFragment>()
-        var newProduct =
+    //New product - Search or create fragment data and obtains it's information, after asks to create or update product
+    fun dialogRegisterProduct(view: View, updateBoolean: Boolean){
+        val newProductFragment:NewProductFragment = view.findFragment()
+        val product =
             Product(
                 androidView.getID(),
                 newProductFragment.editTextProductName.text.toString(),
@@ -96,11 +110,22 @@ class DialogView(private var androidView: AndroidView) {
                 R.drawable.ic_login.toString().toInt(),
                 newProductFragment.editTextProductQuantity.text.toString().toInt()
             )
-        dialogConfirmRegister(  viewElement,
-                                newProduct,
-                                newProductFragment.getString(R.string.titleAlertNewProd),
-                                newProductFragment.getString(R.string.messageAlertNewProd)
-                             )
+        if (updateBoolean) {
+            dialogConfirmRegister(
+                view,
+                product,
+                newProductFragment.getString(R.string.titleAlertUpdateProd),
+                newProductFragment.getString(R.string.messageAlertUpdateProd)
+            )
+            FragmentData.setBooleanUpdate(false)
+        }else {
+            dialogConfirmRegister(
+                view,
+                product,
+                newProductFragment.getString(R.string.titleAlertNewProd),
+                newProductFragment.getString(R.string.messageAlertNewProd)
+            )
+        }
     }
 
     // Dialogs
@@ -110,17 +135,28 @@ class DialogView(private var androidView: AndroidView) {
         builder.setTitle(title)
         val messageDialog = message +
                 "\n" + data
-        builder.setPositiveButton("Si"){_,_ ->
-            if(view.context.getString(R.string.titleAlertNewProd) == title)
-                showResultTransaction(androidView.createNewProduct(data as Product), view)
-            else{
-                FragmentData.setConfirmRegister(true)
-                androidView.controller.onClick(view)
+        builder.setPositiveButton("Si") { _, _ ->
+            when (title) {
+                view.context.getString(R.string.titleAlertNewProd) -> {
+                    showResultTransaction(androidView.createProduct(data as Product), view)
+                }
+                view.context.getString(R.string.titleAlertUpdateProd) -> {
+                    showResultTransaction(androidView.updateProduct(data as Product), view)
+                }
+                view.context.getString(R.string.titleAlertNewSale) -> {
+                    dialogNewSale(view)
+                }
+                view.context.getString(R.string.titleAlertNewCustomer) -> {
+                    showResultTransaction(androidView.createCustomer(data as Customer), view)
+                    showCustomerName(view, data)
+                }
+                view.context.getString(R.string.titleAlertUpdateCustomer) ->
+                    showResultTransaction(androidView.updateCustomer(data as Customer), view)
             }
         }
         builder.setNegativeButton("No") { _, _ ->
-            FragmentData.setConfirmRegister(false)
-            showMessage(view.context,"Modifique los datos si es necesario")
+            FragmentData.setBooleanUpdate(false)
+            showMessage(view.context, view.context.getString(R.string.modifyIfIsNecessary))
         }
         builder.setMessage(messageDialog)
         builder.create()
@@ -128,19 +164,21 @@ class DialogView(private var androidView: AndroidView) {
     }
     private fun dialogGetDate(view: View):String{
         val date = Calendar.getInstance()
-        var dateSelected:String = ""
+        var dateSelected: String = ""
         val builder = DatePickerDialog(view.context, { _, yyyy, mm, dd ->
-            date.set(yyyy,mm,dd)
+            date.set(yyyy, mm, dd)
             dateSelected = FragmentData.getDate(date)
-            view.textViewDateSelected.text = view.context.getString(R.string.date)+": "+ dateSelected
+            view.textViewDateSelected.text =
+                view.context.getString(R.string.date) + ": " + dateSelected
         }, 2020, 9, 1)
         builder.show()
         return dateSelected
     }
-    fun dialogSelectList(view: View, data:Array<String> ){
-        val builder=AlertDialog.Builder(view.context)
 
-        builder.setItems(data){ _, item ->
+    private fun dialogSelectList(view: View, data: Array<String>) {
+        val builder = AlertDialog.Builder(view.context)
+
+        builder.setItems(data) { _, item ->
             androidView.setCustomerSelected(view, item)
         }
 
@@ -152,13 +190,15 @@ class DialogView(private var androidView: AndroidView) {
     fun showCustomerName(view: View,customer: Customer) {
         view.textViewSaleCustomerNameSelected?.text = customer.getName()
     }
-    private fun showResultTransaction(resultTransaction: Boolean, view: View){
+
+    private fun showResultTransaction(resultTransaction: Boolean, view: View) {
         if (resultTransaction)
             showMessage(view.context, "Se realizo la operación con exito")
         else
             showMessage(view.context, "No se pudo realizar la operación")
     }
-    fun showMessage(context:Context ,message:String){
+
+    fun showMessage(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

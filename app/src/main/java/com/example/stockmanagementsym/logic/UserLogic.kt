@@ -20,6 +20,7 @@ class UserLogic(private val userDao: UserDao) {
     }
 
     fun confirmLogin(userName: String, password: String): Boolean {
+        //insertUser("1",userName,password)
         return (selectUser().any { it -> it.getUser() == userName }) &&
                 (selectUser().any { it -> it.getPassword() == password })
     }

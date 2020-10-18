@@ -22,7 +22,6 @@ import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
 import com.example.stockmanagementsym.presentation.view.AndroidView
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
-import kotlinx.android.synthetic.main.fragment_new_product.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
 import java.util.*
@@ -39,9 +38,8 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     private var productLogic: ProductLogic ?= null
     private var saleLogic: SaleLogic ?= null
     private var userLogic:UserLogic ?= null
-    private lateinit var newProductFragment: NewProductFragment
     private lateinit var dateSale: String
-    private lateinit var customerSale: Customer
+    private lateinit var customerNewSale: Customer
 
     init{
         getAndroidView()
@@ -50,11 +48,13 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
 
     //Sale
     fun getCustomerNewSale(): Customer {
-        return customerSale
+        return customerNewSale
     }
 
-    fun createNewSale(): Boolean {
-        return getSaleLogic().updateNewSale(generateID(),customerSale,dateSale)
+    fun createSale(): Boolean {
+        val resultTransaction = getSaleLogic().createSale(generateID(),customerNewSale,dateSale)
+        FragmentData.reloadCartList()
+        return resultTransaction
     }
 
     fun getSalesList(): List<Sale> {
@@ -63,23 +63,6 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
 
     fun setDateSale(dateSale: String) {
         this.dateSale = dateSale
-    }
-
-    fun confirmNewSale(view: View) {
-
-        getAndroidView().dialogConfirmRegister(
-                view = view,
-                data = getCartList(),
-                title = view.context.getString(R.string.titleAlertNewSale),
-                message = view.context.getString(R.string.messageAlertNewSale)
-            )
-        FragmentData.setConfirmRegister(true)
-        getAndroidView().controller.onClick(view)
-    }
-
-    fun newSale(view: View) {
-        getAndroidView().dialogNewSale(view)
-        FragmentData.setConfirmRegister(false)
     }
 
     fun addProduct(item: Product): String {
@@ -100,10 +83,12 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     //Customer
-    fun updateCustomer(customer: Customer): Boolean {
-        var customerToEdit = FragmentData.getCustomerToEdit()
-        customer.idCustomer = customerToEdit.idCustomer
-        return getCustomerLogic().updateCustomer(customer)
+    fun updateCustomer(customerToUpdate: Customer): Boolean {
+        val customerToEdit = FragmentData.getCustomerToEdit()
+        customerToUpdate.idCustomer = customerToEdit.idCustomer
+        val resultTransaction = getCustomerLogic().updateCustomer(customerToUpdate)
+        FragmentData.reloadCustomerList()
+        return resultTransaction
     }
 
     fun getCustomerList(): List<Customer> {
@@ -111,44 +96,32 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setCustomerSelected(view: View, item: Int) {
-        customerSale = getCustomerList().get(item)
+        customerNewSale = getCustomerList().get(item)
         getAndroidView().showCustomerName(view, getCustomerList().get(item))
     }
 
-    fun createNewCustomer(customer: Customer): Boolean {
-        return getCustomerLogic().createNewCustomer(customer)
+    fun createCustomer(customer: Customer): Boolean {
+        val resultTransaction = getCustomerLogic().createCustomer(customer)
+        FragmentData.reloadCustomerList()
+        return resultTransaction
     }
 
     //Product
-    //   Update product
-    fun setProductToEdit(item: Product) {
-        getProductLogic().setProductToEdit(item)
-    }
-
-    fun setProductEdited() {
-        getProductLogic().setProductEdited(
-            Product(
-                generateID(),
-                newProductFragment.editTextProductName.text.toString(),
-                newProductFragment.editTextProductPrice.text.toString().toInt(),
-                newProductFragment.editTextProductDesc.text.toString(),
-                R.drawable.ic_login.toString().toInt(),
-                newProductFragment.editTextProductQuantity.text.toString().toInt()
-            )
-        )
-    }
-
     fun getProductList(): List<Product> {
         return getProductLogic().getProductList()
     }
 
-    fun updateProduct() {
-        getProductLogic().updateProduct()
+    fun updateProduct(productToUpdate: Product):Boolean {
+        var productToEdit = FragmentData.getProductToEdit()
+        productToUpdate.idProduct = productToEdit.idProduct
+        val resultTransaction = getProductLogic().updateProduct(productToUpdate)
+        FragmentData.reloadProductList()
+        return resultTransaction
     }
 
     //   New product creation
-    fun createNewProduct(product: Product): Boolean {
-        var result = getProductLogic().createNewProduct(product)
+    fun createProduct(product: Product): Boolean {
+        var result = getProductLogic().createProduct(product)
         FragmentData.reloadProductList()
         return result
     }
@@ -164,10 +137,10 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     //Searches
-    fun searchSale(viewElement: View) {
-        val view = viewElement.findFragment<SaleListFragment>()
-        view.setList(
-            getSaleLogic().searchSales(view.editTextSearchSaleList.text.toString()).toMutableList()
+    fun searchSale(view: View) {
+        val saleListFragment = view.findFragment<SaleListFragment>()
+        saleListFragment.setList(
+            getSaleLogic().searchSales(saleListFragment.editTextSearchSaleList.text.toString()).toMutableList()
         )
     }
 

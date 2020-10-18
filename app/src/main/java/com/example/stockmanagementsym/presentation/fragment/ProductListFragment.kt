@@ -32,7 +32,6 @@ class ProductListFragment : Fragment(), ListListener{
         recyclerViewProductList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
         FragmentData.setProductListListener(this)
-        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
 
         buttonProductListToSearch.setOnClickListener(AndroidController)
         buttonProductListToHome.setOnClickListener (AndroidController)
@@ -42,7 +41,6 @@ class ProductListFragment : Fragment(), ListListener{
 
     override fun onResume() {
         super.onResume()
-        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
         reloadList()
     }
 

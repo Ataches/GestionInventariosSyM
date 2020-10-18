@@ -1,13 +1,9 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
-import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.data.CartData
 import com.example.stockmanagementsym.logic.ProductLogic
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.AndroidController
-import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_product.view.*
@@ -36,19 +32,9 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
         itemView.buttonEditProduct.setOnClickListener {
-
-            val fragment = itemView.findFragment<ProductListFragment>()
-            val transaction = fragment.parentFragmentManager.beginTransaction()
-
-            FragmentData.setNewProductFragment(NewProductFragment())
-            FragmentData.setUpdateBoolean(true)
-            FragmentData.setNewProductFragment(FragmentData.getNewProductFragment())
-            AndroidController.setFragmentTransaction(transaction)
-            AndroidController.goNewProduct()
-
             FragmentData.setProductToEdit(item)
-            AndroidController.onClick(it)
-
+            FragmentData.setBooleanUpdate(true)
+            FragmentData.goToNewProduct()
         }
     }
 }

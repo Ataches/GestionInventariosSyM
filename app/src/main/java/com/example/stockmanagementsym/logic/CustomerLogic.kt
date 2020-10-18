@@ -10,13 +10,14 @@ class CustomerLogic(private val customerDao: CustomerDao) {
     fun updateCustomer(customer: Customer):Boolean {
         return try{
             customerDao.update(customer)
+            updateCustomerList()
             true
         }catch (e:Exception){
             false
         }
     }
 
-    fun createNewCustomer(newCustomer: Customer): Boolean {
+    fun createCustomer(newCustomer: Customer): Boolean {
         return try{
             customerDao.insert(newCustomer)
             updateCustomerList()

@@ -5,13 +5,11 @@ import com.example.stockmanagementsym.logic.business.Product
 
 class ProductLogic(private var productDao: ProductDao) {
 
-    private lateinit var productEdited: Product
-    private lateinit var productToEdit: Product
     private var productList:List<Product> ?= null
 
-    fun updateProduct():Boolean {
+    fun updateProduct(productToUpdate: Product):Boolean {
         return try{
-            productDao.update(productEdited)
+            productDao.update(productToUpdate)
             updateProductList()
             true
         }catch (e:Exception){
@@ -19,7 +17,7 @@ class ProductLogic(private var productDao: ProductDao) {
         }
     }
 
-    fun createNewProduct(newProduct:Product):Boolean{
+    fun createProduct(newProduct:Product):Boolean{
         return try{
             productDao.insert(newProduct)
             updateProductList()
@@ -27,14 +25,6 @@ class ProductLogic(private var productDao: ProductDao) {
         }catch (e:Exception){
             false
         }
-    }
-
-    fun setProductToEdit(customerToEdit : Product) {
-        this.productToEdit = customerToEdit
-    }
-
-    fun setProductEdited(customerEdited: Product) {
-        this.productEdited = customerEdited
     }
 
     fun searchProduct(searchText: String): List<Product> {

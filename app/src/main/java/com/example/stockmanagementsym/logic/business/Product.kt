@@ -9,7 +9,7 @@ import java.util.*
 @Entity
 data class Product(
     @NonNull @PrimaryKey @ColumnInfo(name = "id_product")
-    val idProduct: String = UUID.randomUUID().toString(),
+    var idProduct: String = UUID.randomUUID().toString(),
     private val name: String,
     private val price: Int,
     private val description: String,

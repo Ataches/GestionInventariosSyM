@@ -17,16 +17,14 @@ import java.util.*
 object FragmentData {
 
     private lateinit var customerToEdit: Customer
-    private lateinit var itemToEdit: Product
+    private lateinit var productToEdit: Product
 
-    private var confirmRegister: Boolean = false
+    private var booleanUpdate: Boolean = false
     private lateinit var cartListener: ListListener
     private lateinit var productListListener: ListListener
-    private var customerListListener: ListListener? = null
-    private var updateBoolean: Boolean = false
+    private lateinit var customerListListener: ListListener
 
     private lateinit var newProductFragment: NewProductFragment
-    private var idFragment: Int=0
 
     private lateinit var androidModel: AndroidModel
     private lateinit var userName: String
@@ -41,14 +39,6 @@ object FragmentData {
     fun setModel(androidModel: AndroidModel){
         this.androidModel = androidModel
     }
-
-    fun setUpdateBoolean(updateBoolean:Boolean){
-        FragmentData.updateBoolean = updateBoolean
-    }
-    fun getUpdateBoolean():Boolean{
-        return updateBoolean
-    }
-
     fun setProductListListener(productListFragment: ListListener) {
         productListListener = productListFragment
     }
@@ -63,18 +53,11 @@ object FragmentData {
         return newProductFragment
     }
     fun setNewProductFragment(newProductFragment: NewProductFragment){
-        FragmentData.newProductFragment = newProductFragment
-    }
-
-    fun getIdFragment(): Int {
-        return idFragment
-    }
-    fun setIdFragment(idFragment: Int){
-        FragmentData.idFragment = idFragment
+        this.newProductFragment = newProductFragment
     }
 
     fun reloadCustomerList(){
-        customerListListener?.reloadList()
+        customerListListener.reloadList()
     }
     fun reloadProductList(){
         productListListener.reloadList()
@@ -83,11 +66,11 @@ object FragmentData {
         cartListener.reloadList()
     }
 
-    fun setConfirmRegister(confirmRegister: Boolean) {
-        FragmentData.confirmRegister = confirmRegister
+    fun setBooleanUpdate(confirmUpdate: Boolean) {
+        this.booleanUpdate = confirmUpdate
     }
-    fun getConfirmRegister():Boolean{
-        return confirmRegister
+    fun getBooleanUpdate():Boolean{
+        return booleanUpdate
     }
 
     fun getDate(date: Calendar): String {
@@ -102,10 +85,10 @@ object FragmentData {
     }
 
     fun setProductToEdit(item: Product) {
-        itemToEdit = item
+        productToEdit = item
     }
     fun getProductToEdit(): Product {
-        return itemToEdit
+        return productToEdit
     }
 
     fun getCartList(): MutableList<Product> {
@@ -128,8 +111,8 @@ object FragmentData {
         return customerToEdit
     }
 
-    fun dialogNewCustomer(itemView: View, b: Boolean) {
-        androidModel.getAndroidView().dialogNewCustomer(itemView,b)
+    fun updateCustomer(itemView: View, updateBoolean: Boolean) {
+        androidModel.getAndroidView().registerCustomer(itemView,updateBoolean)
     }
 
     fun getSalesList(): List<Sale> {
@@ -149,5 +132,17 @@ object FragmentData {
 
     fun getProductList(): List<Product> {
         return androidModel.getProductList()
+    }
+
+    fun updateProduct(view: View, updateBoolean: Boolean) {
+        androidModel.getAndroidView().registerProduct(view, updateBoolean)
+    }
+
+    fun goToNewProduct() {
+        androidModel.getAndroidView().goToNewProduct()
+    }
+
+    fun goToNewCustomer(view:View) {
+        androidModel.getAndroidView().goToNewCustomer(view)
     }
 }

@@ -19,20 +19,11 @@ class NewProductFragment: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
-        FragmentData.setIdFragment(this.id)
-
         buttonNewProductToHome.setOnClickListener (AndroidController)
         buttonNewProductToProductList.setOnClickListener (AndroidController)
         buttonNewProductToNewProduct.setOnClickListener (AndroidController)
         buttonNewProductToGallery.setOnClickListener(AndroidController)
         buttonNewProductToCamera.setOnClickListener(AndroidController)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        AndroidController.setFragmentTransaction(parentFragmentManager.beginTransaction())
-        FragmentData.setIdFragment(this.id)
     }
 
     override fun onCreateView(
@@ -42,8 +33,6 @@ class NewProductFragment: Fragment(){
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_new_product, container, false)
     }
-
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

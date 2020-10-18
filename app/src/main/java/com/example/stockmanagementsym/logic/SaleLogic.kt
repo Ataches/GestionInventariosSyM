@@ -22,7 +22,7 @@ class SaleLogic(private var saleDao: SaleDao) {
         return saleList!!
     }
 
-    fun updateNewSale(id: String, customerNewSale: Customer, date: String): Boolean {
+    fun createSale(id: String, customerNewSale: Customer, date: String): Boolean {
         return try {
             saleDao.update(
                 Sale(

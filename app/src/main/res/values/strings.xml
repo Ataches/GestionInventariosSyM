@@ -56,5 +56,11 @@
 
     <!-- Dialogs -->
     <string name="modifyIfIsNecessary">Modifique los datos si es necesario</string>
+    <string name="titleAlertNewCustomer">Registrar nuevo cliente</string>
+    <string name="messageAlertNewCustomer">¿Desea crear un nuevo cliente con los siguietes datos?:</string>
+    <string name="titleAlertUpdateCustomer">Actualizar cliente</string>
+    <string name="messageAlertUpdateCustomer">¿Desea actualizar la información del cliente con los siguientes datos?:</string>
+    <string name="titleAlertUpdateProd">Actualizar datos producto</string>
+    <string name="messageAlertUpdateProd">¿Desea actualizar el producto con los siguientes datos?:</string>
 
 </resources>

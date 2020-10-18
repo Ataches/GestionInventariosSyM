@@ -49,7 +49,6 @@ class CustomerListFragment : Fragment(), ListListener {
     }
 
     override fun reloadList() {
-        //adapter.customerList = Model.getCustomerList()
         adapter.customerList = FragmentData.getCustomerList()
         adapter.notifyDataSetChanged()
     }
