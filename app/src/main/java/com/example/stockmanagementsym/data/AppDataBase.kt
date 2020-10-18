@@ -43,8 +43,8 @@ abstract class AppDataBase : RoomDatabase(){
 class Converters {
     @TypeConverter
     fun customerToStoredString(customer: Customer):String{
-        return customer.getName()+","+customer.getAddress()+",.,"+
-                 customer.getPhone()+","+customer.getPhone()+","+customer.getCity()
+        return customer.getName()+",.,"+customer.getAddress()+",.,"+
+                 customer.getPhone()+",.,"+customer.getPhone()+",.,"+customer.getCity()
     }
     @TypeConverter
     fun storedStringToCustomer(string: String):Customer{

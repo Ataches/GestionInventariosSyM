@@ -1,7 +1,6 @@
 package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.dao.SaleDao
-import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 
@@ -22,13 +21,9 @@ class SaleLogic(private var saleDao: SaleDao) {
         return saleList!!
     }
 
-    fun createSale(id: String, customerNewSale: Customer, date: String): Boolean {
+    fun createSale(sale: Sale): Boolean {
         return try {
-            saleDao.update(
-                Sale(
-                    id, customerNewSale, date, getCartLogic().getCartList()
-                )
-            )
+            saleDao.insert(sale)
             getCartLogic().clearCart()
             updateSaleList()
             true

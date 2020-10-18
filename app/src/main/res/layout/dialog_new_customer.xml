@@ -6,16 +6,23 @@
     android:layout_width="320dp"
     android:layout_height="600dp"
     >
-
+    <TextView
+        android:id="@+id/textViewCustomerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textViewCustomerName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/textViewCustomerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="80dp"
         android:text="@string/customerName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCustomerTitle"
         app:layout_constraintBottom_toTopOf="@id/editTextCustomerName"
         />
 
@@ -102,6 +109,7 @@
         android:drawableStart="@drawable/ic_edit"
         android:text="@string/uploadCustomer"
         android:layout_marginBottom="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCity"
         app:layout_constraintBottom_toTopOf="@+id/buttonNewProductCancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -110,7 +118,7 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="@string/Cancel"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

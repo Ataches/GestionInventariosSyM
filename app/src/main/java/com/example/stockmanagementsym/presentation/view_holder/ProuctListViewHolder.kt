@@ -9,20 +9,14 @@ import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_product.view.*
 
 class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private lateinit var productLogic: ProductLogic
-    private lateinit var productListFragment: ProductListFragment
-    private var productLogicCreated: Boolean = false
-    private var productListFragmentCreated: Boolean = false
-
     fun bind(item: Product) {
         itemView.textViewName.text = item.getName()
         itemView.textViewPrice.text = "$ ${item.getPrice()}"
         itemView.textViewDescription.text = item.getDescription()
         itemView.textViewQuantity.text = "Cantidad: ${item.getQuantity()}"
         //itemView.buttonCart.setBackgroundDrawable(itemView.context.resources.getDrawable(item.getIDiconDrawable()))
-        itemView.buttonProductListToCart.setOnClickListener{
-            var quantity:Int
+        itemView.buttonAddProductToCart.setOnClickListener{
+            val quantity:Int
             try {
                 quantity = itemView.editTextQuantity.text.toString().toInt()
                 item.setQuantity(quantity)
@@ -35,6 +29,9 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             FragmentData.setProductToEdit(item)
             FragmentData.setBooleanUpdate(true)
             FragmentData.goToNewProduct()
+        }
+        itemView.buttonDeleteProduct.setOnClickListener{
+            FragmentData.deleteProduct(item)
         }
     }
 }

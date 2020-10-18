@@ -27,6 +27,16 @@ class ProductLogic(private var productDao: ProductDao) {
         }
     }
 
+    fun deleteProduct(product:Product):Boolean{
+        return try{
+            productDao.delete(product)
+            updateProductList()
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
+
     fun searchProduct(searchText: String): List<Product> {
         return getProductList().filter {product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
     }

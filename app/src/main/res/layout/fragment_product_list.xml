@@ -8,7 +8,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/buttonProductListToCart"
+            android:id="@+id/buttonAddProductToCart"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:drawableStart="@drawable/ic_add_cart"
@@ -38,7 +38,7 @@
             app:layout_constraintBottom_toTopOf="@+id/recyclerViewProductList"
             app:layout_constraintEnd_toStartOf="@id/buttonProductListToSearch"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonProductListToCart" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddProductToCart" />
 
         <Button
             android:id="@+id/buttonProductListToSearch"
@@ -49,7 +49,7 @@
             android:text="@string/search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editTextSearchProductList"
-            app:layout_constraintTop_toBottomOf="@+id/buttonProductListToCart" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddProductToCart" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewProductList"

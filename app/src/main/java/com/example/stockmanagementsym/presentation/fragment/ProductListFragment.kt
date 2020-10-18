@@ -35,7 +35,7 @@ class ProductListFragment : Fragment(), ListListener{
 
         buttonProductListToSearch.setOnClickListener(AndroidController)
         buttonProductListToHome.setOnClickListener (AndroidController)
-        buttonProductListToCart.setOnClickListener (AndroidController)
+        buttonAddProductToCart.setOnClickListener (AndroidController)
         buttonProductListToNewProduct.setOnClickListener (AndroidController)
     }
 

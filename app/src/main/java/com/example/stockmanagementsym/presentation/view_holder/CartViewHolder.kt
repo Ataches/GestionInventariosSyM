@@ -18,7 +18,7 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             FragmentData.removeElementCart(it.context,item)
             listener.reloadList()
         }
-        itemView.buttonAddProdCart.setOnClickListener{
+        itemView.buttonAddQuantityProdCart.setOnClickListener{
             var quantity:Int
             try {
                 quantity = itemView.editTextQuantity.text.toString().toInt()

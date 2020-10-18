@@ -9,10 +9,10 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.AndroidModel
 import com.example.stockmanagementsym.presentation.fragment.ListListener
-import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.Exception
 
 object FragmentData {
 
@@ -23,8 +23,6 @@ object FragmentData {
     private lateinit var cartListener: ListListener
     private lateinit var productListListener: ListListener
     private lateinit var customerListListener: ListListener
-
-    private lateinit var newProductFragment: NewProductFragment
 
     private lateinit var androidModel: AndroidModel
     private lateinit var userName: String
@@ -49,15 +47,11 @@ object FragmentData {
         customerListListener = customerListFragment
     }
 
-    fun getNewProductFragment(): NewProductFragment {
-        return newProductFragment
-    }
-    fun setNewProductFragment(newProductFragment: NewProductFragment){
-        this.newProductFragment = newProductFragment
-    }
-
     fun reloadCustomerList(){
-        customerListListener.reloadList()
+        try{
+            customerListListener.reloadList()
+        }catch (e:Exception){
+        }
     }
     fun reloadProductList(){
         productListListener.reloadList()
@@ -111,8 +105,8 @@ object FragmentData {
         return customerToEdit
     }
 
-    fun updateCustomer(itemView: View, updateBoolean: Boolean) {
-        androidModel.getAndroidView().registerCustomer(itemView,updateBoolean)
+    fun deleteCustomer(customer: Customer) {
+        androidModel.deleteCustomer(customer)
     }
 
     fun getSalesList(): List<Sale> {
@@ -121,6 +115,10 @@ object FragmentData {
 
     fun addProduct(item: Product): String {
         return androidModel.addProduct(item)
+    }
+
+    fun deleteProduct(item: Product) {
+        androidModel.deleteProduct(item)
     }
 
     fun removeElementCart(context: Context, item: Product) {
@@ -134,10 +132,6 @@ object FragmentData {
         return androidModel.getProductList()
     }
 
-    fun updateProduct(view: View, updateBoolean: Boolean) {
-        androidModel.getAndroidView().registerProduct(view, updateBoolean)
-    }
-
     fun goToNewProduct() {
         androidModel.getAndroidView().goToNewProduct()
     }
@@ -145,4 +139,5 @@ object FragmentData {
     fun goToNewCustomer(view:View) {
         androidModel.getAndroidView().goToNewCustomer(view)
     }
+
 }

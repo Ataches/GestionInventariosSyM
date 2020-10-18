@@ -5,12 +5,8 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.fragment.HomeFragment
-import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
-import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 import com.example.stockmanagementsym.presentation.view.AndroidView
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.item_customer.view.*
 
 object AndroidController: View.OnClickListener {
 
@@ -39,7 +35,7 @@ object AndroidController: View.OnClickListener {
             //Product list
 
             R.id.buttonProductListToHome -> navController.navigate(R.id.action_productsList_to_home)
-            R.id.buttonProductListToCart -> navController.navigate(R.id.action_productsList_to_cart)
+            R.id.buttonAddProductToCart -> navController.navigate(R.id.action_productsList_to_cart)
             R.id.buttonProductListToSearch -> androidView.searchProduct(view)
             R.id.buttonProductListToNewProduct -> navController.navigate(R.id.action_productsList_to_newProductFragment)
 

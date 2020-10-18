@@ -11,7 +11,10 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.AppDataBase
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.data.dao.UserDao
-import com.example.stockmanagementsym.logic.*
+import com.example.stockmanagementsym.logic.CustomerLogic
+import com.example.stockmanagementsym.logic.ProductLogic
+import com.example.stockmanagementsym.logic.SaleLogic
+import com.example.stockmanagementsym.logic.UserLogic
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
@@ -40,6 +43,7 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     private var userLogic:UserLogic ?= null
     private lateinit var dateSale: String
     private lateinit var customerNewSale: Customer
+    private var newSale: Sale ?= null
 
     init{
         getAndroidView()
@@ -51,10 +55,18 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
         return customerNewSale
     }
 
-    fun createSale(): Boolean {
-        val resultTransaction = getSaleLogic().createSale(generateID(),customerNewSale,dateSale)
+    fun createSale(newSale: Sale): Boolean {
+        val resultTransaction = getSaleLogic().createSale(newSale)
         FragmentData.reloadCartList()
+        if(resultTransaction)
+            this.newSale = null
         return resultTransaction
+    }
+
+    fun getNewSale(): Sale {
+        if(newSale==null)
+            newSale = Sale(generateID(),customerNewSale,dateSale,getSaleLogic().getCartList())
+        return newSale!!
     }
 
     fun getSalesList(): List<Sale> {
@@ -96,12 +108,18 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setCustomerSelected(view: View, item: Int) {
-        customerNewSale = getCustomerList().get(item)
-        getAndroidView().showCustomerName(view, getCustomerList().get(item))
+        customerNewSale = getCustomerList()[item]
+        getAndroidView().showCustomerName(view, customerNewSale)
     }
 
     fun createCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().createCustomer(customer)
+        FragmentData.reloadCustomerList()
+        return resultTransaction
+    }
+
+    fun deleteCustomer(customer: Customer): Boolean {
+        val resultTransaction = getCustomerLogic().deleteCustomer(customer)
         FragmentData.reloadCustomerList()
         return resultTransaction
     }
@@ -119,6 +137,11 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
         return resultTransaction
     }
 
+    fun deleteProduct(product: Product): Boolean {
+        val resultTransaction = getProductLogic().deleteProduct(product)
+        FragmentData.reloadProductList()
+        return resultTransaction
+    }
     //   New product creation
     fun createProduct(product: Product): Boolean {
         var result = getProductLogic().createProduct(product)
@@ -207,7 +230,5 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
                                         "Usuario $user no encontrado o contraseña incorrecta"
                                         )
     }
-
-
 
 }

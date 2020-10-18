@@ -18,5 +18,8 @@ class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             FragmentData.setBooleanUpdate(true)
             FragmentData.goToNewCustomer(it)
         }
+        itemView.buttonDeleteCustomer.setOnClickListener{
+            FragmentData.deleteCustomer(item)
+        }
     }
 }

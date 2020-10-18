@@ -4,10 +4,10 @@ import com.example.stockmanagementsym.data.CartData
 import com.example.stockmanagementsym.logic.business.Product
 
 class CartLogic {
-    private var cartObject = CartData()
+
     private var cartData:CartData ?= null
 
-    fun getCartData():CartData{
+    private fun getCartData():CartData{
         if(cartData==null)
             cartData = CartData()
         return cartData!!
@@ -18,10 +18,11 @@ class CartLogic {
     }
 
     fun getTotalPrice():Int{
-        if(cartObject.getCartList().isNullOrEmpty())
+        if(getCartData().getCartList().isNullOrEmpty())
             return 0
-        return cartObject.getCartList().map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
+        return getCartData().getCartList().map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
     }
+
     fun addProduct(item: Product):String{
         return getCartData().addProduct(item)
     }
@@ -31,6 +32,6 @@ class CartLogic {
     }
 
     fun clearCart() {
-        return getCartData().clearCart()
+        getCartData().clearCart()
     }
 }

@@ -2,13 +2,12 @@ package com.example.stockmanagementsym.presentation.view
 
 import android.content.Context
 import android.view.View
-import androidx.fragment.app.findFragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
-import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 
 class AndroidView(private val androidModel: AndroidModel)  {
 
@@ -49,6 +48,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return resultTransaction
     }
 
+    fun deleteProduct(product: Product): Boolean {
+        return androidModel.deleteProduct(product)
+    }
+
     fun searchProduct(view: View) {
         androidModel.searchProduct(view)
     }
@@ -73,12 +76,12 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.updateCustomer(customer)
     }
 
-    fun setCustomerSelected(view: View, item: Int) {
-        return androidModel.setCustomerSelected(view, item)
+    fun deleteCustomer(customer: Customer): Boolean {
+        return androidModel.deleteCustomer(customer)
     }
 
-    fun getCustomerNewSale(): Customer {
-        return androidModel.getCustomerNewSale()
+    fun setCustomerSelected(view: View, item: Int) {
+        return androidModel.setCustomerSelected(view, item)
     }
 
     fun searchCustomer(view: View) {
@@ -114,8 +117,12 @@ class AndroidView(private val androidModel: AndroidModel)  {
         )
     }
 
-    fun createSale(): Boolean {
-        return androidModel.createSale()
+    fun createSale(newSale: Sale): Boolean {
+        return androidModel.createSale(newSale)
+    }
+
+    fun getNewSale(): Sale {
+        return androidModel.getNewSale()
     }
 
     fun setDateSale(date: String) {

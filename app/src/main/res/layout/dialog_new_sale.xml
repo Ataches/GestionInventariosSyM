@@ -2,43 +2,65 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="20dp"
+    android:padding="10dp"
     android:layout_width="320dp"
     android:layout_height="600dp"
     >
-
+    <TextView
+        android:id="@+id/textViewTitleSale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/uploadSale"
+        app:layout_goneMarginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCustomer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
     <TextView
         android:id="@+id/textViewCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/customer"
-        app:layout_constraintBottom_toTopOf="@id/buttonSelectCustomerName"
+        android:text="@string/selectCustomer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleSale"
+        />
 
     <Button
         android:id="@+id/buttonSelectCustomerName"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
         android:text="@string/saleCustomerName"
+        android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toStartOf="@+id/buttonNewCustomer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCustomer"
         app:layout_constraintBottom_toTopOf="@id/textViewSaleCustomerNameSelected"
+
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".42"
+
         />
 
     <Button
         android:id="@+id/buttonNewCustomer"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
         android:text="@string/uploadCustomer"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonSelectCustomerName"
-        app:layout_constraintTop_toTopOf="@+id/buttonSelectCustomerName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCustomer"
         app:layout_constraintBottom_toTopOf="@id/textViewSaleCustomerNameSelected"
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".42"
+
         />
 
     <TextView
@@ -46,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="@string/dateSelected"
+        android:text="@string/customerNotSelected"
         app:layout_constraintBottom_toTopOf="@id/textViewDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/buttonSelectCustomerName"
@@ -56,7 +78,7 @@
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/date"
+        android:text="@string/selectDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewSaleCustomerNameSelected"
@@ -80,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:text="@string/dateSelected"
+        android:text="@string/dateNotSelected"
         app:layout_constraintBottom_toTopOf="@id/buttonNewSale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

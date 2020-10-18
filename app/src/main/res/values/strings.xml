@@ -29,7 +29,7 @@
     <string name="updateProduct">Registrar producto</string>
     <string name="titleAlertNewProd">Crear nuevo producto</string>
     <string name="messageAlertNewProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
-    <string name="uploadCustomer">Registrar nuevo cliente</string>
+    <string name="uploadCustomer">Nuevo cliente</string>
     <string name="selectImage">Seleccione la imagen para el producto (opcional)</string>
 
     <!-- Customer -->
@@ -46,10 +46,7 @@
     <string name="uploadSale">Nueva venta</string>
     <string name="titleAlertNewSale">Registrar nueva venta</string>
     <string name="messageAlertNewSale">¿Desea reistrar una nueva venta con los siguientes productos?:</string>
-    <string name="saleCustomerName">Seleccione el cliente</string>
-    <string name="dateSelected">No se ha seleccionado fecha de venta</string>
-    <string name="date">Fecha</string>
-    <string name="selectDate">Seleccionar fecha</string>
+    <string name="saleCustomerName">Seleccionar cliente</string>
     <string name="saleDate">Fecha de compra:</string>
     <string name="elementAddedToCart">Elemento añadido al carrito</string>
     <string name="elementNotAddedToCart">Elemento no añadido al carrito</string>
@@ -62,5 +59,14 @@
     <string name="messageAlertUpdateCustomer">¿Desea actualizar la información del cliente con los siguientes datos?:</string>
     <string name="titleAlertUpdateProd">Actualizar datos producto</string>
     <string name="messageAlertUpdateProd">¿Desea actualizar el producto con los siguientes datos?:</string>
+
+    <!-- Dialogs/new_sale-->
+    <string name="selectCustomer">Seleccione el cliente para la venta</string>
+    <string name="customerNotSelected">No se ha seleccionado cliente para la venta</string>
+    <string name="date">Fecha</string>
+    <string name="selectDate">Seleccionar fecha</string>
+    <string name="dateNotSelected">No se ha seleccionado fecha de venta</string>
+    <string name="titleAlertNewSaleBd">Registrar nueva venta en la base de datos</string>
+
 
 </resources>

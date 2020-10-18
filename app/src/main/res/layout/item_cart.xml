@@ -67,6 +67,7 @@
 
             <Button
                 android:id="@+id/buttonRemoveCart"
+                android:background="@color/buttonPrimary"
                 android:drawableBottom="@drawable/ic_remove_cart"
                 android:paddingBottom="5dp"
                 android:layout_width="35dp"
@@ -75,10 +76,11 @@
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/buttonAddProdCart"
+                app:layout_constraintBottom_toTopOf="@id/buttonAddQuantityProdCart"
                 />
             <Button
-                android:id="@+id/buttonAddProdCart"
+                android:id="@+id/buttonAddQuantityProdCart"
+                android:background="@color/buttonPrimary"
                 android:drawableBottom="@drawable/ic_add_quantity"
                 android:paddingBottom="5dp"
                 android:layout_width="35dp"
@@ -97,7 +99,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                app:layout_constraintEnd_toStartOf="@id/buttonAddProdCart"
+                app:layout_constraintEnd_toStartOf="@id/buttonAddQuantityProdCart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>

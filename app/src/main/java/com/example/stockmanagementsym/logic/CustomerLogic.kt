@@ -27,6 +27,16 @@ class CustomerLogic(private val customerDao: CustomerDao) {
         }
     }
 
+    fun deleteCustomer(customer: Customer):Boolean{
+        return try{
+            customerDao.delete(customer)
+            updateCustomerList()
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
+
     fun searchCustomer(searchText: String): List<Customer> {
         return getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText)}
     }

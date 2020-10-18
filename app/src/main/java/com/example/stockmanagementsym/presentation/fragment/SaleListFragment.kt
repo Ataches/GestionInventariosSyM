@@ -36,11 +36,6 @@ class SaleListFragment : Fragment(), ListListener {
         buttonSaleListToHome.setOnClickListener (AndroidController)
     }
 
-    override fun onResume() {
-        super.onResume()
-        reloadList()
-    }
-
     override fun reloadList() {
         adapter.salesList = FragmentData.getSalesList()
         adapter.notifyDataSetChanged()
