@@ -114,6 +114,7 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
 
     fun createCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().createCustomer(customer)
+        customerNewSale = customer //If it is a new customer register from new sale fragment
         FragmentData.reloadCustomerList()
         return resultTransaction
     }

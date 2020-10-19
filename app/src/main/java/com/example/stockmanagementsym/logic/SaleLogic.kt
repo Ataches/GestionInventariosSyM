@@ -22,8 +22,8 @@ class SaleLogic(private var saleDao: SaleDao) {
     }
 
     fun createSale(sale: Sale): Boolean {
+        saleDao.insert(sale)
         return try {
-            saleDao.insert(sale)
             getCartLogic().clearCart()
             updateSaleList()
             true

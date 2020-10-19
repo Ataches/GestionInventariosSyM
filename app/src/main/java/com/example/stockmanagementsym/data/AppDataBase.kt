@@ -1,6 +1,7 @@
-package com.example.stockmanagementsym.data
+    package com.example.stockmanagementsym.data
 
 import android.content.Context
+import android.util.Log
 import androidx.room.*
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.data.dao.ProductDao
@@ -43,34 +44,58 @@ abstract class AppDataBase : RoomDatabase(){
 class Converters {
     @TypeConverter
     fun customerToStoredString(customer: Customer):String{
-        return customer.getName()+",.,"+customer.getAddress()+",.,"+
-                 customer.getPhone()+",.,"+customer.getPhone()+",.,"+customer.getCity()
+        return customer.idCustomer+"-lim-"+
+                customer.getName()+"-lim-"+
+                customer.getAddress()+"-lim-"+
+                 customer.getPhone()+"-lim-"+
+                customer.getCity()
     }
     @TypeConverter
-    fun storedStringToCustomer(string: String):Customer{
-        val dataCustomer = string.split(",.,")
-        return Customer(dataCustomer[0],dataCustomer[1],dataCustomer[2],dataCustomer[3],dataCustomer[4])
+    fun storedStringToCustomer(string: String): Customer? {
+        val dataCustomer = string.split("-lim-")
+        Log.d("PRUEBA CLIENTE",""+dataCustomer)
+        if(dataCustomer.isNotEmpty())
+            return Customer(
+                idCustomer = dataCustomer[0],
+                name = dataCustomer[1],
+                address = dataCustomer[2],
+                phone = dataCustomer[3],
+                city = dataCustomer[4])
+        return null
     }
     @TypeConverter
     fun productListToStoredString(productList:MutableList<Product>):String{
         var value:String = ""
         for (product in productList){
-            value += product.getName()+",.,"+
-                    product.getPrice()+",.,"+
-                    product.getDescription()+",.,"+
-                    product.getIdIconDrawable()+",.,"+
-                    product.getQuantity()+"&ln"
+            value+= product.idProduct+"-lim-"+
+                    product.getName()+"-lim-"+
+                    product.getPrice()+"-lim-"+
+                    product.getDescription()+"-lim-"+
+                    product.getIdIconDrawable()+"-lim-"+
+                    product.getQuantity()+"-ln-"
         }
         return value
     }
     @TypeConverter
     fun storedStringToProductList(value: String): MutableList<Product>{
-        val dataProducts = value.split("&ln")
+        var dataProducts = value.split("-ln-")
+        dataProducts = dataProducts.filter{it != ""}//Remove void elements in list
+        Log.d("PRUEBA DATA PRODS",""+dataProducts)
         val productList: MutableList<Product> = mutableListOf()
-        for(dataProduct in dataProducts){
-            var data = dataProduct.split(",.,")
-            Product(data[0], data[1], data[2].toInt(), data[3], data[4].toInt(), data[5].toInt())
-        }
+        if(dataProducts.isNotEmpty())
+            for(dataProduct in dataProducts){
+                val data = dataProduct.split("-lim-")
+                Log.d("PRUEBA DATA",""+data)
+                val product = Product(
+                                        idProduct = data[0],
+                                        name = data[1],
+                                        price = data[2].toInt(),
+                                        description = data[3],
+                                        idIconDrawable = data[4].toInt(),
+                                        quantity = data[5].toInt()
+                                     )
+                productList.add(product)
+            }
         return productList
     }
 

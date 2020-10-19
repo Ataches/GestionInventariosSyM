@@ -10,10 +10,10 @@ import java.util.*
 @Entity
 data class Sale(
     @NonNull @PrimaryKey @ColumnInfo(name = "id_sale")
-    val idSale: String = UUID.randomUUID().toString(),
+    var idSale: String,
     private var customer: Customer,
     private var date: String,
-    var productList: MutableList<Product>
+    private var productList: MutableList<Product>
 ) {
 
     fun getCustomer(): Customer {
@@ -30,5 +30,9 @@ data class Sale(
 
     fun setDate(date: String) {
         this.date = date
+    }
+
+    fun getProductList():MutableList<Product>{
+        return productList
     }
 }

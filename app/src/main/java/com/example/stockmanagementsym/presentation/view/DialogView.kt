@@ -88,7 +88,7 @@ class DialogView(private var androidView: AndroidView) {
                 dialogSelectList(
                                    viewNewSale,
                                    data = androidView.getCustomerList(),
-                                   view.context.getString(R.string.titleAlertNewSale)
+                                   view.context.getString(R.string.selectCustomer)
                                 )
         }
         viewNewSale.buttonDate.setOnClickListener {
@@ -184,6 +184,7 @@ class DialogView(private var androidView: AndroidView) {
             dateSelected = FragmentData.getDate(date)
             view.textViewDateSelected.text =
                 view.context.getString(R.string.date) + ": " + dateSelected
+            androidView.setDateSale(dateSelected)
         }, 2020, 9, 1)
         builder.show()
         return dateSelected
@@ -196,7 +197,7 @@ class DialogView(private var androidView: AndroidView) {
 
         builder.setItems(data) { _, item ->
             when(title){
-                view.context.getString(R.string.titleAlertNewSale)->{
+                view.context.getString(R.string.selectCustomer)->{
                     androidView.setCustomerSelected(view, item)
                 }
             }
