@@ -44,31 +44,28 @@ abstract class AppDataBase : RoomDatabase(){
 class Converters {
     @TypeConverter
     fun customerToStoredString(customer: Customer):String{
-        return customer.idCustomer+"-lim-"+
-                customer.getName()+"-lim-"+
+        return customer.getName()+"-lim-"+
                 customer.getAddress()+"-lim-"+
-                 customer.getPhone()+"-lim-"+
+                customer.getPhone()+"-lim-"+
                 customer.getCity()
     }
     @TypeConverter
     fun storedStringToCustomer(string: String): Customer? {
         val dataCustomer = string.split("-lim-")
-        Log.d("PRUEBA CLIENTE",""+dataCustomer)
         if(dataCustomer.isNotEmpty())
             return Customer(
-                idCustomer = dataCustomer[0],
-                name = dataCustomer[1],
-                address = dataCustomer[2],
-                phone = dataCustomer[3],
-                city = dataCustomer[4])
+                name = dataCustomer[0],
+                address = dataCustomer[1],
+                phone = dataCustomer[2],
+                city = dataCustomer[3]
+            )
         return null
     }
     @TypeConverter
     fun productListToStoredString(productList:MutableList<Product>):String{
-        var value:String = ""
+        var value = ""
         for (product in productList){
-            value+= product.idProduct+"-lim-"+
-                    product.getName()+"-lim-"+
+            value+= product.getName()+"-lim-"+
                     product.getPrice()+"-lim-"+
                     product.getDescription()+"-lim-"+
                     product.getIdIconDrawable()+"-lim-"+
@@ -80,23 +77,21 @@ class Converters {
     fun storedStringToProductList(value: String): MutableList<Product>{
         var dataProducts = value.split("-ln-")
         dataProducts = dataProducts.filter{it != ""}//Remove void elements in list
-        Log.d("PRUEBA DATA PRODS",""+dataProducts)
         val productList: MutableList<Product> = mutableListOf()
         if(dataProducts.isNotEmpty())
             for(dataProduct in dataProducts){
                 val data = dataProduct.split("-lim-")
-                Log.d("PRUEBA DATA",""+data)
                 val product = Product(
-                                        idProduct = data[0],
-                                        name = data[1],
-                                        price = data[2].toInt(),
-                                        description = data[3],
-                                        idIconDrawable = data[4].toInt(),
-                                        quantity = data[5].toInt()
-                                     )
+                    name = data[0],
+                    price = data[1].toInt(),
+                    description = data[2],
+                    idIconDrawable = data[3].toInt(),
+                    quantity = data[4].toInt()
+                )
                 productList.add(product)
             }
         return productList
     }
 
 }
+

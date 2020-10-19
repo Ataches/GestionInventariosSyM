@@ -4,12 +4,9 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity
 data class Product(
-    @NonNull @PrimaryKey @ColumnInfo(name = "id_product")
-    var idProduct: String = UUID.randomUUID().toString(),
     private val name: String,
     private val price: Int,
     private val description: String,
@@ -17,6 +14,9 @@ data class Product(
     private var idIconDrawable: Int,
     private var quantity: Int
 ){
+    @PrimaryKey(autoGenerate = true)
+    @NonNull @ColumnInfo(name = "id_product")
+    var idProduct:Long = 0L
 
     fun getName():String{
         return name

@@ -129,17 +129,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.setDateSale(date)
     }
 
-
     fun searchSale(view: View) {
         androidModel.searchSale(view)
     }
 
-
-
-
-    fun getID(): String {
-        return androidModel.generateID()
-    }
 
     fun showMessage(context: Context, message:String){
         getDialogView().showMessage(context,message)

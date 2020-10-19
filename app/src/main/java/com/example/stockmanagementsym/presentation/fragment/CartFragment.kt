@@ -39,7 +39,6 @@ class CartFragment : Fragment(), ListListener {
         buttonCartToHome.setOnClickListener(AndroidController)
         buttonCartToProductList.setOnClickListener(AndroidController)
         buttonCartToNewSale.setOnClickListener(AndroidController)
-
     }
 
     override fun onResume() {

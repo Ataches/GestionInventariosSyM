@@ -1,20 +1,13 @@
 package com.example.stockmanagementsym.presentation
 
-import android.app.Application
 import android.content.Intent
 import android.view.View
 import androidx.fragment.app.findFragment
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.data.AppDataBase
-import com.example.stockmanagementsym.data.dao.CustomerDao
-import com.example.stockmanagementsym.data.dao.UserDao
-import com.example.stockmanagementsym.logic.CustomerLogic
-import com.example.stockmanagementsym.logic.ProductLogic
-import com.example.stockmanagementsym.logic.SaleLogic
-import com.example.stockmanagementsym.logic.UserLogic
+import com.example.stockmanagementsym.logic.*
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
@@ -29,12 +22,10 @@ import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
 import java.util.*
 
-class AndroidModel(application: Application) : AndroidViewModel(application) {
+class AndroidModel{
 
-    private var customerDao: CustomerDao = AppDataBase.getAppDataBase(application)!!.getCustomerDao()
-    private var userDao: UserDao = AppDataBase.getAppDataBase(application)!!.getUserDao()
-    private var productDao = AppDataBase.getAppDataBase(application)!!.getProductDao()
-    private var saleDao = AppDataBase.getAppDataBase(application)!!.getSaleDao()
+    private lateinit var dataBaseLogic: DataBaseLogic
+
     private var androidView:AndroidView ?= null
     private var customerLogic: CustomerLogic ?= null
 
@@ -51,11 +42,8 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     //Sale
-    fun getCustomerNewSale(): Customer {
-        return customerNewSale
-    }
-
     fun createSale(newSale: Sale): Boolean {
+        customerNewSale.idCustomer
         val resultTransaction = getSaleLogic().createSale(newSale)
         FragmentData.reloadCartList()
         if(resultTransaction)
@@ -65,7 +53,7 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
 
     fun getNewSale(): Sale {
         if(newSale==null)
-            newSale = Sale(generateID(),customerNewSale,dateSale,getSaleLogic().getCartList())
+            newSale = Sale(customerNewSale,dateSale,getSaleLogic().getCartList())
         return newSale!!
     }
 
@@ -185,27 +173,27 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     //Logic classes
-    private fun getCustomerLogic(): CustomerLogic {
-        if(customerLogic == null)
-            customerLogic = CustomerLogic(customerDao)
-        return customerLogic!!
-    }
-
     private fun getUserLogic(): UserLogic {
         if(userLogic==null)
-            userLogic = UserLogic(userDao)
+            userLogic = UserLogic(dataBaseLogic.getUserDao())
         return userLogic!!
+    }
+
+    private fun getCustomerLogic(): CustomerLogic {
+        if(customerLogic == null)
+            customerLogic = CustomerLogic(dataBaseLogic.getCustomerDao())
+        return customerLogic!!
     }
 
     private fun getSaleLogic(): SaleLogic {
         if(saleLogic==null)
-            saleLogic = SaleLogic(saleDao)
+            saleLogic = SaleLogic(dataBaseLogic.getSaleDao())
         return saleLogic!!
     }
 
     private fun getProductLogic(): ProductLogic {
         if(productLogic==null)
-            productLogic = ProductLogic(productDao)
+            productLogic = ProductLogic(dataBaseLogic.getProductDao())
         return productLogic!!
     }
     fun getAndroidView(): AndroidView {
@@ -219,6 +207,7 @@ class AndroidModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun confirmLogin(login: LoginActivity, user: String, password: String) {
+        dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
         if(getUserLogic().confirmLogin(user,password)){
             FragmentData.setUser(userName = user)
             getAndroidView().showMessage(login,login.getString(R.string.welcome)+" "+user)
