@@ -3,8 +3,9 @@ package com.example.stockmanagementsym.logic
 import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
 
-class ProductLogic(private var productDao: ProductDao) {
-
+class ProductLogic(
+    private var productDao: ProductDao
+) {
     private var productList:List<Product> ?= null
 
     fun updateProduct(productToUpdate: Product):Boolean {

@@ -37,9 +37,6 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_home_to_cart"
-            app:destination="@id/cart" />
-        <action
             android:id="@+id/action_home_to_productsList"
             app:destination="@id/productsList" />
         <action

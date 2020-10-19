@@ -6,6 +6,7 @@ import com.example.stockmanagementsym.logic.business.Sale
 
 class SaleLogic(private var saleDao: SaleDao) {
 
+
     private var cartLogic:CartLogic ?= null
     private var saleList: List<Sale> ?= null
 
@@ -22,8 +23,8 @@ class SaleLogic(private var saleDao: SaleDao) {
     }
 
     fun createSale(sale: Sale): Boolean {
-        saleDao.insert(sale)
         return try {
+            saleDao.insert(sale)
             getCartLogic().clearCart()
             updateSaleList()
             true

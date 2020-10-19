@@ -1,19 +1,20 @@
 package com.example.stockmanagementsym.logic.business
 
 import androidx.annotation.NonNull
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import java.util.*
+import androidx.room.PrimaryKey
 
-@Entity(tableName = "customer",
-    primaryKeys = ["idCustomer"])
+@Entity(tableName = "customer")
 data class Customer(
-    @NonNull
-    var idCustomer:String = UUID.randomUUID().toString(),
     private var name: String,
     private var address: String,
     private var phone: String,
     private var city:String
 ){
+    @PrimaryKey(autoGenerate = true)
+    @NonNull @ColumnInfo(name = "id_customer")
+    var idCustomer:Long = 0L
 
     fun getName():String{
         return name

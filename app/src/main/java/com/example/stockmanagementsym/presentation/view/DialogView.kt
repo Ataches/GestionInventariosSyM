@@ -40,7 +40,6 @@ class DialogView(private var androidView: AndroidView) {
         viewNewCustomer.buttonProductListToNewProduct.setOnClickListener {
             val customer =
                 Customer(
-                    androidView.getID(),
                     viewNewCustomer.editTextCustomerName.text.toString(),
                     viewNewCustomer.editTextCustomerAddress.text.toString(),
                     viewNewCustomer.editTextPhone.text.toString(),
@@ -114,7 +113,6 @@ class DialogView(private var androidView: AndroidView) {
         val newProductFragment:NewProductFragment = view.findFragment()
         val product =
             Product(
-                androidView.getID(),
                 newProductFragment.editTextProductName.text.toString(),
                 newProductFragment.editTextProductPrice.text.toString().toInt(),
                 newProductFragment.editTextProductDesc.text.toString(),
@@ -179,13 +177,12 @@ class DialogView(private var androidView: AndroidView) {
     private fun dialogGetDate(view: View):String{
         val date = Calendar.getInstance()
         var dateSelected: String = ""
-        val builder = DatePickerDialog(view.context, { _, yyyy, mm, dd ->
-            date.set(yyyy, mm, dd)
+        val builder = DatePickerDialog(view.context, { _, yy, mm, dd ->
+            date.set(yy, mm, dd)
             dateSelected = FragmentData.getDate(date)
-            view.textViewDateSelected.text =
-                view.context.getString(R.string.date) + ": " + dateSelected
+            view.textViewDateSelected.text = view.context.getString(R.string.date) + ": " + dateSelected
             androidView.setDateSale(dateSelected)
-        }, 2020, 9, 1)
+        }, 2020, 9, 20)
         builder.show()
         return dateSelected
     }
@@ -220,6 +217,6 @@ class DialogView(private var androidView: AndroidView) {
     }
 
     fun showMessage(context: Context, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

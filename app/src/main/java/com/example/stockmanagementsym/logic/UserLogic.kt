@@ -1,18 +1,25 @@
 package com.example.stockmanagementsym.logic
 
+import android.util.Log
 import com.example.stockmanagementsym.data.dao.UserDao
 import com.example.stockmanagementsym.logic.business.User
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class UserLogic(private val userDao: UserDao) {
+class UserLogic(
+    private var userDao: UserDao
+){
 
-    fun selectUser(): List<User> {
+    private suspend fun selectUserList(): List<User> {
         return userDao.select()
     }
 
-    fun insertUser(id:String,userName: String, password: String):Boolean{
+    fun insertUser(userName: String, password: String):Boolean{
         return try{
-            userDao.insert(User(id,userName,password))
+            GlobalScope.launch(Dispatchers.IO) {
+                userDao.insert(User(userName,password))
+            }
             true
         }catch (e:Exception){
             false
@@ -20,8 +27,16 @@ class UserLogic(private val userDao: UserDao) {
     }
 
     fun confirmLogin(userName: String, password: String): Boolean {
-        insertUser("1",userName,password)
-        return (selectUser().any { it -> it.getUser() == userName }) &&
-                (selectUser().any { it -> it.getPassword() == password })
+        var resultName = false
+        var resultPass = false
+        var userList: List<User> = listOf()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            userList = (selectUserList())
+        }
+        Log.d("TEST",""+userList)
+        resultName = userList.any { it.getUser() == userName }
+        resultPass = userList.any { it.getPassword() == password }
+        return resultName && resultPass
     }
 }
