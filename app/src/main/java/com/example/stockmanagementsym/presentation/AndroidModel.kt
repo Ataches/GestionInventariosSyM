@@ -20,6 +20,7 @@ import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
+import kotlinx.coroutines.delay
 import java.util.*
 
 class AndroidModel{
@@ -210,7 +211,7 @@ class AndroidModel{
         return UUID.randomUUID().toString()
     }
 
-    fun confirmLogin(login: LoginActivity, user: String, password: String) {
+    suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
         if(getUserLogic().confirmLogin(user,password)){
             FragmentData.setUser(userName = user)

@@ -23,11 +23,12 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:inputType="textFilter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonSaleListToHome"
         app:layout_constraintEnd_toStartOf="@id/buttonSaleListToSearch"
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewSaleList"
-        />
+        android:autofillHints="@string/search" />
     <Button
         android:id="@+id/buttonSaleListToSearch"
         android:drawableLeft="@drawable/ic_search"
