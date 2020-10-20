@@ -43,7 +43,11 @@ class AndroidModel{
 
     //Sale
     fun createSale(newSale: Sale): Boolean {
-        customerNewSale.idCustomer
+        newSale.getProductList().forEach {
+            val product  = getProductLogic().searchProducts(it.idProduct)
+            product.setQuantity(product.getQuantity() - it.getQuantity())
+            getProductLogic().updateProduct(product)
+        }
         val resultTransaction = getSaleLogic().createSale(newSale)
         FragmentData.reloadCartList()
         if(resultTransaction)
@@ -65,7 +69,7 @@ class AndroidModel{
         this.dateSale = dateSale
     }
 
-    fun addProduct(item: Product): String {
+    fun addProductToCart(item: Product): String {
         return getSaleLogic().addProductToCart(item)
     }
 

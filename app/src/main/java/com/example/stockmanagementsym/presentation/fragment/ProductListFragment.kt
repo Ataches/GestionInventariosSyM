@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
@@ -12,6 +13,7 @@ import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_product_list.*
+
 
 class ProductListFragment : Fragment(), ListListener{
 
@@ -29,14 +31,14 @@ class ProductListFragment : Fragment(), ListListener{
         super.onCreate(savedInstanceState)
         adapter = ProductsListAdapter(FragmentData.getProductList())
         recyclerViewProductList.adapter = adapter
-        recyclerViewProductList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        recyclerViewProductList.layoutManager = GridLayoutManager(view.context, 2)
 
         FragmentData.setProductListListener(this)
 
         buttonProductListToSearch.setOnClickListener(AndroidController)
-        buttonProductListToHome.setOnClickListener (AndroidController)
-        buttonAddProductToCart.setOnClickListener (AndroidController)
-        buttonProductListToNewProduct.setOnClickListener (AndroidController)
+        buttonProductListToHome.setOnClickListener(AndroidController)
+        buttonAddProductToCart.setOnClickListener(AndroidController)
+        buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
 
     override fun onResume() {

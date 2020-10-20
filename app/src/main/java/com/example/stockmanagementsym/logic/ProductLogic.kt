@@ -37,6 +37,10 @@ class ProductLogic(private var productDao: ProductDao) {
         }
     }
 
+    fun searchProducts(id:Long): Product {
+        return getProductList().filter {product -> product.idProduct == id}[0]
+    }
+
     fun searchProduct(searchText: String): List<Product> {
         return getProductList().filter {product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
     }

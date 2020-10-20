@@ -28,7 +28,9 @@
         android:paddingBottom="5dp"
         android:text="@string/backHome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editTextSearchProductList"
+        />
 
     <EditText
         android:id="@+id/editTextSearchProductList"
@@ -49,16 +51,19 @@
         android:text="@string/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextSearchProductList"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddProductToCart" />
+        app:layout_constraintTop_toTopOf="@+id/editTextSearchProductList"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextSearchProductList"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProductList"
-        android:layout_marginBottom="20dp"
 
         app:layout_constraintBottom_toTopOf="@+id/buttonProductListToNewProduct"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonProductListToSearch"
+
+        android:foregroundGravity="center"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -66,7 +71,7 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent=".99"
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".75"
+        app:layout_constraintHeight_percent=".77"
         />
 
 
@@ -75,10 +80,12 @@
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_add_quantity"
-        android:paddingBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/createProduct"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewProductList" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewProductList"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

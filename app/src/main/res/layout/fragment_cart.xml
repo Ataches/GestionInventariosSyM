@@ -22,23 +22,31 @@
         android:layout_height="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewCart"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".72"
+
         app:layout_constraintTop_toBottomOf="@id/buttonCartToHome"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTotal"
+        />
     <TextView
         android:id="@+id/textViewTotal"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewCart"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCart"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonCartToNewSale"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCartToNewSale"
         />
     <Button
         android:id="@+id/buttonCartToNewSale"
@@ -46,9 +54,10 @@
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_edit"
         android:text="@string/createSale"
-        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewTotal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

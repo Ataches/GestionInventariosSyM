@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutSales"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/buttonCustomerListToHome"
@@ -17,7 +12,9 @@
             android:drawableStart="@drawable/ic_home"
             android:text="@string/backHome"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/editTextSearchCustomerList"
+            />
 
         <EditText
             android:id="@+id/editTextSearchCustomerList"
@@ -25,7 +22,9 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@id/buttonCustomerToSearch"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonCustomerListToHome" />
+            app:layout_constraintTop_toBottomOf="@id/buttonCustomerListToHome"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerViewCustomerList"
+            />
 
         <Button
             android:id="@+id/buttonCustomerToSearch"
@@ -35,7 +34,9 @@
             android:text="@string/search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editTextSearchCustomerList"
-            app:layout_constraintTop_toBottomOf="@id/buttonCustomerListToHome" />
+            app:layout_constraintTop_toBottomOf="@id/buttonCustomerListToHome"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextSearchCustomerList"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewCustomerList"
@@ -50,7 +51,7 @@
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent=".99"
             app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent=".78"
+            app:layout_constraintHeight_percent=".76"
             />
 
         <Button
@@ -58,10 +59,12 @@
             android:layout_width="185dp"
             android:layout_height="50dp"
             android:drawableStart="@drawable/ic_add_quantity"
-            android:paddingBottom="5dp"
             android:text="@string/createCustomer"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewCustomerList" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewCustomerList"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+</androidx.constraintlayout.widget.ConstraintLayout>

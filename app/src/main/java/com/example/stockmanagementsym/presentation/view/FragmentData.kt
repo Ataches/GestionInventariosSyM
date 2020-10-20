@@ -113,8 +113,8 @@ object FragmentData {
         return androidModel.getSalesList()
     }
 
-    fun addProduct(item: Product): String {
-        return androidModel.addProduct(item)
+    fun addProductToCart(item: Product): String {
+        return androidModel.addProductToCart(item)
     }
 
     fun deleteProduct(item: Product) {
