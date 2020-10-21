@@ -78,8 +78,8 @@ class AndroidView(private val androidModel: AndroidModel)  {
     /*
         Customer
      */
-    fun registerCustomer(view: View, updateBoolean: Boolean) {
-        getDialogView().dialogRegisterCustomer(view,updateBoolean)
+    fun registerCustomer(view: View) {
+        getDialogView().dialogRegisterCustomer(view,getFragmentData().getBooleanUpdate())
     }
 
     suspend fun createCustomer(customer: Customer): Boolean {
@@ -94,8 +94,8 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.deleteCustomer(customer)
     }
 
-    fun setCustomerSelected(view: View, item: Int) {
-        return androidModel.setCustomerSelected(view, item)
+    fun setCustomerSelected(item: Int) {
+        return androidModel.setCustomerSelected(item)
     }
 
     fun searchCustomer(view: View) {
@@ -113,6 +113,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
 
     fun goToNewCustomer(view: View) {
         controller.onClick(view)
+    }
+
+    fun getCustomerToEdit(): Customer {
+        return getFragmentData().getCustomerToEdit()
     }
 
     /*

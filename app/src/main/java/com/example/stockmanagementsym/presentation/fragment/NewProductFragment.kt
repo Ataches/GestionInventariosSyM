@@ -16,22 +16,29 @@ import kotlinx.android.synthetic.main.fragment_new_product.*
 
 class NewProductFragment: Fragment(){
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        buttonNewProductToHome.setOnClickListener (AndroidController)
-        buttonNewProductToProductList.setOnClickListener (AndroidController)
-        buttonNewProductToNewProduct.setOnClickListener (AndroidController)
-        buttonNewProductToGallery.setOnClickListener(AndroidController)
-        buttonNewProductToCamera.setOnClickListener(AndroidController)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_new_product, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if(FragmentData.getBooleanUpdate()){
+            editTextProductName.setText(FragmentData.getProductToEdit().getName())
+            editTextProductPrice.setText(FragmentData.getProductToEdit().getPrice().toString())
+            editTextProductDesc.setText(FragmentData.getProductToEdit().getDescription())
+            editTextProductQuantity.setText(FragmentData.getProductToEdit().getQuantity().toString())
+        }
+
+        buttonNewProductToHome.setOnClickListener (AndroidController)
+        buttonNewProductToProductList.setOnClickListener (AndroidController)
+        buttonNewProductToNewProduct.setOnClickListener (AndroidController)
+        buttonNewProductToGallery.setOnClickListener(AndroidController)
+        buttonNewProductToCamera.setOnClickListener(AndroidController)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

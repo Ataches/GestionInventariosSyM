@@ -45,11 +45,7 @@ class SaleLogic(private var saleDao: SaleDao) {
     }
 
     suspend fun searchSales(searchText:String): List<Sale> {
-        GlobalScope.launch(Dispatchers.IO){
-            saleList = getSaleList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase())}
-        }
-        delay(100)
-        return saleList
+        return getSaleList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
 

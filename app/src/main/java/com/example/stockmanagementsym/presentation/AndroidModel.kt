@@ -103,7 +103,7 @@ class AndroidModel{
         return getCustomerLogic().getCustomerList()
     }
 
-    fun setCustomerSelected(view: View, item: Int) {
+    fun setCustomerSelected(item: Int) {
         GlobalScope.launch(Dispatchers.IO){
             customerNewSale = getCustomerList()[item]
         }
@@ -173,7 +173,6 @@ class AndroidModel{
                 getCustomerLogic().searchCustomer(view.editTextSearchCustomerList.text.toString())
                     .toMutableList()
             )
-            FragmentData.reloadCustomerList()
         }
     }
 
@@ -215,10 +214,6 @@ class AndroidModel{
         if(androidView == null)
             androidView = AndroidView(this)
         return androidView!!
-    }
-
-    fun generateID(): String {
-        return UUID.randomUUID().toString()
     }
 
     suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {

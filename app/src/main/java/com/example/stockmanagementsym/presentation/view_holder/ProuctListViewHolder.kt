@@ -1,6 +1,7 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
+import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view.FragmentData
@@ -17,17 +18,21 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewQuantity.text = "Cantidad: ${item.getQuantity()}"
         //itemView.buttonCart.setBackgroundDrawable(itemView.context.resources.getDrawable(item.getIDiconDrawable()))
         itemView.buttonAddProductToCart.setOnClickListener{
-            val quantity:Int = itemView.editTextQuantity.text.toString().toInt()
-            if((item.getQuantity() >= quantity) && (quantity > 0)){
-                val cartProduct = Product(
-                    name = item.getName(),
-                    description = item.getDescription(),
-                    price = item.getPrice(),
-                    idIconDrawable = item.getIdIconDrawable(),
-                    quantity = quantity
-                )
-                cartProduct.idProduct = item.idProduct
-                FragmentData.showMessage(it.context, FragmentData.addProductToCart(cartProduct))
+            val quantityString = itemView.editTextQuantity.text.toString()
+            if(quantityString.isDigitsOnly()&&quantityString.isNotEmpty()){
+                val quantity:Int = quantityString.toInt()
+                if((item.getQuantity() >= quantity) && (quantity > 0)){
+                    val cartProduct = Product(
+                        name = item.getName(),
+                        description = item.getDescription(),
+                        price = item.getPrice(),
+                        idIconDrawable = item.getIdIconDrawable(),
+                        quantity = quantity
+                    )
+                    cartProduct.idProduct = item.idProduct
+                    FragmentData.showMessage(it.context, FragmentData.addProductToCart(cartProduct))
+                }else
+                    FragmentData.showMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
             }else
                 FragmentData.showMessage(it.context, "Digite un numero correcto")
         }

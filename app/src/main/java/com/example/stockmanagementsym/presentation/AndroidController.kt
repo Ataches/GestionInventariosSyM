@@ -60,10 +60,7 @@ object AndroidController: View.OnClickListener, NavigationView.OnNavigationItemS
 
             //Customer list
             R.id.buttonCustomerListToHome -> navController.navigate(R.id.action_customerListFragment_to_home)
-            R.id.buttonCustomerListToCreateCustomer -> androidView.registerCustomer(
-                view,
-                FragmentData.getBooleanUpdate()
-            )
+            R.id.buttonCustomerListToCreateCustomer -> androidView.registerCustomer(view)
             R.id.buttonCustomerToSearch -> androidView.searchCustomer(view)
 
             //New product
@@ -80,10 +77,7 @@ object AndroidController: View.OnClickListener, NavigationView.OnNavigationItemS
             R.id.buttonSaleListToHome -> navController.navigate(R.id.action_saleList_to_home)
 
             //Item view holder customer
-            R.id.buttonEditCustomer -> androidView.registerCustomer(
-                view,
-                FragmentData.getBooleanUpdate()
-            )
+            R.id.buttonEditCustomer -> androidView.registerCustomer(view)
         }
     }
 

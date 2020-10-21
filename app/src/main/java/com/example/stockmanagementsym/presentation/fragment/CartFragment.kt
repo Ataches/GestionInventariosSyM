@@ -12,6 +12,9 @@ import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CartAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_cart.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class CartFragment : Fragment(), ListListener {
 
@@ -27,12 +30,13 @@ class CartFragment : Fragment(), ListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CartAdapter(FragmentData.getCartList(), this)
-        adapter.notifyDataSetChanged()
+        adapter = CartAdapter(FragmentData.getCartList(), this,)
 
         recyclerViewCart.adapter = adapter
         recyclerViewCart.layoutManager =
             LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+
+        reloadList()
 
         FragmentData.setCartListener(this)
 
@@ -43,19 +47,22 @@ class CartFragment : Fragment(), ListListener {
 
     override fun onResume() {
         super.onResume()
-        adapter.notifyDataSetChanged()
+        reloadList()
     }
 
     override fun reloadList() {
-        adapter.listProducts = FragmentData.getCartList()
-        requireActivity().runOnUiThread {
-            textViewTotal.text = "Total: ${FragmentData.getTotalPrice()}"
-            adapter.notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.setProductList(FragmentData.getProductList())
+            adapter.setCartList(FragmentData.getCartList())
+            requireActivity().runOnUiThread {
+                textViewTotal.text = "Total: ${FragmentData.getTotalPrice()}"
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
     override fun setList(list: MutableList<Any>) {
-        adapter.listProducts = list as MutableList<Product>
+        adapter.setCartList(list as MutableList<Product>)
         requireActivity().runOnUiThread {
             adapter.notifyDataSetChanged()
         }

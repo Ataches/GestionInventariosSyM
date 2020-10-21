@@ -82,11 +82,16 @@ class DialogView(private var androidView: AndroidView) {
         dialog.setContentView(viewNewCustomer)
         dialog.show()
 
-        viewNewCustomer.textViewCustomerTitle.text =
-            if(updateBoolean)
-                viewNewCustomer.context.getString(R.string.titleAlertUpdateCustomer)
-            else
-                viewNewCustomer.context.getString(R.string.titleAlertNewCustomer)
+        if(updateBoolean){
+            viewNewCustomer.textViewCustomerTitle.text = viewNewCustomer.context.getString(R.string.titleAlertUpdateCustomer)
+            viewNewCustomer.editTextCustomerName.setText(androidView.getCustomerToEdit().getName())
+            viewNewCustomer.editTextCustomerAddress.setText(androidView.getCustomerToEdit().getAddress())
+            viewNewCustomer.editTextPhone.setText(androidView.getCustomerToEdit().getPhone())
+            viewNewCustomer.editTextCity.setText(androidView.getCustomerToEdit().getCity())
+            viewNewCustomer.buttonProductListToNewProduct.setText(viewNewCustomer.context.getString(R.string.titleAlertUpdateCustomer))
+        }else
+            viewNewCustomer.textViewCustomerTitle.text = viewNewCustomer.context.getString(R.string.titleAlertNewCustomer)
+
 
         viewNewCustomer.buttonProductListToNewProduct.setOnClickListener {
             val customer =
@@ -233,7 +238,7 @@ class DialogView(private var androidView: AndroidView) {
         builder.setItems(data) { _, item ->
             when(title){
                 view.context.getString(R.string.selectCustomer) -> {
-                    androidView.setCustomerSelected(view, item)
+                    androidView.setCustomerSelected(item)
                     showCustomerName(view, customerList.get(item))
                 }
             }
@@ -244,16 +249,10 @@ class DialogView(private var androidView: AndroidView) {
     }
 
     // Show messages
-    fun showCustomerName(view: View, customerName: String) {
+    private fun showCustomerName(view: View, customerName: String) {
         view.textViewSaleCustomerNameSelected?.text = customerName
     }
 
-    private fun showResultTransaction(resultTransaction: Boolean, view: View) {
-        if (resultTransaction)
-            showMessage(view.context, "Se realizo la operación con exito")
-        else
-            showMessage(view.context, "No se pudo realizar la operación")
-    }
     private fun showMessage(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }

@@ -42,7 +42,7 @@ class CustomerLogic(private val customerDao: CustomerDao) {
     }
 
     suspend fun searchCustomer(searchText: String): List<Customer> {
-        return getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText)}
+        return getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
     suspend fun getCustomerList(): List<Customer> {

@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.presentation.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,18 +9,37 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.presentation.view_holder.CartViewHolder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class CartAdapter(var listProducts: MutableList<Product>, var listener: ListListener): RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter (
+    private var cartList: MutableList<Product>,
+    private var listener: ListListener
+): RecyclerView.Adapter<CartViewHolder>() {
+
+    private var productList: List<Product> = listOf()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
         return CartViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bind(listProducts[position], listener)
+        val productCart = cartList[position]
+        holder.setProductOriginal(productList.filter { it.idProduct == productCart.idProduct }[0])
+        holder.bind(productCart, listener)
     }
 
     override fun getItemCount(): Int {
-        return listProducts.size
+        return cartList.size
+    }
+
+    fun setCartList(cartList: MutableList<Product>){
+        this.cartList = cartList
+    }
+
+    fun setProductList(productList: List<Product>) {
+        this.productList = productList
     }
 }
