@@ -11,7 +11,7 @@ import com.example.stockmanagementsym.presentation.view_holder.SaleListViewHolde
 
 class SaleListAdapter(var salesList: List<Sale>): RecyclerView.Adapter<SaleListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaleListViewHolder {
-        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_sale, parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_sale, parent, false)
         return SaleListViewHolder(view)
     }
 

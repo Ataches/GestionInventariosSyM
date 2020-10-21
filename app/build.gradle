@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation 'junit:junit:4.12'
     def nav_version = "2.3.0"
     def room_version = "2.2.5"
 
@@ -38,6 +39,10 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+
+    //Threads
+    implementation 'androidx.test:runner:1.3.0@aar'
+    implementation 'androidx.test:core:1.3.0@aar'
 
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'

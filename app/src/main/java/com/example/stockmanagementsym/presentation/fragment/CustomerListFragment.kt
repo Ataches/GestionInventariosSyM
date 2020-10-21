@@ -12,6 +12,9 @@ import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class CustomerListFragment : Fragment(), ListListener {
@@ -28,13 +31,16 @@ class CustomerListFragment : Fragment(), ListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CustomerListAdapter(FragmentData.getCustomerList())
+
+        adapter = CustomerListAdapter(listOf())
         recyclerViewCustomerList.adapter = adapter
         recyclerViewCustomerList.layoutManager = LinearLayoutManager(
             view.context,
             LinearLayoutManager.VERTICAL,
             false
         )
+
+        reloadList()
 
         FragmentData.setCustomerListListener(this)
 
@@ -45,17 +51,28 @@ class CustomerListFragment : Fragment(), ListListener {
 
     override fun onResume() {
         super.onResume()
-        reloadList()
+        adapter.notifyDataSetChanged()
     }
 
     override fun reloadList() {
-        adapter.customerList = FragmentData.getCustomerList()
-        adapter.notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.customerList = getCustomerList()
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun setList(list: MutableList<Any>) {
-        adapter.customerList = list as MutableList<Customer>
-        adapter.notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.customerList = list as MutableList<Customer>
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
+    private suspend fun getCustomerList(): List<Customer> {
+        return FragmentData.getCustomerList()
+    }
 }

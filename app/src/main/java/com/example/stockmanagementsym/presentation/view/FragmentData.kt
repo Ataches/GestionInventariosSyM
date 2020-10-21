@@ -47,16 +47,16 @@ object FragmentData {
         customerListListener = customerListFragment
     }
 
-    fun reloadCustomerList(){
+    suspend fun reloadCustomerList(){
         try{
             customerListListener.reloadList()
         }catch (e:Exception){
         }
     }
-    fun reloadProductList(){
+    suspend fun reloadProductList(){
         productListListener.reloadList()
     }
-    fun reloadCartList() {
+    suspend fun reloadCartList() {
         cartListener.reloadList()
     }
 
@@ -93,7 +93,7 @@ object FragmentData {
         return androidModel.getTotalPrice()
     }
 
-    fun getCustomerList(): List<Customer> {
+    suspend fun getCustomerList(): List<Customer> {
         return androidModel.getCustomerList()
     }
 
@@ -105,11 +105,11 @@ object FragmentData {
         return customerToEdit
     }
 
-    fun deleteCustomer(customer: Customer) {
+    suspend fun deleteCustomer(customer: Customer) {
         androidModel.deleteCustomer(customer)
     }
 
-    fun getSalesList(): List<Sale> {
+    suspend fun getSaleList(): List<Sale> {
         return androidModel.getSalesList()
     }
 
@@ -117,7 +117,7 @@ object FragmentData {
         return androidModel.addProductToCart(item)
     }
 
-    fun deleteProduct(item: Product) {
+    suspend fun deleteProduct(item: Product) {
         androidModel.deleteProduct(item)
     }
 
@@ -128,7 +128,7 @@ object FragmentData {
             showMessage(context,context.getString(R.string.elementNotAddedToCart))
     }
 
-    fun getProductList(): List<Product> {
+    suspend fun getProductList(): List<Product> {
         return androidModel.getProductList()
     }
 

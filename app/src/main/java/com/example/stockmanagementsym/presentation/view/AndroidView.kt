@@ -8,14 +8,25 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AndroidView(private val androidModel: AndroidModel)  {
 
     private var dialogView:DialogView ?= null
     var controller:AndroidController = AndroidController
+    private var fragmentData:FragmentData ?= null
 
     init {
         controller.setViewClass(this)
+    }
+
+    private fun getFragmentData():FragmentData{
+        if(fragmentData == null)
+            fragmentData  = FragmentData
+        return fragmentData!!
     }
 
     private fun getDialogView(): DialogView {
@@ -42,13 +53,11 @@ class AndroidView(private val androidModel: AndroidModel)  {
         getDialogView().dialogRegisterProduct(view, updateBoolean)
     }
 
-    fun createProduct(product: Product): Boolean {
-        val resultTransaction=androidModel.createProduct(product)
-        controller.goProductList()
-        return resultTransaction
+    suspend fun createProduct(product: Product): Boolean {
+        return androidModel.createProduct(product)
     }
 
-    fun deleteProduct(product: Product): Boolean {
+    suspend fun deleteProduct(product: Product): Boolean {
         return androidModel.deleteProduct(product)
     }
 
@@ -56,10 +65,15 @@ class AndroidView(private val androidModel: AndroidModel)  {
         androidModel.searchProduct(view)
     }
 
-    fun updateProduct(product: Product):Boolean{
-        val resultTransaction = androidModel.updateProduct(product)
+    suspend fun updateProduct(product: Product):Boolean{
+        return androidModel.updateProduct(product)
+    }
+
+    fun goToProductList() {
+        GlobalScope.launch(Dispatchers.IO){
+            getFragmentData().reloadProductList()
+        }
         controller.goProductList()
-        return resultTransaction
     }
     /*
         Customer
@@ -68,15 +82,15 @@ class AndroidView(private val androidModel: AndroidModel)  {
         getDialogView().dialogRegisterCustomer(view,updateBoolean)
     }
 
-    fun createCustomer(customer: Customer): Boolean {
+    suspend fun createCustomer(customer: Customer): Boolean {
         return androidModel.createCustomer(customer)
     }
 
-    fun updateCustomer(customer: Customer): Boolean {
+    suspend fun updateCustomer(customer: Customer): Boolean {
         return androidModel.updateCustomer(customer)
     }
 
-    fun deleteCustomer(customer: Customer): Boolean {
+    suspend fun deleteCustomer(customer: Customer): Boolean {
         return androidModel.deleteCustomer(customer)
     }
 
@@ -88,17 +102,13 @@ class AndroidView(private val androidModel: AndroidModel)  {
         androidModel.searchCustomer(view)
     }
 
-    fun getCustomerList(): Array<String> {
+    suspend fun getCustomerList(): Array<String> {
         return androidModel.getCustomerList().map {
-                                                it.getName()+" "+
-                                                        it.getAddress()+" "+
-                                                        it.getPhone()+" "+
-                                                        it.getCity()
-                                            }.toTypedArray()
-    }
-
-    fun showCustomerName(view: View, customerNewSale: Customer) {
-        getDialogView().showCustomerName(view, customerNewSale)
+                                                        it.getName()+" "+
+                                                                it.getAddress()+" "+
+                                                                it.getPhone()+" "+
+                                                                it.getCity()
+                                                    }.toTypedArray()
     }
 
     fun goToNewCustomer(view: View) {
@@ -117,7 +127,7 @@ class AndroidView(private val androidModel: AndroidModel)  {
         )
     }
 
-    fun createSale(newSale: Sale): Boolean {
+    suspend fun createSale(newSale: Sale): Boolean {
         return androidModel.createSale(newSale)
     }
 
@@ -135,7 +145,7 @@ class AndroidView(private val androidModel: AndroidModel)  {
 
 
     fun showMessage(context: Context, message:String){
-        getDialogView().showMessage(context,message)
+        getDialogView().showMessage(message,context)
     }
 
 }

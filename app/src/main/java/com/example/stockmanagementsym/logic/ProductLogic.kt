@@ -2,12 +2,16 @@ package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ProductLogic(private var productDao: ProductDao) {
 
-    private var productList:List<Product> ?= null
+    private var productList:List<Product> = listOf()
 
-    fun updateProduct(productToUpdate: Product):Boolean {
+    suspend fun updateProduct(productToUpdate: Product):Boolean {
         return try{
             productDao.update(productToUpdate)
             updateProductList()
@@ -17,7 +21,7 @@ class ProductLogic(private var productDao: ProductDao) {
         }
     }
 
-    fun createProduct(newProduct:Product):Boolean{
+    suspend fun createProduct(newProduct:Product):Boolean{
         return try{
             productDao.insert(newProduct)
             updateProductList()
@@ -27,7 +31,7 @@ class ProductLogic(private var productDao: ProductDao) {
         }
     }
 
-    fun deleteProduct(product:Product):Boolean{
+    suspend fun deleteProduct(product:Product):Boolean{
         return try{
             productDao.delete(product)
             updateProductList()
@@ -37,21 +41,25 @@ class ProductLogic(private var productDao: ProductDao) {
         }
     }
 
-    fun searchProducts(id:Long): Product {
-        return getProductList().filter {product -> product.idProduct == id}[0]
+    suspend fun searchProducts(id:Long): Product {
+        return getProductList().filter { product -> product.idProduct == id }[0]
     }
 
-    fun searchProduct(searchText: String): List<Product> {
-        return getProductList().filter {product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
+    suspend fun searchProduct(searchText: String): List<Product> {
+        return getProductList().filter { product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
-    fun getProductList(): List<Product> {
-        if(productList==null)
-            productList = productDao.selectProductList()
-        return productList!!
+    suspend fun getProductList(): List<Product> {
+        if(productList.isEmpty()){
+            GlobalScope.launch(Dispatchers.IO){
+                productList = productDao.selectProductList()
+            }
+            delay(100)
+        }
+        return productList
     }
 
-    private fun updateProductList() {
+    private suspend fun updateProductList() {
         productList = productDao.selectProductList()
     }
 

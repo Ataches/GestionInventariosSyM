@@ -1,9 +1,12 @@
 package com.example.stockmanagementsym
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stockmanagementsym.presentation.AndroidModel
+import com.example.stockmanagementsym.presentation.view.DialogView
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,5 +28,4 @@ class LoginActivity : AppCompatActivity() {
 
         androidModel.confirmLogin(this,editTextUser.text.toString(), editTextPass.text.toString())
     }
-
 }

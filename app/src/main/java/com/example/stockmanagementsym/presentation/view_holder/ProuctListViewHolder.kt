@@ -5,6 +5,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_product.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Product) {
@@ -34,7 +37,10 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             FragmentData.goToNewProduct()
         }
         itemView.buttonDeleteProduct.setOnClickListener{
-            FragmentData.deleteProduct(item)
+            GlobalScope.launch(Dispatchers.IO){
+                FragmentData.deleteProduct(item)
+                FragmentData.reloadProductList()
+            }
         }
     }
 }

@@ -3,11 +3,16 @@ package com.example.stockmanagementsym.logic
 import com.example.stockmanagementsym.data.dao.SaleDao
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SaleLogic(private var saleDao: SaleDao) {
 
     private var cartLogic:CartLogic ?= null
-    private var saleList: List<Sale> ?= null
+    private var saleList: List<Sale> = listOf()
+
 
     private fun getCartLogic(): CartLogic {
         if(cartLogic==null)
@@ -15,13 +20,16 @@ class SaleLogic(private var saleDao: SaleDao) {
         return cartLogic!!
     }
 
-    fun getSaleList(): List<Sale> {
-        if(saleList==null)
+    suspend fun getSaleList(): List<Sale> {
+        GlobalScope.launch(Dispatchers.IO){
             saleList = saleDao.selectSaleList()
-        return saleList!!
+        }
+        delay(100)
+        return saleList
     }
 
-    fun createSale(sale: Sale): Boolean {
+
+    suspend fun createSale(sale: Sale): Boolean {
         saleDao.insert(sale)
         return try {
             getCartLogic().clearCart()
@@ -32,14 +40,20 @@ class SaleLogic(private var saleDao: SaleDao) {
         }
     }
 
-    private fun updateSaleList() {
+    private suspend fun updateSaleList() {
         saleList = saleDao.selectSaleList()
     }
 
-    fun searchSales(searchText:String): List<Sale> {
-        return getSaleList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase())}
+    suspend fun searchSales(searchText:String): List<Sale> {
+        GlobalScope.launch(Dispatchers.IO){
+            saleList = getSaleList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase())}
+        }
+        delay(100)
+        return saleList
     }
 
+
+    //Cart
     fun addProductToCart(item: Product):String{
         return getCartLogic().addProduct(item)
     }

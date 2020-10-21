@@ -20,7 +20,10 @@ import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AndroidModel{
@@ -43,7 +46,7 @@ class AndroidModel{
     }
 
     //Sale
-    fun createSale(newSale: Sale): Boolean {
+    suspend fun createSale(newSale: Sale): Boolean {
         newSale.getProductList().forEach {
             val product  = getProductLogic().searchProducts(it.idProduct)
             product.setQuantity(product.getQuantity() - it.getQuantity())
@@ -58,11 +61,11 @@ class AndroidModel{
 
     fun getNewSale(): Sale {
         if(newSale==null)
-            newSale = Sale(customerNewSale,dateSale,getSaleLogic().getCartList())
+            newSale = Sale(customerNewSale, dateSale, getSaleLogic().getCartList())
         return newSale!!
     }
 
-    fun getSalesList(): List<Sale> {
+    suspend fun getSalesList(): List<Sale> {
         return getSaleLogic().getSaleList()
     }
 
@@ -88,7 +91,7 @@ class AndroidModel{
     }
 
     //Customer
-    fun updateCustomer(customerToUpdate: Customer): Boolean {
+    suspend fun updateCustomer(customerToUpdate: Customer): Boolean {
         val customerToEdit = FragmentData.getCustomerToEdit()
         customerToUpdate.idCustomer = customerToEdit.idCustomer
         val resultTransaction = getCustomerLogic().updateCustomer(customerToUpdate)
@@ -96,34 +99,35 @@ class AndroidModel{
         return resultTransaction
     }
 
-    fun getCustomerList(): List<Customer> {
+    suspend fun getCustomerList(): List<Customer> {
         return getCustomerLogic().getCustomerList()
     }
 
     fun setCustomerSelected(view: View, item: Int) {
-        customerNewSale = getCustomerList()[item]
-        getAndroidView().showCustomerName(view, customerNewSale)
+        GlobalScope.launch(Dispatchers.IO){
+            customerNewSale = getCustomerList()[item]
+        }
     }
 
-    fun createCustomer(customer: Customer): Boolean {
+    suspend fun createCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().createCustomer(customer)
         customerNewSale = customer //If it is a new customer register from new sale fragment
         FragmentData.reloadCustomerList()
         return resultTransaction
     }
 
-    fun deleteCustomer(customer: Customer): Boolean {
+    suspend fun deleteCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().deleteCustomer(customer)
         FragmentData.reloadCustomerList()
         return resultTransaction
     }
 
     //Product
-    fun getProductList(): List<Product> {
+    suspend fun getProductList(): List<Product> {
         return getProductLogic().getProductList()
     }
 
-    fun updateProduct(productToUpdate: Product):Boolean {
+    suspend fun updateProduct(productToUpdate: Product):Boolean {
         var productToEdit = FragmentData.getProductToEdit()
         productToUpdate.idProduct = productToEdit.idProduct
         val resultTransaction = getProductLogic().updateProduct(productToUpdate)
@@ -131,14 +135,12 @@ class AndroidModel{
         return resultTransaction
     }
 
-    fun deleteProduct(product: Product): Boolean {
-        val resultTransaction = getProductLogic().deleteProduct(product)
-        FragmentData.reloadProductList()
-        return resultTransaction
+    suspend fun deleteProduct(product: Product): Boolean {
+        return getProductLogic().deleteProduct(product)
     }
     //   New product creation
-    fun createProduct(product: Product): Boolean {
-        var result = getProductLogic().createProduct(product)
+    suspend fun createProduct(product: Product): Boolean {
+        val result = getProductLogic().createProduct(product)
         FragmentData.reloadProductList()
         return result
     }
@@ -155,26 +157,34 @@ class AndroidModel{
 
     //Searches
     fun searchSale(view: View) {
-        val saleListFragment = view.findFragment<SaleListFragment>()
-        saleListFragment.setList(
-            getSaleLogic().searchSales(saleListFragment.editTextSearchSaleList.text.toString()).toMutableList()
-        )
+        GlobalScope.launch(Dispatchers.IO){
+            val saleListFragment = view.findFragment<SaleListFragment>()
+            saleListFragment.setList(
+                getSaleLogic().searchSales(saleListFragment.editTextSearchSaleList.text.toString())
+                    .toMutableList()
+            )
+        }
     }
 
     fun searchCustomer(viewElement: View) {
-        val view = viewElement.findFragment<CustomerListFragment>()
-        view.setList(
-            getCustomerLogic().searchCustomer(view.editTextSearchCustomerList.text.toString())
-                .toMutableList()
-        )
+        GlobalScope.launch(Dispatchers.IO){
+            val view = viewElement.findFragment<CustomerListFragment>()
+            view.setList(
+                getCustomerLogic().searchCustomer(view.editTextSearchCustomerList.text.toString())
+                    .toMutableList()
+            )
+            FragmentData.reloadCustomerList()
+        }
     }
 
     fun searchProduct(viewElement: View) {
-        val view = viewElement.findFragment<ProductListFragment>()
-        view.setList(
-            getProductLogic().searchProduct(view.editTextSearchProductList.text.toString())
-                .toMutableList()
-        )
+        GlobalScope.launch(Dispatchers.IO){
+            val view = viewElement.findFragment<ProductListFragment>()
+            view.setList(
+                getProductLogic().searchProduct(view.editTextSearchProductList.text.toString())
+                    .toMutableList()
+            )
+        }
     }
 
     //Logic classes
@@ -213,7 +223,7 @@ class AndroidModel{
 
     suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
-        if(getUserLogic().confirmLogin(user,password)){
+        if(getUserLogic().confirmLogin(user, password)){
             FragmentData.setUser(userName = user)
             getAndroidView().showMessage(login,login.getString(R.string.welcome)+" "+user)
 
@@ -221,9 +231,12 @@ class AndroidModel{
             login.startActivity(intent)
         }
         else
-            getAndroidView().showMessage(login,
-                                        "Usuario $user no encontrado o contraseña incorrecta"
-                                        )
+            getAndroidView().showMessage(
+                login,
+                "Usuario $user no encontrado o contraseña incorrecta"
+            )
+
+
     }
 
 }

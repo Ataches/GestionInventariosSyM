@@ -1,14 +1,18 @@
 package com.example.stockmanagementsym.presentation
 
+import android.content.Context
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.view.AndroidView
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.google.android.material.navigation.NavigationView
+
 
 object AndroidController: View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,7 +32,8 @@ object AndroidController: View.OnClickListener, NavigationView.OnNavigationItemS
             R.id.item_menu_product_list -> navController.navigate(R.id.action_home_to_productsList)
             R.id.item_menu_customer_list -> navController.navigate(R.id.action_home_to_customerListFragment)
             R.id.item_menu_sale_list -> navController.navigate(R.id.action_home_to_saleList)
-            R.id.item_menu_create_user -> {}
+            R.id.item_menu_create_user -> {
+            }
 
             //Home
             R.id.buttonHomeToProductList -> {
@@ -55,11 +60,11 @@ object AndroidController: View.OnClickListener, NavigationView.OnNavigationItemS
 
             //Customer list
             R.id.buttonCustomerListToHome -> navController.navigate(R.id.action_customerListFragment_to_home)
-            R.id.buttonCustomerListToCreateCustomer -> androidView.registerCustomer(view,FragmentData.getBooleanUpdate())
-            R.id.buttonCustomerToSearch -> {
-                androidView.searchCustomer(view)
-                FragmentData.reloadCustomerList()
-            }
+            R.id.buttonCustomerListToCreateCustomer -> androidView.registerCustomer(
+                view,
+                FragmentData.getBooleanUpdate()
+            )
+            R.id.buttonCustomerToSearch -> androidView.searchCustomer(view)
 
             //New product
             R.id.buttonNewProductToHome -> navController.navigate(R.id.action_newProductFragment_to_home)
@@ -75,7 +80,10 @@ object AndroidController: View.OnClickListener, NavigationView.OnNavigationItemS
             R.id.buttonSaleListToHome -> navController.navigate(R.id.action_saleList_to_home)
 
             //Item view holder customer
-            R.id.buttonEditCustomer -> androidView.registerCustomer(view,FragmentData.getBooleanUpdate())
+            R.id.buttonEditCustomer -> androidView.registerCustomer(
+                view,
+                FragmentData.getBooleanUpdate()
+            )
         }
     }
 

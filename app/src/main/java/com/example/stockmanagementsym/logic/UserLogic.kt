@@ -1,8 +1,11 @@
 package com.example.stockmanagementsym.logic
 
+import android.widget.Toast
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.example.stockmanagementsym.data.dao.UserDao
 import com.example.stockmanagementsym.logic.business.User
 import kotlinx.coroutines.*
+
 
 class UserLogic(private val userDao: UserDao) {
 
@@ -13,20 +16,20 @@ class UserLogic(private val userDao: UserDao) {
     }
     fun insertUser(userName: String, password: String):Boolean{
         return try{
-            userDao.insert(User(userName,password))
+            userDao.insert(User(userName, password))
             true
-        }catch (e:Exception){
+        }catch (e: Exception){
             false
         }
     }
 
-    private fun confirmLogin(userName: String, password: String,boolean: Boolean): Job = GlobalScope.launch(Dispatchers.IO) {
-        insertUser(userName,password)
-        selectUser()
-    }
-
     suspend fun confirmLogin(userName: String, password: String):Boolean {
-        confirmLogin(userName,password, true)
+        GlobalScope.launch(
+            Dispatchers.IO
+        ) {
+            insertUser(userName, password)
+            selectUser()
+        }
         delay(100)
         return (userList.any { it.getUser() == userName }) &&
                 (userList.any { it.getPassword() == password })

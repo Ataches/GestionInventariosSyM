@@ -43,17 +43,21 @@ class CartFragment : Fragment(), ListListener {
 
     override fun onResume() {
         super.onResume()
-        reloadList()
+        adapter.notifyDataSetChanged()
     }
 
     override fun reloadList() {
         adapter.listProducts = FragmentData.getCartList()
-        textViewTotal.text = "Total: ${FragmentData.getTotalPrice()}"
-        adapter.notifyDataSetChanged()
+        requireActivity().runOnUiThread {
+            textViewTotal.text = "Total: ${FragmentData.getTotalPrice()}"
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun setList(list: MutableList<Any>) {
         adapter.listProducts = list as MutableList<Product>
-        adapter.notifyDataSetChanged()
+        requireActivity().runOnUiThread {
+            adapter.notifyDataSetChanged()
+        }
     }
 }
