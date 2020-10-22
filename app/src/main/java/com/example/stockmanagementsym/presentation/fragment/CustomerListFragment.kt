@@ -45,7 +45,6 @@ class CustomerListFragment : Fragment(), ListListener {
         FragmentData.setCustomerListListener(this)
 
         buttonCustomerToSearch.setOnClickListener(AndroidController)
-        buttonCustomerListToHome.setOnClickListener(AndroidController)
         buttonCustomerListToCreateCustomer.setOnClickListener(AndroidController)
     }
 

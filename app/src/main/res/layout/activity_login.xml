@@ -9,18 +9,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-
     <TextView
         android:id="@+id/textViewPrincipal"
         android:text="@string/tittle"
         android:textSize="30sp"
         android:textColor="@color/tittleColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="200dp"
         android:layout_marginBottom="40dp"
-        android:gravity="center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="start"
         />
-
     <TextView
         android:id="@+id/textViewUser"
         android:text="@string/textViewUser"
@@ -28,16 +27,19 @@
         android:textColor="@color/tittleColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="left"
         />
     <EditText
         android:id="@+id/editTextUser"
         android:inputType="text"
-        android:textColor="@color/subtittleColor"
+        android:textColor="@color/subtitleColor"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:hint="Ej: Su nombre"
         android:layout_marginBottom="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="start"
         />
 
     <TextView
@@ -47,16 +49,19 @@
         android:textColor="@color/tittleColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="start"
         />
     <EditText
         android:id="@+id/editTextPass"
         android:inputType="textPassword"
-        android:textColor="@color/subtittleColor"
+        android:textColor="@color/subtitleColor"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:hint="****"
         android:layout_marginBottom="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="start"
         />
     <Button
         android:id="@+id/buttonLogin"
@@ -70,5 +75,7 @@
         android:paddingLeft="14dp"
         android:paddingRight="14dp"
         android:drawablePadding="14dp"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="left"
         />
 </LinearLayout>

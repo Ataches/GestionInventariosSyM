@@ -40,8 +40,6 @@ class CartFragment : Fragment(), ListListener {
 
         FragmentData.setCartListener(this)
 
-        buttonCartToHome.setOnClickListener(AndroidController)
-        buttonCartToProductList.setOnClickListener(AndroidController)
         buttonCartToNewSale.setOnClickListener(AndroidController)
     }
 

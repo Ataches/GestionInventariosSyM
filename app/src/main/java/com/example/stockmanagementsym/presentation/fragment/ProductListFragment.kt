@@ -12,6 +12,7 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.gorillazuniversity.clase8_1.ShopPagerAdapter
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -41,9 +42,8 @@ class ProductListFragment : Fragment(), ListListener{
 
         FragmentData.setProductListListener(this)
 
+
         buttonProductListToSearch.setOnClickListener(AndroidController)
-        buttonProductListToHome.setOnClickListener(AndroidController)
-        buttonAddProductToCart.setOnClickListener(AndroidController)
         buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
 

@@ -8,22 +8,25 @@
 
     <Button
         android:id="@+id/buttonNewProductToProductList"
+        android:background="@color/buttonSecondaryLight"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:drawableLeft="@drawable/ic_store"
         android:text="@string/backProductList"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonNewProductToHome"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonNewProductToHome"
-        android:layout_width="wrap_content"
+        android:background="@color/buttonSecondaryLight"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:drawableLeft="@drawable/ic_home"
         android:text="@string/backHome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonNewProductToProductList"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayoutNewProduct"
         />
     <ScrollView

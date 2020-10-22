@@ -39,7 +39,6 @@ class SaleListFragment : Fragment(), ListListener {
         reloadList()
 
         buttonSaleListToSearch.setOnClickListener(AndroidController)
-        buttonSaleListToHome.setOnClickListener (AndroidController)
     }
 
     override fun reloadList() {

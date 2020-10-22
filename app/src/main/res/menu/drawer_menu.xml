@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/item_menu_product_list"
-        android:title="@string/productList"/>
-    <item android:id="@+id/item_menu_customer_list"
+    <item android:id="@+id/home"
+        android:title="@string/home"/>
+    <item android:id="@+id/shopFragment"
+        android:title="@string/shopFragment"/>
+    <item android:id="@+id/customerListFragment"
         android:title="@string/customersList"/>
-    <item android:id="@+id/item_menu_sale_list"
+    <item android:id="@+id/saleList"
         android:title="@string/saleList"/>
-    <item android:id="@+id/item_menu_create_user"
+    <item android:id="@+id/userFragment"
         android:title="@string/createUser"/>
 </menu>

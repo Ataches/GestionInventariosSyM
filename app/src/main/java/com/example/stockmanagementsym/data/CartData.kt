@@ -6,10 +6,10 @@ import java.lang.Exception
 class CartData {
     private var cartList:MutableList<Product> = mutableListOf()
 
-    fun addProduct(item: Product):String{
-        if(cartList.filter{product -> product.idProduct == item.idProduct}.isNotEmpty())
+    fun addProduct(product: Product):String{
+        if(cartList.any { it == product })
             return "El producto ya está en el carrito"
-        cartList.add(item)
+        cartList.add(product)
         return "Producto añadido al carrito"
     }
     fun clearCart():Boolean{

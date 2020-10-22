@@ -9,23 +9,13 @@
     android:layout_height="match_parent"
     tools:context=".presentation.fragment.SaleListFragment">
 
-    <Button
-        android:id="@+id/buttonSaleListToHome"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_home"
-        android:text="@string/backHome"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <EditText
         android:id="@+id/editTextSearchSaleList"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:inputType="textFilter"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSaleListToHome"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonSaleListToSearch"
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewSaleList"
         android:autofillHints="@string/search" />
@@ -47,7 +37,7 @@
         android:layout_height="0dp"
 
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".83"
+        app:layout_constraintHeight_percent=".90"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

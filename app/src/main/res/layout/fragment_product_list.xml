@@ -7,31 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/buttonAddProductToCart"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_cart"
-        android:onClick="goToCart"
-        android:paddingStart="5dp"
-        android:paddingBottom="5dp"
-        android:text="@string/goToCart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonProductListToHome"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:drawableLeft="@drawable/ic_home"
-        android:onClick="goToHome"
-        android:paddingBottom="5dp"
-        android:text="@string/backHome"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/editTextSearchProductList"
-        />
-
     <EditText
         android:id="@+id/editTextSearchProductList"
         android:layout_width="300dp"
@@ -40,7 +15,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewProductList"
         app:layout_constraintEnd_toStartOf="@id/buttonProductListToSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddProductToCart" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonProductListToSearch"
@@ -71,7 +46,7 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent=".99"
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".77"
+        app:layout_constraintHeight_percent=".84"
         />
 
 
@@ -88,4 +63,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewProductList"
         />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,7 @@ class UserLogic(private val userDao: UserDao) {
         GlobalScope.launch(
             Dispatchers.IO
         ) {
-            insertUser(userName, password)
+            //insertUser(userName, password)
             selectUser()
         }
         delay(100)

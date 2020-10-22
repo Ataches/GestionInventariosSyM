@@ -3,7 +3,7 @@
     <string name="tittle">Gestion inventarios SyM</string>
 
     <!-- Login -->
-    <string name="textViewUser">Ingrese su usuario:</string>
+    <string name="textViewUser">Uuario:</string>
     <string name="textViewPass">Contraseña:</string>
     <string name="buttonLogin">Iniciar sesión</string>
 
@@ -68,10 +68,12 @@
     <string name="dateNotSelected">No se ha seleccionado fecha de venta</string>
     <string name="titleAlertNewSaleBd">Registrar nueva venta en la base de datos</string>
     <string name="createUser">Crear usuario</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="capturePhoto">Capturar foto</string>
     <string name="getPhotoFromGallery">Foto desde galería</string>
+    <string name="userList">Listado de usuarios</string>
 
+    <string name="shopFragment">Tienda</string>
+    <string name="home">Inicio</string>
 
 </resources>

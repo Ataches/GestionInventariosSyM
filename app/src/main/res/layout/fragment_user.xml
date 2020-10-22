@@ -9,22 +9,13 @@
     tools:context=".presentation.fragment.UserFragment"
     >
 
-    <Button
-        android:id="@+id/buttonCustomerListToHome"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_home"
-        android:text="@string/backHome"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/editTextSearchCustomerList"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@id/buttonCustomerToSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonCustomerListToHome" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonCustomerToSearch"
@@ -34,7 +25,9 @@
         android:text="@string/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextSearchCustomerList"
-        app:layout_constraintTop_toBottomOf="@id/buttonCustomerListToHome" />
+        app:layout_constraintTop_toTopOf="@+id/editTextSearchCustomerList"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextSearchCustomerList"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCustomerList"
@@ -49,7 +42,7 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent=".99"
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".78"
+        app:layout_constraintHeight_percent=".83"
         />
 
     <Button
@@ -61,5 +54,6 @@
         android:text="@string/createCustomer"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewCustomerList" />
 </androidx.constraintlayout.widget.ConstraintLayout>

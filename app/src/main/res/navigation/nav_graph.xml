@@ -10,26 +10,8 @@
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <action
-            android:id="@+id/action_productsList_to_cart"
-            app:destination="@id/cart" />
-        <action
-            android:id="@+id/action_productsList_to_home"
-            app:destination="@id/home" />
-        <action
             android:id="@+id/action_productsList_to_newProductFragment"
             app:destination="@id/newProductFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/cart"
-        android:name="com.example.stockmanagementsym.presentation.fragment.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" >
-        <action
-            android:id="@+id/action_cart_to_productsList"
-            app:destination="@id/productsList" />
-        <action
-            android:id="@+id/action_cart_to_home"
-            app:destination="@id/home" />
     </fragment>
     <fragment
         android:id="@+id/home"
@@ -37,14 +19,17 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_home_to_productsList"
-            app:destination="@id/productsList" />
-        <action
             android:id="@+id/action_home_to_saleList"
             app:destination="@id/saleList" />
         <action
             android:id="@+id/action_home_to_customerListFragment"
             app:destination="@id/customerListFragment" />
+        <action
+            android:id="@+id/action_home_to_shopFragment"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_home_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
     <fragment
         android:id="@+id/saleList"
@@ -73,5 +58,23 @@
         <action
             android:id="@+id/action_newProductFragment_to_productsList"
             app:destination="@id/productsList" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_home"
+            app:destination="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" >
+        <action
+            android:id="@+id/action_shopFragment_to_home"
+            app:destination="@id/home" />
     </fragment>
 </navigation>

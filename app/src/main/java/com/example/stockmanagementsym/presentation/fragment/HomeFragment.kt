@@ -22,9 +22,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        textViewWelcome.text = getString(R.string.welcome)+" "+ FragmentData.getUser()
-        buttonHomeToProductList.setOnClickListener(AndroidController)
+        textViewUserName.text = FragmentData.getUser()
+        buttonHomeToShop.setOnClickListener(AndroidController)
         buttonHomeToSaleList.setOnClickListener(AndroidController)
         buttonHomeToCustomersList.setOnClickListener(AndroidController)
+        buttonHomeToUserList.setOnClickListener(AndroidController)
     }
 }
