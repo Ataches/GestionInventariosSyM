@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +8,6 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.presentation.view_holder.CartViewHolder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class CartAdapter (
     private var cartList: MutableList<Product>,

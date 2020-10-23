@@ -44,7 +44,6 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         quantity = quantity
                     )
                     cartProduct.idProduct = product.idProduct
-
                     FragmentData.showMessage(it.context, FragmentData.addProductToCart(cartProduct))
                 }else
                     FragmentData.showMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")

@@ -1,7 +1,6 @@
 package com.example.stockmanagementsym.presentation
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +21,10 @@ import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AndroidModel{
 
@@ -148,29 +150,40 @@ class AndroidModel{
 
     //Product
     suspend fun getProductList(): List<Product> {
-        var list:List<Product> = listOf()
-        withContext(Dispatchers.IO) {
-           list = getProductLogic().getProductList()
+        return try {
+            var list = listOf<Product>()
+            withContext(Dispatchers.IO) {
+                list = getProductLogic().getProductList()
+            }
+            list
+        }catch (e: Exception){
+            listOf()
         }
-        return list
     }
 
-    fun updateProduct(productToUpdate: Product):Boolean {
-        var resultTransaction = false
-        GlobalScope.launch(Dispatchers.IO){
-            val productToEdit = FragmentData.getProductToEdit()
-            productToUpdate.idProduct = productToEdit.idProduct
-            resultTransaction = getProductLogic().updateProduct(productToUpdate)
-            FragmentData.reloadProductList()
+    suspend fun updateProduct(productToUpdate: Product):Boolean {
+        return try{
+            withContext(Dispatchers.IO) {
+                val productToEdit = FragmentData.getProductToEdit()
+                productToUpdate.idProduct = productToEdit.idProduct
+                getProductLogic().updateProduct(productToUpdate)
+                FragmentData.reloadProductList()
+            }
+            true
+        }catch (e: Exception){
+            false
         }
-        return resultTransaction
     }
-    fun deleteProduct(product: Product): Boolean {
-        var resultTransaction:Boolean = false
-        GlobalScope.launch(Dispatchers.IO){
-            resultTransaction = getProductLogic().deleteProduct(product)
+
+    suspend fun deleteProduct(product: Product): Boolean {
+        return try{
+            withContext(Dispatchers.IO) {
+                getProductLogic().deleteProduct(product)
+            }
+            true
+        }catch (e: Exception){
+            false
         }
-        return resultTransaction
     }
 
     fun getProductToString(product: Product): String {

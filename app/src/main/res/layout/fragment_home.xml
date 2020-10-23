@@ -59,7 +59,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/design_default_color_background"
-        android:text="@string/customersList"
+        android:text="@string/customerList"
         app:layout_constraintTop_toBottomOf="@id/constraintLayoutUserHome"
         app:layout_constraintStart_toEndOf="@+id/buttonHomeToShop"
         app:layout_constraintEnd_toEndOf="parent"

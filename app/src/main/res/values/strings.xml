@@ -11,7 +11,7 @@
     <string name="welcome">Bienvenid@</string>
     <string name="productList">Listado de productos y registro de ventas</string>
     <string name="saleList">Ventas registradas</string>
-    <string name="customersList">Listado clientes</string>
+    <string name="customerList">Listado clientes</string>
 
     <!-- Fragments text -->
     <string name="editTextQuantity">Units</string>
@@ -21,7 +21,7 @@
     <string name="search">Buscar</string>
 
     <!-- Product -->
-    <string name="productName">Nombre producto:</string>
+    <string name="productName">Nombre del prodcto:</string>
     <string name="productQuantity">Cantidad: </string>
     <string name="productDesc">Descripción: </string>
     <string name="productPrice">Precio: </string>
@@ -75,7 +75,6 @@
 
     <string name="shopFragment">Tienda</string>
     <string name="home">Inicio</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="product">Producto</string>
 
 </resources>

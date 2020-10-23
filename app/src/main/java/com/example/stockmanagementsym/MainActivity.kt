@@ -3,6 +3,7 @@ package com.example.stockmanagementsym
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        title = getString(R.string.customerList)
         val navView: NavigationView = findViewById(R.id.navigation_view)
         val navController = findNavController(R.id.nav_host_fragment)
         this.navController = navController
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupToolBarMain() {
         setSupportActionBar(toolBarMain)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.shopFragment,R.id.customerListFragment,
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.home, R.id.shopFragment,R.id.customerListFragment,
                                                         R.id.saleList, R.id.userFragment),drawerLayoutMain)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }

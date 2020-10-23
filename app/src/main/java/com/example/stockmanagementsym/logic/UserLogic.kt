@@ -28,7 +28,7 @@ class UserLogic(private val userDao: UserDao) {
 
     suspend fun confirmLogin(userName: String, password: String):Boolean {
         withContext(Dispatchers.IO) {
-            insertUser(userName, password)
+            //insertUser(userName, password)
             selectUserList()
         }
         return (userList.any { it.getUser() == userName }) &&

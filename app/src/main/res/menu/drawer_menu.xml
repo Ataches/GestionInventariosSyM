@@ -5,7 +5,7 @@
     <item android:id="@+id/shopFragment"
         android:title="@string/shopFragment"/>
     <item android:id="@+id/customerListFragment"
-        android:title="@string/customersList"/>
+        android:title="@string/customerList"/>
     <item android:id="@+id/saleList"
         android:title="@string/saleList"/>
     <item android:id="@+id/userFragment"

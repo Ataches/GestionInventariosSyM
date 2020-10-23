@@ -12,6 +12,7 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
@@ -32,6 +33,7 @@ class NewProductFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.product)
 
         if(FragmentData.getBooleanUpdate()){
             val product = FragmentData.getProductToEdit()

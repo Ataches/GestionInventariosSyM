@@ -65,7 +65,7 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.createProduct(product)
     }
 
-    fun deleteProduct(product: Product): Boolean {
+    suspend fun deleteProduct(product: Product): Boolean {
         return androidModel.deleteProduct(product)
     }
 

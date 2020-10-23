@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
@@ -31,6 +32,7 @@ class SaleListFragment : Fragment(), ListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.saleList)
         adapter = SaleListAdapter(saleList)
 
         recyclerViewSaleList.adapter = adapter
