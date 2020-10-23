@@ -1,6 +1,7 @@
 package com.example.stockmanagementsym.presentation
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,7 @@ import com.example.stockmanagementsym.logic.*
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
+import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.CustomerListFragment
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
@@ -20,11 +22,7 @@ import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.coroutines.*
 
 class AndroidModel{
 
@@ -43,6 +41,14 @@ class AndroidModel{
     init{
         getAndroidView()
         FragmentData.setModel(this)
+    }
+    //User
+    fun getUserList(): List<User> {
+        var list:List<User> = listOf()
+        GlobalScope.launch(Dispatchers.IO){
+            list = getUserLogic().selectUserList()
+        }
+        return list
     }
 
     //Sale
@@ -74,7 +80,11 @@ class AndroidModel{
     }
 
     fun addProductToCart(item: Product): String {
-        return getSaleLogic().addProductToCart(item)
+        val stringResult = getSaleLogic().addProductToCart(item)
+        GlobalScope.launch (Dispatchers.IO){
+            FragmentData.reloadCartList()
+        }
+        return stringResult
     }
 
     fun removeElementCart(item: Product): Boolean {
@@ -124,19 +134,30 @@ class AndroidModel{
 
     //Product
     suspend fun getProductList(): List<Product> {
-        return getProductLogic().getProductList()
+        var list:List<Product> = listOf()
+        withContext(Dispatchers.IO) {
+           list = getProductLogic().getProductList()
+        }
+        return list
     }
 
-    suspend fun updateProduct(productToUpdate: Product):Boolean {
-        var productToEdit = FragmentData.getProductToEdit()
-        productToUpdate.idProduct = productToEdit.idProduct
-        val resultTransaction = getProductLogic().updateProduct(productToUpdate)
-        FragmentData.reloadProductList()
+    fun updateProduct(productToUpdate: Product):Boolean {
+        var resultTransaction = false
+        GlobalScope.launch(Dispatchers.IO){
+            val productToEdit = FragmentData.getProductToEdit()
+            productToUpdate.idProduct = productToEdit.idProduct
+            resultTransaction = getProductLogic().updateProduct(productToUpdate)
+            FragmentData.reloadProductList()
+        }
         return resultTransaction
     }
 
-    suspend fun deleteProduct(product: Product): Boolean {
-        return getProductLogic().deleteProduct(product)
+    fun deleteProduct(product: Product): Boolean {
+        var resultTransaction:Boolean = false
+        GlobalScope.launch(Dispatchers.IO){
+            resultTransaction = getProductLogic().deleteProduct(product)
+        }
+        return resultTransaction
     }
     //   New product creation
     suspend fun createProduct(product: Product): Boolean {

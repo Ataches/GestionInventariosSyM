@@ -4,9 +4,7 @@ import com.example.stockmanagementsym.data.dao.SaleDao
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SaleLogic(private var saleDao: SaleDao) {
 
@@ -21,10 +19,9 @@ class SaleLogic(private var saleDao: SaleDao) {
     }
 
     suspend fun getSaleList(): List<Sale> {
-        GlobalScope.launch(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             saleList = saleDao.selectSaleList()
         }
-        delay(100)
         return saleList
     }
 
@@ -32,8 +29,10 @@ class SaleLogic(private var saleDao: SaleDao) {
     suspend fun createSale(sale: Sale): Boolean {
         saleDao.insert(sale)
         return try {
-            getCartLogic().clearCart()
-            updateSaleList()
+            withContext(Dispatchers.IO) {
+                getCartLogic().clearCart()
+                updateSaleList()
+            }
             true
         } catch (e: Exception) {
             false

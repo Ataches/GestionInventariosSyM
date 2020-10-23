@@ -7,24 +7,26 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
+import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidModel
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.Exception
 
-object FragmentData {
+object FragmentData{
 
+    private var stringBitmap: String = ""
     private lateinit var customerToEdit: Customer
     private lateinit var productToEdit: Product
-
     private var booleanUpdate: Boolean = false
+
     private lateinit var cartListener: ListListener
     private lateinit var productListListener: ListListener
     private lateinit var customerListListener: ListListener
 
     private lateinit var androidModel: AndroidModel
+    private lateinit var androidView: AndroidView
     private lateinit var userName: String
 
     fun setUser(userName:String){
@@ -37,6 +39,11 @@ object FragmentData {
     fun setModel(androidModel: AndroidModel){
         this.androidModel = androidModel
     }
+
+    fun setAndroidView(androidView: AndroidView){
+        this.androidView = androidView
+    }
+
     fun setProductListListener(productListFragment: ListListener) {
         productListListener = productListFragment
     }
@@ -85,6 +92,15 @@ object FragmentData {
         return productToEdit
     }
 
+    fun setStringBitMap(stringBitmap: String) {
+        this.stringBitmap = stringBitmap
+    }
+
+    fun getStringBitMap():String{
+        return stringBitmap
+    }
+
+
     fun getCartList(): MutableList<Product> {
         return androidModel.getCartList()
     }
@@ -129,7 +145,7 @@ object FragmentData {
     }
 
     suspend fun getProductList(): List<Product> {
-        return androidModel.getProductList()
+        return androidView.getProductList()
     }
 
     fun goToNewProduct() {
@@ -140,4 +156,7 @@ object FragmentData {
         androidModel.getAndroidView().goToNewCustomer(view)
     }
 
+    fun getUserList(): List<User> {
+        return androidView.getUserList()
+    }
 }

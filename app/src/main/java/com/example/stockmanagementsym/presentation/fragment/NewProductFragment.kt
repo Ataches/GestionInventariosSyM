@@ -3,8 +3,11 @@ package com.example.stockmanagementsym.presentation.fragment
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +16,8 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_new_product.*
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class NewProductFragment: Fragment(){
 
@@ -45,7 +50,18 @@ class NewProductFragment: Fragment(){
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 10 && resultCode == RESULT_OK){
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageViewNewProduct.setImageBitmap(imageBitmap)
+
+            val byteArrayOutputStream =  ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            val stringBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+            val byteArrayFromString = Base64.decode(stringBitmap,Base64.DEFAULT)
+            val bitMap=BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
+
+            imageViewNewProduct.setImageBitmap(bitMap)
+
+            FragmentData.setStringBitMap(stringBitmap)
         }
         if(requestCode == 101 && resultCode == RESULT_OK){
             val imageUri = data?.data
@@ -66,5 +82,13 @@ class NewProductFragment: Fragment(){
         if(intent.resolveActivity(requireContext().packageManager) != null){
             startActivityForResult(intent, 101)
         }
+    }
+    fun decoder(base64Str: String, pathFile: String): Unit{
+        val imageByteArray = Base64.decode(base64Str,0)
+        File(pathFile).writeBytes(imageByteArray)
+    }
+    fun encoder(filePath: String): String{
+        val bytes = File(filePath).readBytes()
+        return Base64.encodeToString(bytes,0)
     }
 }

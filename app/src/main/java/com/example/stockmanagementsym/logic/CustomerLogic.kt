@@ -2,10 +2,7 @@ package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.logic.business.Customer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class CustomerLogic(private val customerDao: CustomerDao) {
 
@@ -13,8 +10,10 @@ class CustomerLogic(private val customerDao: CustomerDao) {
 
     suspend fun updateCustomer(customer: Customer):Boolean {
         return try{
-            customerDao.update(customer)
-            updateCustomerList()
+            withContext(Dispatchers.IO) {
+                customerDao.update(customer)
+                updateCustomerList()
+            }
             true
         }catch (e:Exception){
             false
@@ -23,8 +22,10 @@ class CustomerLogic(private val customerDao: CustomerDao) {
 
     suspend fun createCustomer(newCustomer: Customer): Boolean {
         return try{
-            customerDao.insert(newCustomer)
-            updateCustomerList()
+            withContext(Dispatchers.IO) {
+                customerDao.insert(newCustomer)
+                updateCustomerList()
+            }
             true
         }catch (e: Exception){
             false
@@ -33,8 +34,10 @@ class CustomerLogic(private val customerDao: CustomerDao) {
 
     suspend fun deleteCustomer(customer: Customer):Boolean{
         return try{
-            customerDao.delete(customer)
-            updateCustomerList()
+            withContext(Dispatchers.IO) {
+                customerDao.delete(customer)
+                updateCustomerList()
+            }
             true
         }catch (e:Exception){
             false
@@ -47,10 +50,9 @@ class CustomerLogic(private val customerDao: CustomerDao) {
 
     suspend fun getCustomerList(): List<Customer> {
         if(customerList.isEmpty()){
-            GlobalScope.launch(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 customerList = customerDao.selectCustomerList()
             }
-            delay(100)
         }
         return customerList
     }

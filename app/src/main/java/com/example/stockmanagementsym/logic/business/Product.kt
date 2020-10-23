@@ -11,7 +11,7 @@ data class Product(
     private val price: Int,
     private val description: String,
     @ColumnInfo(name = "id_image")
-    private var idIconDrawable: Int,
+    private var stringBitMap: String,
     private var quantity: Int
 ){
     @PrimaryKey(autoGenerate = true)
@@ -29,8 +29,8 @@ data class Product(
         return description
     }
 
-    fun getIdIconDrawable(): Int {
-        return idIconDrawable
+    fun getStringBitMap(): String {
+        return stringBitMap
     }
 
     fun getQuantity(): Int {

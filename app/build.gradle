@@ -43,6 +43,10 @@ dependencies {
     //Threads
     implementation 'androidx.test:runner:1.3.0@aar'
     implementation 'androidx.test:core:1.3.0@aar'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'

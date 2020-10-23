@@ -5,15 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/home">
     <fragment
-        android:id="@+id/productsList"
-        android:name="com.example.stockmanagementsym.presentation.fragment.ProductListFragment"
-        android:label="fragment_product_list"
-        tools:layout="@layout/fragment_product_list" >
-        <action
-            android:id="@+id/action_productsList_to_newProductFragment"
-            app:destination="@id/newProductFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/home"
         android:name="com.example.stockmanagementsym.presentation.fragment.HomeFragment"
         android:label="fragment_home"
@@ -56,8 +47,8 @@
             android:id="@+id/action_newProductFragment_to_home"
             app:destination="@id/home" />
         <action
-            android:id="@+id/action_newProductFragment_to_productsList"
-            app:destination="@id/productsList" />
+            android:id="@+id/action_newProductFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
     </fragment>
     <fragment
         android:id="@+id/userFragment"
@@ -76,5 +67,8 @@
         <action
             android:id="@+id/action_shopFragment_to_home"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_shopFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment" />
     </fragment>
 </navigation>

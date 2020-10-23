@@ -2,10 +2,7 @@ package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class ProductLogic(private var productDao: ProductDao) {
 
@@ -13,8 +10,10 @@ class ProductLogic(private var productDao: ProductDao) {
 
     suspend fun updateProduct(productToUpdate: Product):Boolean {
         return try{
-            productDao.update(productToUpdate)
-            updateProductList()
+            withContext(Dispatchers.IO) {
+                productDao.update(productToUpdate)
+                updateProductList()
+            }
             true
         }catch (e:Exception){
             false
@@ -23,8 +22,10 @@ class ProductLogic(private var productDao: ProductDao) {
 
     suspend fun createProduct(newProduct:Product):Boolean{
         return try{
-            productDao.insert(newProduct)
-            updateProductList()
+            withContext(Dispatchers.IO) {
+                productDao.insert(newProduct)
+                updateProductList()
+            }
             true
         }catch (e:Exception){
             false
@@ -33,8 +34,10 @@ class ProductLogic(private var productDao: ProductDao) {
 
     suspend fun deleteProduct(product:Product):Boolean{
         return try{
-            productDao.delete(product)
-            updateProductList()
+            withContext(Dispatchers.IO) {
+                productDao.delete(product)
+                updateProductList()
+            }
             true
         }catch (e:Exception){
             false
@@ -50,11 +53,10 @@ class ProductLogic(private var productDao: ProductDao) {
     }
 
     suspend fun getProductList(): List<Product> {
-        if(productList.isEmpty()){
-            GlobalScope.launch(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
+            if(productList.isEmpty()){
                 productList = productDao.selectProductList()
             }
-            delay(100)
         }
         return productList
     }

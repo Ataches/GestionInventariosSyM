@@ -55,7 +55,7 @@ class CustomerListFragment : Fragment(), ListListener {
 
     override fun reloadList() {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.customerList = getCustomerList()
+            adapter.customerList = FragmentData.getCustomerList()
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }
@@ -69,9 +69,5 @@ class CustomerListFragment : Fragment(), ListListener {
                 adapter.notifyDataSetChanged()
             }
         }
-    }
-
-    private suspend fun getCustomerList(): List<Customer> {
-        return FragmentData.getCustomerList()
     }
 }

@@ -1,5 +1,8 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private var product = Product("",1,"",0,1)
+    private var product = Product("",1,"","",1)
 
     fun bind(productCart: Product, listener: ListListener) {
         itemView.textViewName.text = productCart.getName()
@@ -26,6 +29,7 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewDescription.text = productCart.getDescription()
         itemView.textViewQuantity.text = "Cantidad: ${productCart.getQuantity()}"
         itemView.editTextQuantity.setText("""${productCart.getQuantity()}""")
+        itemView.imageViewProduct.setImageBitmap(getBitMap(product))
         itemView.textViewProdRealQuantity.text =
             "Disponibles: ${(product.getQuantity()-productCart.getQuantity())}" +
                     ", total: ${product.getQuantity()}"
@@ -48,6 +52,11 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }else
                 FragmentData.showMessage(it.context, "Digite un numero correcto")
         }
+    }
+
+    private fun getBitMap(product: Product): Bitmap? {
+        val byteArrayFromString = Base64.decode(product.getStringBitMap(), Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
     }
 
     fun setProductOriginal(product: Product) {

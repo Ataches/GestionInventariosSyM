@@ -69,7 +69,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/textViewQuantity"
-                app:layout_constraintEnd_toStartOf="@+id/editTextQuantity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 

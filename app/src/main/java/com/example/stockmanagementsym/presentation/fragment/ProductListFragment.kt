@@ -1,7 +1,6 @@
 package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,20 +9,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
-import com.example.stockmanagementsym.presentation.adapter.ProductsListAdapter
+import com.example.stockmanagementsym.presentation.adapter.ProductListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import com.gorillazuniversity.clase8_1.ShopPagerAdapter
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 class ProductListFragment : Fragment(), ListListener{
 
     private var productList: List<Product> = listOf()
-    private var adapter:ProductsListAdapter = ProductsListAdapter(productList)
+    private var adapter:ProductListAdapter = ProductListAdapter(productList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,14 +39,13 @@ class ProductListFragment : Fragment(), ListListener{
 
         FragmentData.setProductListListener(this)
 
-
         buttonProductListToSearch.setOnClickListener(AndroidController)
         buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
 
     override fun reloadList() {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.setProductList(getProductList())
+            adapter.setProductList(FragmentData.getProductList())
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }
@@ -63,9 +59,5 @@ class ProductListFragment : Fragment(), ListListener{
                 adapter.notifyDataSetChanged()
             }
         }
-    }
-
-    private suspend fun getProductList(): List<Product> {
-        return FragmentData.getProductList()
     }
 }

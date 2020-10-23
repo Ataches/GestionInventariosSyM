@@ -15,7 +15,7 @@ object AndroidController: View.OnClickListener {
     private lateinit var transaction: FragmentTransaction
     private lateinit var androidView: AndroidView
 
-    fun setViewClass(androidView: AndroidView){
+    fun setAdroidView(androidView: AndroidView){
         this.androidView = androidView
     }
 
@@ -31,7 +31,7 @@ object AndroidController: View.OnClickListener {
 
             //Product list
             R.id.buttonProductListToSearch -> androidView.searchProduct(view)
-            R.id.buttonProductListToNewProduct -> navController.navigate(R.id.action_productsList_to_newProductFragment)
+            R.id.buttonProductListToNewProduct -> navController.navigate(R.id.action_shopFragment_to_newProductFragment)
 
             //Cart
             R.id.buttonCartToNewSale -> androidView.confirmNewSale(view)
@@ -42,7 +42,7 @@ object AndroidController: View.OnClickListener {
 
             //New product
             R.id.buttonNewProductToHome -> navController.navigate(R.id.action_newProductFragment_to_home)
-            R.id.buttonNewProductToProductList -> navController.navigate(R.id.action_newProductFragment_to_productsList)
+            R.id.buttonNewProductToProductList -> navController.navigate(R.id.action_newProductFragment_to_shopFragment)
             R.id.buttonNewProductToGallery -> androidView.getPhotoGallery(view)
             R.id.buttonNewProductToCamera -> androidView.getPhotoCamera(view)
             R.id.buttonNewProductToNewProduct -> {
@@ -58,10 +58,10 @@ object AndroidController: View.OnClickListener {
     }
 
     fun goProductList(){
-        navController.navigate(R.id.action_newProductFragment_to_productsList)
+        navController.navigate(R.id.action_newProductFragment_to_shopFragment)
     }
 
     fun goNewProduct(){
-        navController.navigate(R.id.action_productsList_to_newProductFragment)
+        navController.navigate(R.id.action_shopFragment_to_newProductFragment)
     }
 }

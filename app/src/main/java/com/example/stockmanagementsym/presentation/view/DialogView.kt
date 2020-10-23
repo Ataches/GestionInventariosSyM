@@ -5,9 +5,6 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.AsyncTask
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -15,14 +12,12 @@ import androidx.fragment.app.findFragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.fragment.CartFragment
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -135,7 +130,7 @@ class DialogView(private var androidView: AndroidView) {
                 newProductFragment.editTextProductName.text.toString(),
                 newProductFragment.editTextProductPrice.text.toString().toInt(),
                 newProductFragment.editTextProductDesc.text.toString(),
-                R.drawable.ic_login.toString().toInt(),
+                FragmentData.getStringBitMap(),
                 newProductFragment.editTextProductQuantity.text.toString().toInt()
             )
         if (updateBoolean) {

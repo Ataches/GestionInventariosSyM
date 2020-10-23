@@ -34,7 +34,7 @@ class CartFragment : Fragment(), ListListener {
 
         recyclerViewCart.adapter = adapter
         recyclerViewCart.layoutManager =
-            LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
         reloadList()
 

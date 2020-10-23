@@ -6,11 +6,11 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
+import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AndroidView(private val androidModel: AndroidModel)  {
@@ -20,12 +20,14 @@ class AndroidView(private val androidModel: AndroidModel)  {
     private var fragmentData:FragmentData ?= null
 
     init {
-        controller.setViewClass(this)
+        controller.setAdroidView(this)
+        getFragmentData().setAndroidView(this)
     }
 
     private fun getFragmentData():FragmentData{
-        if(fragmentData == null)
+        if(fragmentData == null){
             fragmentData  = FragmentData
+        }
         return fragmentData!!
     }
 
@@ -42,6 +44,12 @@ class AndroidView(private val androidModel: AndroidModel)  {
     fun getPhotoCamera(view: View) {
         androidModel.getPhotoCamera(view)
     }
+    /*
+        User
+     */
+    fun getUserList(): List<User> {
+        return androidModel.getUserList()
+    }
 
     /*
         Product
@@ -57,8 +65,12 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.createProduct(product)
     }
 
-    suspend fun deleteProduct(product: Product): Boolean {
+    fun deleteProduct(product: Product): Boolean {
         return androidModel.deleteProduct(product)
+    }
+
+    suspend fun getProductList(): List<Product> {
+        return androidModel.getProductList()
     }
 
     fun searchProduct(view: View) {
@@ -75,6 +87,7 @@ class AndroidView(private val androidModel: AndroidModel)  {
         }
         controller.goProductList()
     }
+
     /*
         Customer
      */
@@ -143,13 +156,14 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.setDateSale(date)
     }
 
+
     fun searchSale(view: View) {
         androidModel.searchSale(view)
     }
 
-
     fun showMessage(context: Context, message:String){
         getDialogView().showMessage(message,context)
     }
+
 
 }

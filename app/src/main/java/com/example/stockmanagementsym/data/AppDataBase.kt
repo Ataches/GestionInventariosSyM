@@ -1,7 +1,6 @@
     package com.example.stockmanagementsym.data
 
 import android.content.Context
-import android.util.Log
 import androidx.room.*
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.data.dao.ProductDao
@@ -71,7 +70,7 @@ class Converters {
             value+= product.getName()+"-lim-"+
                     product.getPrice()+"-lim-"+
                     product.getDescription()+"-lim-"+
-                    product.getIdIconDrawable()+"-lim-"+
+                    product.getStringBitMap()+"-lim-"+
                     product.getQuantity()+"-ln-"
         }
         return value
@@ -88,7 +87,7 @@ class Converters {
                     name = data[0],
                     price = data[1].toInt(),
                     description = data[2],
-                    idIconDrawable = data[3].toInt(),
+                    stringBitMap = data[3],
                     quantity = data[4].toInt()
                 )
                 productList.add(product)
