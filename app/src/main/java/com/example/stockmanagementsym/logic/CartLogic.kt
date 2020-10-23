@@ -34,4 +34,5 @@ class CartLogic {
     fun clearCart() {
         getCartData().clearCart()
     }
+
 }

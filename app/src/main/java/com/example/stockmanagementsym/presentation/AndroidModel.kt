@@ -91,6 +91,12 @@ class AndroidModel{
         return getSaleLogic().removeElementCart(item)
     }
 
+    fun getSaleToString(sale: Sale): String {
+        return "Cliente: \n"+getCustomerLogic().customerToString(sale.getCustomer()) +"\n\n"+
+                "Fecha: "+sale.getDate()+"\n\n"+
+                "Listado de productos: \n"+ getProductLogic().productListToString(sale.getProductList(),false)
+    }
+
     //Cart
     fun getCartList(): MutableList<Product> {
         return getSaleLogic().getCartList()
@@ -98,6 +104,10 @@ class AndroidModel{
 
     fun getTotalPrice(): Int {
         return getSaleLogic().getTotalPriceCart()
+    }
+
+    fun getCartListToString(mutableList: MutableList<Product>): String {
+        return getProductLogic().productListToString(mutableList,false)
     }
 
     //Customer
@@ -132,6 +142,10 @@ class AndroidModel{
         return resultTransaction
     }
 
+    fun getCustomerToString(customer: Customer): String {
+        return getCustomerLogic().customerToString(customer)
+    }
+
     //Product
     suspend fun getProductList(): List<Product> {
         var list:List<Product> = listOf()
@@ -151,7 +165,6 @@ class AndroidModel{
         }
         return resultTransaction
     }
-
     fun deleteProduct(product: Product): Boolean {
         var resultTransaction:Boolean = false
         GlobalScope.launch(Dispatchers.IO){
@@ -159,6 +172,11 @@ class AndroidModel{
         }
         return resultTransaction
     }
+
+    fun getProductToString(product: Product): String {
+        return getProductLogic().productToString(product,false)
+    }
+
     //   New product creation
     suspend fun createProduct(product: Product): Boolean {
         val result = getProductLogic().createProduct(product)
@@ -219,7 +237,6 @@ class AndroidModel{
             customerLogic = CustomerLogic(dataBaseLogic.getCustomerDao())
         return customerLogic!!
     }
-
     private fun getSaleLogic(): SaleLogic {
         if(saleLogic==null)
             saleLogic = SaleLogic(dataBaseLogic.getSaleDao())
@@ -231,6 +248,7 @@ class AndroidModel{
             productLogic = ProductLogic(dataBaseLogic.getProductDao())
         return productLogic!!
     }
+
     fun getAndroidView(): AndroidView {
         if(androidView == null)
             androidView = AndroidView(this)
@@ -254,5 +272,4 @@ class AndroidModel{
 
 
     }
-
 }

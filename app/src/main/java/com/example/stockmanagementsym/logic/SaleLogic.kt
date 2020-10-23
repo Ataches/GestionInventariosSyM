@@ -11,7 +11,6 @@ class SaleLogic(private var saleDao: SaleDao) {
     private var cartLogic:CartLogic ?= null
     private var saleList: List<Sale> = listOf()
 
-
     private fun getCartLogic(): CartLogic {
         if(cartLogic==null)
             cartLogic = CartLogic()
@@ -24,7 +23,6 @@ class SaleLogic(private var saleDao: SaleDao) {
         }
         return saleList
     }
-
 
     suspend fun createSale(sale: Sale): Boolean {
         saleDao.insert(sale)
@@ -48,6 +46,7 @@ class SaleLogic(private var saleDao: SaleDao) {
     }
 
 
+
     //Cart
     fun addProductToCart(item: Product):String{
         return getCartLogic().addProduct(item)
@@ -56,12 +55,11 @@ class SaleLogic(private var saleDao: SaleDao) {
     fun getTotalPriceCart(): Int {
         return getCartLogic().getTotalPrice()
     }
-
     fun getCartList(): MutableList<Product> {
         return getCartLogic().getCartList()
     }
+
     fun removeElementCart(item: Product):Boolean{
         return getCartLogic().removeElementCart(item)
     }
-
 }

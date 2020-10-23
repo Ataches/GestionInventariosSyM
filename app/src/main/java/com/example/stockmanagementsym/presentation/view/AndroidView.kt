@@ -132,6 +132,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return getFragmentData().getCustomerToEdit()
     }
 
+    fun getCustomerToString(customer: Customer): String {
+        return androidModel.getCustomerToString(customer)
+    }
+
     /*
         Sale
      */
@@ -161,9 +165,22 @@ class AndroidView(private val androidModel: AndroidModel)  {
         androidModel.searchSale(view)
     }
 
+    fun getSaleToString(sale: Sale): String {
+        return androidModel.getSaleToString(sale)
+    }
+    /*
+        Cart
+     */
+
+    fun getCartListToString(mutableList: MutableList<Product>): String {
+        return androidModel.getCartListToString(mutableList)
+    }
+
     fun showMessage(context: Context, message:String){
         getDialogView().showMessage(message,context)
     }
 
-
+    fun getProductToString(product: Product): String {
+        return androidModel.getProductToString(product)
+    }
 }

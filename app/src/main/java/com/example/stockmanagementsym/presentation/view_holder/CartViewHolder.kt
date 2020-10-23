@@ -11,10 +11,12 @@ import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_cart.view.*
 import kotlinx.android.synthetic.main.item_cart.view.editTextQuantity
+import kotlinx.android.synthetic.main.item_cart.view.imageViewProduct
 import kotlinx.android.synthetic.main.item_cart.view.textViewDescription
 import kotlinx.android.synthetic.main.item_cart.view.textViewName
 import kotlinx.android.synthetic.main.item_cart.view.textViewPrice
 import kotlinx.android.synthetic.main.item_cart.view.textViewQuantity
+import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,7 +31,11 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewDescription.text = productCart.getDescription()
         itemView.textViewQuantity.text = "Cantidad: ${productCart.getQuantity()}"
         itemView.editTextQuantity.setText("""${productCart.getQuantity()}""")
-        itemView.imageViewProduct.setImageBitmap(getBitMap(product))
+        if(product.getStringBitMap().isNotEmpty()){
+            itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
+            itemView.imageViewProduct.setBackgroundResource(0)
+        }
+
         itemView.textViewProdRealQuantity.text =
             "Disponibles: ${(product.getQuantity()-productCart.getQuantity())}" +
                     ", total: ${product.getQuantity()}"
@@ -54,8 +60,8 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    private fun getBitMap(product: Product): Bitmap? {
-        val byteArrayFromString = Base64.decode(product.getStringBitMap(), Base64.DEFAULT)
+    private fun decoderStringToBitMap(string: String): Bitmap? {
+        val byteArrayFromString = Base64.decode(string, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
     }
 

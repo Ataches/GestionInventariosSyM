@@ -12,6 +12,7 @@ import androidx.fragment.app.findFragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
@@ -153,11 +154,10 @@ class DialogView(private var androidView: AndroidView) {
 
     // Dialogs
     fun dialogConfirmRegister(view: View, data: Any, title: String, message: String){
-
         val builder = AlertDialog.Builder(view.context)
         builder.setTitle(title)
         val messageDialog = message +
-                "\n" + data
+                "\n\n" + getRegisterData(data,title,view)
         builder.setPositiveButton("Si") { _, _ ->
             when (title) {
                 view.context.getString(R.string.titleAlertNewProd) -> {
@@ -204,13 +204,31 @@ class DialogView(private var androidView: AndroidView) {
             FragmentData.setBooleanUpdate(false)
 
             GlobalScope.launch(Dispatchers.IO) {
-                showMessage(view.context, view.context.getString(R.string.modifyIfIsNecessary))
+                showMessage(view.context.getString(R.string.modifyIfIsNecessary),view.context)
             }
         }
         builder.setMessage(messageDialog)
         builder.create()
         builder.show()
     }
+
+    private fun getRegisterData(data: Any, title: String, view: View): String {
+        return when(title){
+            view.context.getString(R.string.titleAlertNewCustomer) -> androidView.getCustomerToString(data as Customer)
+
+            view.context.getString(R.string.titleAlertUpdateCustomer) -> androidView.getCustomerToString(data as Customer)
+
+            view.context.getString(R.string.titleAlertNewSale) -> androidView.getCartListToString(data as MutableList<Product>)
+
+            view.context.getString(R.string.titleAlertNewSaleBd) -> androidView.getSaleToString(data as Sale)
+
+            view.context.getString(R.string.titleAlertNewProd) -> androidView.getProductToString(data as Product)
+            view.context.getString(R.string.titleAlertUpdateProd) -> androidView.getProductToString(data as Product)
+
+            else -> ""+data
+        }
+    }
+
     private fun dialogGetDate(view: View):String{
         val date = Calendar.getInstance()
         var dateSelected: String = ""
@@ -248,10 +266,6 @@ class DialogView(private var androidView: AndroidView) {
         view.textViewSaleCustomerNameSelected?.text = customerName
     }
 
-    private fun showMessage(context: Context, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
     private fun showResultTransaction(view: View,resultTransaction: Boolean) {
         if (resultTransaction)
             showMessage("Se realizo la operación con exito",view.context)
@@ -271,4 +285,6 @@ class DialogView(private var androidView: AndroidView) {
             return null
         }
     }
+
+
 }

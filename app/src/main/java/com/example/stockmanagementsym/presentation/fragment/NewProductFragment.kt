@@ -4,20 +4,21 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import java.io.ByteArrayOutputStream
-import java.io.File
 
 class NewProductFragment: Fragment(){
 
@@ -33,10 +34,12 @@ class NewProductFragment: Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         if(FragmentData.getBooleanUpdate()){
-            editTextProductName.setText(FragmentData.getProductToEdit().getName())
-            editTextProductPrice.setText(FragmentData.getProductToEdit().getPrice().toString())
-            editTextProductDesc.setText(FragmentData.getProductToEdit().getDescription())
-            editTextProductQuantity.setText(FragmentData.getProductToEdit().getQuantity().toString())
+            val product = FragmentData.getProductToEdit()
+            editTextProductName.setText(product.getName())
+            editTextProductPrice.setText(product.getPrice().toString())
+            editTextProductDesc.setText(product.getDescription())
+            editTextProductQuantity.setText(product.getQuantity().toString())
+            imageViewNewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
         }
 
         buttonNewProductToHome.setOnClickListener (AndroidController)
@@ -49,23 +52,23 @@ class NewProductFragment: Fragment(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 10 && resultCode == RESULT_OK){
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-
-            val byteArrayOutputStream =  ByteArrayOutputStream()
-            imageBitmap.compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val stringBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-
-            val byteArrayFromString = Base64.decode(stringBitmap,Base64.DEFAULT)
-            val bitMap=BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
+            val bitMap = data?.extras?.get("data") as Bitmap
 
             imageViewNewProduct.setImageBitmap(bitMap)
 
-            FragmentData.setStringBitMap(stringBitmap)
+            FragmentData.setStringBitMap(encoderBitMapToString(bitMap))
         }
         if(requestCode == 101 && resultCode == RESULT_OK){
-            val imageUri = data?.data
+            val imageUri = data!!.data!!
+
             imageViewNewProduct.setImageURI(imageUri)
+
+            val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver, imageUri))
+            } else {
+                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+            }
+            FragmentData.setStringBitMap(encoderBitMapToString(bitMap))
         }
     }
 
@@ -83,12 +86,15 @@ class NewProductFragment: Fragment(){
             startActivityForResult(intent, 101)
         }
     }
-    fun decoder(base64Str: String, pathFile: String): Unit{
-        val imageByteArray = Base64.decode(base64Str,0)
-        File(pathFile).writeBytes(imageByteArray)
+    private fun encoderBitMapToString(imageBitmap: Bitmap): String{
+        val byteArrayOutputStream =  ByteArrayOutputStream()
+        imageBitmap.compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
-    fun encoder(filePath: String): String{
-        val bytes = File(filePath).readBytes()
-        return Base64.encodeToString(bytes,0)
+
+    private fun decoderStringToBitMap(string: String): Bitmap? {
+        val byteArrayFromString = Base64.decode(string, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
     }
 }

@@ -43,7 +43,7 @@
                 android:id="@+id/imageViewProduct"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
-                android:background="@color/buttonPrimary"
+                android:background="@drawable/ic_image"
 
                 android:layout_marginTop="10dp"
 

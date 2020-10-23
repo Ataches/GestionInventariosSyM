@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.logic
 
+import android.util.Log
 import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
 import kotlinx.coroutines.*
@@ -65,4 +66,68 @@ class ProductLogic(private var productDao: ProductDao) {
         productList = productDao.selectProductList()
     }
 
+    //TypeConverter
+    //ProductList
+    fun productListToString(productList:MutableList<Product>,toDB: Boolean):String{
+        var value = ""
+        for (product in productList)
+            value+= productToString(product,toDB)
+        return value
+    }
+
+    fun storedStringToProductList(value: String, toDB:Boolean): MutableList<Product>{
+        var dataProducts = value.split("\n\n")
+        dataProducts = dataProducts.filter{it != ""}//Remove void elements in list
+        val productList: MutableList<Product> = mutableListOf()
+        for(dataProduct in dataProducts)
+            if(dataProducts.isNotEmpty())
+                productList.add(storedStringToProduct(dataProduct,toDB))
+        return productList
+    }
+    //Product
+    fun productToString(product: Product, toDB: Boolean):String{
+        return if(toDB)
+            "Nombre: "+product.getName()+"\n"+
+            "Precio: "+product.getPrice()+"\n"+
+            "Descripción: "+product.getDescription()+"\n"+
+            "bitMap: "+product.getStringBitMap()+"\n"+
+            "Cantidad: "+product.getQuantity()+"\n\n"
+        else
+            "Nombre: "+product.getName()+"\n"+
+            "Precio: "+product.getPrice()+"\n"+
+            "Descripción: "+product.getDescription()+"\n"+
+            "Cantidad: "+product.getQuantity()+"\n\n"
+    }
+
+    fun storedStringToProduct(string: String, toDB: Boolean): Product{
+        var listString = string.split("\n")
+        val bitmap:String
+        val quantity:Int
+
+        listString = listString.map { it.removePrefix("Nombre: ") }
+        listString = listString.map { it.removePrefix("Precio: ") }
+        listString = listString.map { it.removePrefix("Descripción: ") }
+
+        if(toDB) {
+            listString = listString.map { it.removePrefix("bitMap: ") }
+            listString = listString.map { it.removePrefix("Cantidad: ") }
+
+            bitmap = listString[3]
+            quantity = listString[4].toInt()
+        }
+        else{
+            listString = listString.map { it.removePrefix("Cantidad: ") }
+
+            bitmap = ""
+            quantity = listString[3].toInt()
+        }
+
+        return Product(
+                    name = listString[0],
+                    price = listString[1].toInt(),
+                    description = listString[2],
+                    stringBitMap = bitmap,
+                    quantity = quantity
+                )
+    }
 }

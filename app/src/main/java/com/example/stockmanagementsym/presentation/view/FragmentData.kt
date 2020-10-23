@@ -96,8 +96,10 @@ object FragmentData{
         this.stringBitmap = stringBitmap
     }
 
-    fun getStringBitMap():String{
-        return stringBitmap
+    fun getStringBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
+        val string = stringBitmap
+        stringBitmap = ""
+        return string
     }
 
 

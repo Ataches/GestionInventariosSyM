@@ -1,11 +1,7 @@
 package com.example.stockmanagementsym
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.findFragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,7 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_navigation_header.*
 import kotlinx.android.synthetic.main.layout_navigation_header.view.*
 
 class MainActivity : AppCompatActivity() {
