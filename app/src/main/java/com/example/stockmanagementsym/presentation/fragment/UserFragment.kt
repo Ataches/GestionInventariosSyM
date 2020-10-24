@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class UserFragment : Fragment() {
 
@@ -39,7 +40,11 @@ class UserFragment : Fragment() {
         recyclerViewUserList.layoutManager = GridLayoutManager(view.context, 2)
     }
     private fun reloadList(){
-        adapter.setUserList(FragmentData.getUserList())
-        adapter.notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.setUserList(FragmentData.getUserList())
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }

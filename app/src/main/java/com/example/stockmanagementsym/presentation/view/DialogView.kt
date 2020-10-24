@@ -204,7 +204,7 @@ class DialogView(private var androidView: AndroidView) {
             FragmentData.setBooleanUpdate(false)
 
             GlobalScope.launch(Dispatchers.IO) {
-                showMessage(view.context.getString(R.string.modifyIfIsNecessary),view.context)
+                showToastMessage(view.context.getString(R.string.modifyIfIsNecessary),view.context)
             }
         }
         builder.setMessage(messageDialog)
@@ -268,12 +268,20 @@ class DialogView(private var androidView: AndroidView) {
 
     private fun showResultTransaction(view: View,resultTransaction: Boolean) {
         if (resultTransaction)
-            showMessage("Se realizo la operación con exito",view.context)
+            showToastMessage("Se realizo la operación con exito",view.context)
         else
-            showMessage("No se pudo realizar la operación",view.context)
+            showToastMessage("No se pudo realizar la operación",view.context)
     }
-    fun showMessage(message: String, context: Context) {
+    fun showToastMessage(message: String, context: Context) {
         CustomTask(context, message).execute()
+    }
+    fun showAlertMessage(title: String, message: String, view: View) {
+        val builder = AlertDialog.Builder(view.context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setNeutralButton("Cerrar"){_,_->}
+        builder.create()
+        builder.show()
     }
     private class CustomTask(val context: Context, val message: String) :
         AsyncTask<Void?, Void?, Void?>() {

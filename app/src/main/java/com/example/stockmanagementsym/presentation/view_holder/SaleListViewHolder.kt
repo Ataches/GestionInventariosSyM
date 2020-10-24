@@ -4,9 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Sale
-import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.item_product.view.textViewName
 import kotlinx.android.synthetic.main.item_sale.view.*
 
 class SaleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -17,7 +15,7 @@ class SaleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewCity.text = item.getCustomer().getCity()
         itemView.textViewDateSale.text = itemView.context.getString(R.string.saleDate)+" "+ item.getDate()
         itemView.buttonProductListSale.setOnClickListener{
-            FragmentData.showMessage(itemView.context,""+item.getProductList())
+            FragmentData.showProductListSaleToString(item, itemView)
         }
     }
 }

@@ -45,9 +45,9 @@ class AndroidModel{
         FragmentData.setModel(this)
     }
     //User
-    fun getUserList(): List<User> {
+    suspend fun getUserList(): List<User> {
         var list:List<User> = listOf()
-        GlobalScope.launch(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             list = getUserLogic().selectUserList()
         }
         return list
@@ -55,16 +55,21 @@ class AndroidModel{
 
     //Sale
     suspend fun createSale(newSale: Sale): Boolean {
-        newSale.getProductList().forEach {
-            val product  = getProductLogic().searchProducts(it.idProduct)
-            product.setQuantity(product.getQuantity() - it.getQuantity())
-            getProductLogic().updateProduct(product)
-        }
-        val resultTransaction = getSaleLogic().createSale(newSale)
-        FragmentData.reloadCartList()
-        if(resultTransaction)
+        return try{
+            withContext(Dispatchers.IO) {
+                newSale.getProductList().forEach {
+                        val product  = getProductLogic().searchProducts(it.idProduct)
+                        product.setQuantity(product.getQuantity() - it.getQuantity())
+                        getProductLogic().updateProduct(product)
+                    }
+                getSaleLogic().createSale(newSale)
+                FragmentData.reloadCartList()
+            }
             this.newSale = null
-        return resultTransaction
+            true
+        }catch(e:Exception){
+            false
+        }
     }
 
     fun getNewSale(): Sale {
@@ -94,9 +99,9 @@ class AndroidModel{
     }
 
     fun getSaleToString(sale: Sale): String {
-        return "Cliente: \n"+getCustomerLogic().customerToString(sale.getCustomer()) +"\n\n"+
-                "Fecha: "+sale.getDate()+"\n\n"+
-                "Listado de productos: \n"+ getProductLogic().productListToString(sale.getProductList(),false)
+        return "Fecha: "+sale.getDate()+"\n\n"+
+               "Cliente: \n\n"+getCustomerLogic().customerToString(sale.getCustomer()) +"\n\n"+
+               "Listado de productos: \n\n"+ getProductLogic().productListToString(sale.getProductList(),false)
     }
 
     //Cart
@@ -262,7 +267,7 @@ class AndroidModel{
         return productLogic!!
     }
 
-    fun getAndroidView(): AndroidView {
+    private fun getAndroidView(): AndroidView {
         if(androidView == null)
             androidView = AndroidView(this)
         return androidView!!
@@ -272,13 +277,13 @@ class AndroidModel{
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
         if(getUserLogic().confirmLogin(user, password)){
             FragmentData.setUser(userName = user)
-            getAndroidView().showMessage(login,login.getString(R.string.welcome)+" "+user)
+            getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+user)
 
             val intent = Intent(login, MainActivity::class.java)
             login.startActivity(intent)
         }
         else
-            getAndroidView().showMessage(
+            getAndroidView().showToastMessage(
                 login,
                 "Usuario $user no encontrado o contraseña incorrecta"
             )

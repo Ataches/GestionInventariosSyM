@@ -8,6 +8,7 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
+import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import java.text.DateFormat
@@ -17,6 +18,7 @@ import java.util.*
 object FragmentData{
 
     private var stringBitmap: String = ""
+    private lateinit var saleSelected: Sale
     private lateinit var customerToEdit: Customer
     private lateinit var productToEdit: Product
     private var booleanUpdate: Boolean = false
@@ -44,16 +46,19 @@ object FragmentData{
         this.androidView = androidView
     }
 
+    fun getAndroidView(): AndroidView {
+        return androidView
+    }
     fun setProductListListener(productListFragment: ListListener) {
         productListListener = productListFragment
     }
     fun setCartListener(cartFragment: ListListener) {
         cartListener = cartFragment
     }
+
     fun setCustomerListListener(customerListFragment: ListListener){
         customerListListener = customerListFragment
     }
-
     suspend fun reloadCustomerList(){
         try{
             customerListListener.reloadList()
@@ -63,31 +68,32 @@ object FragmentData{
     suspend fun reloadProductList(){
         productListListener.reloadList()
     }
+
     suspend fun reloadCartList() {
         cartListener.reloadList()
     }
-
     fun setBooleanUpdate(confirmUpdate: Boolean) {
         this.booleanUpdate = confirmUpdate
     }
+
     fun getBooleanUpdate():Boolean{
         return booleanUpdate
     }
+
+
 
     fun getDate(date: Calendar): String {
         val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
         return df.format(date.time)
     }
 
-
-
     fun showMessage(context: Context, message:String){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
-
     fun setProductToEdit(item: Product) {
         productToEdit = item
     }
+
     fun getProductToEdit(): Product {
         return productToEdit
     }
@@ -96,12 +102,12 @@ object FragmentData{
         this.stringBitmap = stringBitmap
     }
 
+
     fun getStringBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
         val string = stringBitmap
         stringBitmap = ""
         return string
     }
-
 
     fun getCartList(): MutableList<Product> {
         return androidModel.getCartList()
@@ -151,14 +157,26 @@ object FragmentData{
     }
 
     fun goToNewProduct() {
-        androidModel.getAndroidView().goToNewProduct()
+        androidView.goToNewProduct()
     }
 
     fun goToNewCustomer(view:View) {
-        androidModel.getAndroidView().goToNewCustomer(view)
+        androidView.goToNewCustomer(view)
     }
 
-    fun getUserList(): List<User> {
+    suspend fun getUserList(): List<User> {
         return androidView.getUserList()
+    }
+
+    fun getController(): AndroidController {
+        return androidView.controller
+    }
+
+    fun getSaleSelected(): Sale {
+        return saleSelected
+    }
+
+    fun showProductListSaleToString(item: Sale, itemView: View) {
+        return androidView.showProductListSaleToString(item,itemView)
     }
 }

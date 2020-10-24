@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_cart.view.*
@@ -27,10 +28,15 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewPrice.text = "$ ${product.getPrice()}"
         itemView.textViewDescription.text = product.getDescription()
         itemView.textViewQuantity.text = "Cantidad: ${product.getQuantity()}"
+        Log.d("TEST", "DATA PRODUCT BITMAP: "+product.getStringBitMap().length)
         if(product.getStringBitMap().isNotEmpty()){
             itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
             itemView.imageViewProduct.setBackgroundResource(0)
+        }else{
+            itemView.imageViewProduct.setImageBitmap(null)
+            itemView.imageViewProduct.setBackgroundResource(R.drawable.ic_image)
         }
+
         itemView.buttonAddProductToCart.setOnClickListener{
             val quantityString = itemView.editTextQuantity.text.toString()
             if(quantityString.isDigitsOnly()&&quantityString.isNotEmpty()){

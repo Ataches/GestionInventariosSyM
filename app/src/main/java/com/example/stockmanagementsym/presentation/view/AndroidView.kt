@@ -47,7 +47,7 @@ class AndroidView(private val androidModel: AndroidModel)  {
     /*
         User
      */
-    fun getUserList(): List<User> {
+    suspend fun getUserList(): List<User> {
         return androidModel.getUserList()
     }
 
@@ -86,6 +86,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
             getFragmentData().reloadProductList()
         }
         controller.goProductList()
+    }
+
+    fun getProductToString(product: Product): String {
+        return androidModel.getProductToString(product)
     }
 
     /*
@@ -168,19 +172,28 @@ class AndroidView(private val androidModel: AndroidModel)  {
     fun getSaleToString(sale: Sale): String {
         return androidModel.getSaleToString(sale)
     }
+
+    fun showProductListSaleToString(item: Sale, view: View) {
+        showAlertMessage(view.context.getString(R.string.productList),
+                         androidModel.getSaleToString(item),
+                         view)
+    }
+
     /*
         Cart
      */
-
     fun getCartListToString(mutableList: MutableList<Product>): String {
         return androidModel.getCartListToString(mutableList)
     }
 
-    fun showMessage(context: Context, message:String){
-        getDialogView().showMessage(message,context)
+    /*
+        Messages
+     */
+    fun showToastMessage(context: Context, message:String){
+        getDialogView().showToastMessage(message,context)
     }
 
-    fun getProductToString(product: Product): String {
-        return androidModel.getProductToString(product)
+    fun showAlertMessage(title:String, message: String, view: View){
+        getDialogView().showAlertMessage(title,message,view)
     }
 }
