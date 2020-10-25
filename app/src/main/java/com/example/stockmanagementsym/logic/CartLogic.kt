@@ -2,6 +2,7 @@ package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.CartData
 import com.example.stockmanagementsym.logic.business.Product
+import java.text.DecimalFormat
 
 class CartLogic {
 
@@ -17,10 +18,12 @@ class CartLogic {
         return getCartData().getCartList()
     }
 
-    fun getTotalPrice(): Double {
+    fun getTotalPrice(): String {
+        val df = DecimalFormat("$###,###,###")
         if(getCartList().isNullOrEmpty())
-            return 0.0
-        return getCartList().map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it} + 0.0
+            return df.format(0.0)
+        val totalPrice = getCartList().map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
+        return df.format(totalPrice)
     }
 
     fun addProduct(item: Product):String{

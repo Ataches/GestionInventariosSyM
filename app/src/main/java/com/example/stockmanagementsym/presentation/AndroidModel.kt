@@ -1,7 +1,10 @@
 package com.example.stockmanagementsym.presentation
 
 import android.content.Intent
+import android.provider.Settings.Global.getString
+import android.provider.Settings.System.getString
 import android.view.View
+import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.stockmanagementsym.LoginActivity
@@ -12,14 +15,12 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.fragment.CustomerListFragment
-import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
-import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
-import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
+import com.example.stockmanagementsym.presentation.fragment.*
 import com.example.stockmanagementsym.presentation.view.AndroidView
 import kotlinx.android.synthetic.main.fragment_customer_list.*
-import kotlinx.android.synthetic.main.fragment_product_list.*
+import kotlinx.android.synthetic.main.fragment_product_list.editTextSearchProductList
 import kotlinx.android.synthetic.main.fragment_sale_list.*
+import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -80,7 +81,7 @@ class AndroidModel{
     }
 
     fun getUserPrivileges(): String {
-        return getUser().getPrivileges()
+        return getUser().getPrivilege()
     }
 
     suspend fun getUserList(): List<User> {
@@ -126,9 +127,7 @@ class AndroidModel{
 
     fun addProductToCart(item: Product,view: View){
         GlobalScope.launch (Dispatchers.IO){
-            getAndroidView().showAlertMessage(view.context.getString(R.string.cart),
-                                                getSaleLogic().addProductToCart(item),
-                                                view)
+            getAndroidView().showAlertMessage(view.context.getString(R.string.cart),getSaleLogic().addProductToCart(item),view.context)
             getAndroidView().reloadCartList()
         }
     }
@@ -139,7 +138,7 @@ class AndroidModel{
 
     fun getSaleToString(sale: Sale): String {
         return "Fecha: "+sale.getDate()+"\n\n"+
-               "Cliente: \n\n"+getCustomerLogic().customerToString(sale.getCustomer()) +"\n\n"+
+               "Cliente: \n\n"+getCustomerToString(sale.getCustomer()) +"\n\n"+
                "Listado de productos: \n\n"+ getProductLogic().productListToString(sale.getProductList(),false)
     }
 
@@ -148,7 +147,7 @@ class AndroidModel{
         return getSaleLogic().getCartList()
     }
 
-    fun getTotalPriceCart(): Double {
+    fun getTotalPriceCart(): String {
         return getSaleLogic().getTotalPriceCart()
     }
 
@@ -169,8 +168,8 @@ class AndroidModel{
         return getCustomerLogic().getCustomerList()
     }
 
-    suspend fun setCustomerSelected(item: Int) {
-        withContext(Dispatchers.IO) {
+    fun setCustomerSelected(item: Int) {
+        GlobalScope.launch (Dispatchers.IO){
             customerNewSale = getCustomerList()[item]
         }
     }
@@ -283,18 +282,28 @@ class AndroidModel{
         }
     }
 
+    fun searchUser(view: View) {
+        GlobalScope.launch(Dispatchers.IO){
+            val view = view.findFragment<UserListFragment>()
+            view.setList(
+                getUserLogic().searchUser(view.editTextSearchUserList.text.toString())
+                    .toMutableList()
+            )
+        }
+    }
+
     //Logic classes
     private fun getUserLogic(): UserLogic {
         if(userLogic==null)
             userLogic = UserLogic(dataBaseLogic.getUserDao())
         return userLogic!!
     }
-
     private fun getCustomerLogic(): CustomerLogic {
         if(customerLogic == null)
             customerLogic = CustomerLogic(dataBaseLogic.getCustomerDao())
         return customerLogic!!
     }
+
     private fun getSaleLogic(): SaleLogic {
         if(saleLogic==null)
             saleLogic = SaleLogic(dataBaseLogic.getSaleDao())

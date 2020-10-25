@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
 import kotlinx.coroutines.*
+import java.text.DecimalFormat
 
 class ProductLogic(private var productDao: ProductDao) {
 
@@ -50,7 +51,7 @@ class ProductLogic(private var productDao: ProductDao) {
     }
 
     suspend fun searchProduct(searchText: String): List<Product> {
-        return getProductList().filter { product -> product.getName().toLowerCase().contains(searchText.toLowerCase())}
+        return getProductList().filter { it.getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
     suspend fun getProductList(): List<Product> {
@@ -86,6 +87,7 @@ class ProductLogic(private var productDao: ProductDao) {
     }
     //Product
     fun productToString(product: Product, toDB: Boolean):String{
+        val df = DecimalFormat("$###,###,###")
         return if(toDB)
             "Nombre: "+product.getName()+"\n"+
             "Precio: "+product.getPrice()+"\n"+
@@ -94,7 +96,7 @@ class ProductLogic(private var productDao: ProductDao) {
             "Cantidad: "+product.getQuantity()+"\n\n"
         else
             "Nombre: "+product.getName()+"\n"+
-            "Precio: "+product.getPrice()+"\n"+
+            "Precio: "+df.format(product.getPrice())+"\n"+
             "Descripción: "+product.getDescription()+"\n"+
             "Cantidad: "+product.getQuantity()+"\n\n"
     }
@@ -124,7 +126,7 @@ class ProductLogic(private var productDao: ProductDao) {
 
         return Product(
                     name = listString[0],
-                    price = listString[1].toInt(),
+                    price = listString[1].toDouble(),
                     description = listString[2],
                     stringBitMap = bitmap,
                     quantity = quantity

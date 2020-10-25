@@ -9,12 +9,18 @@ import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
+import kotlinx.android.synthetic.main.dialog_new_sale.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AndroidView(private val androidModel: AndroidModel) {
 
     private var dialogView: DialogView? = null
     var controller: AndroidController = AndroidController
     private var fragmentData: FragmentData? = null
+    private lateinit var view:View
 
     init {
         controller.setAdroidView(this)
@@ -104,7 +110,8 @@ class AndroidView(private val androidModel: AndroidModel) {
     /*
         Customer
      */
-    suspend fun createCustomer(customer: Customer): Boolean {
+    suspend fun createCustomer(customer: Customer, view: View): Boolean {
+        this.view = view
         return androidModel.createCustomer(customer)
     }
 
@@ -124,8 +131,9 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.deleteCustomer(customer)
     }
 
-    suspend fun setCustomerSelected(item: Int) {
-        return androidModel.setCustomerSelected(item)
+    fun setCustomerSelected(item: Int, view: View) {
+        this.view = view
+        androidModel.setCustomerSelected(item)
     }
 
     fun searchCustomer(view: View) {
@@ -180,11 +188,11 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getSaleToString(sale)
     }
 
-    fun showProductListSaleToString(item: Sale, view: View) {
+    fun showProductListSaleToString(item: Sale, context: Context) {
         showAlertMessage(
             view.context.getString(R.string.saleList),
             androidModel.getSaleToString(item),
-            view
+            context
         )
     }
 
@@ -214,7 +222,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         getFragmentData().reloadCartList()
     }
 
-    fun getTotalPriceCart(): Double {
+    fun getTotalPriceCart(): String {
         return androidModel.getTotalPriceCart()
     }
 
@@ -225,8 +233,8 @@ class AndroidView(private val androidModel: AndroidModel) {
         getDialogView().showToastMessage(message,context)
     }
 
-    fun showAlertMessage(title:String, message: String, view: View){
-        //getDialogView().showAlertMessage(title,message,view)
+    fun showAlertMessage(title:String, message: String,context: Context){
+        getDialogView().showAlertMessage(title,message,context)
     }
 
     suspend fun deleteUser(user: User): Boolean {
@@ -257,5 +265,9 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun addProductToCart(item: Product,view: View) {
         androidModel.addProductToCart(item,view)
+    }
+
+    fun searchUser(view: View) {
+        androidModel.searchUser(view)
     }
 }

@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_cart.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
 
 class CartFragment : Fragment(), ListListener {
 
@@ -54,9 +53,7 @@ class CartFragment : Fragment(), ListListener {
             adapter.setProductList(FragmentData.getProductList())
             adapter.setCartList(FragmentData.getCartList())
             requireActivity().runOnUiThread {
-                val df = DecimalFormat("###,###.###");
-                val totalPrice = FragmentData.getTotalPriceCart()
-                textViewTotal.text = "Total: $ ${df.format(totalPrice)}"
+                textViewTotal.text = "Total: $ ${FragmentData.getTotalPriceCart()}"
                 adapter.notifyDataSetChanged()
             }
         }

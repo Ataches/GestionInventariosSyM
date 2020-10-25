@@ -40,21 +40,17 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 app:layout_constraintStart_toEndOf="@+id/imageViewUser"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="@id/textViewName"
-                app:layout_constraintTop_toBottomOf="@id/textViewName" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textViewPrivilege"
+                />
 
             <TextView
                 android:id="@+id/textViewPrivilege"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="@id/textViewPassword"
-                app:layout_constraintTop_toBottomOf="@id/textViewPassword" />
+                app:layout_constraintStart_toStartOf="@id/textViewName"
+                app:layout_constraintTop_toBottomOf="@id/textViewName"
+                />
 
             <Button
                 android:id="@+id/buttonDeleteUser"

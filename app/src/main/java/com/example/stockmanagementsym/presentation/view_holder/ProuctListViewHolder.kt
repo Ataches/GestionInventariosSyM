@@ -14,14 +14,15 @@ import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(product: Product) {
+        val df = DecimalFormat("$###,###,###")
         itemView.textViewName.text = product.getName()
-        itemView.textViewPrice.text = "$ ${product.getPrice()}"
         itemView.textViewDescription.text = product.getDescription()
+        itemView.textViewPrice.text = df.format(product.getPrice())
         itemView.textViewQuantity.text = "Cantidad: ${product.getQuantity()}"
-        Log.d("TEST", "DATA PRODUCT BITMAP: "+product.getStringBitMap().length)
         if(product.getStringBitMap().isNotEmpty()){
             itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
             itemView.imageViewProduct.setBackgroundResource(0)

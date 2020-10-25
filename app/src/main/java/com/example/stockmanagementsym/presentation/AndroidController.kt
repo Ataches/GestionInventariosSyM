@@ -54,6 +54,7 @@ object AndroidController: View.OnClickListener {
 
             //User fragment
             R.id.buttonUserListToCreateUser -> androidView.newUser(view)
+            R.id.buttonUserListToSearch -> androidView.searchUser(view)
         }
     }
 

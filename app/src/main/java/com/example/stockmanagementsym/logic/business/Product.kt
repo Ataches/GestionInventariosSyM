@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Product(
     private val name: String,
-    private val price: Int,
+    private val price: Double,
     private val description: String,
     @ColumnInfo(name = "id_image")
     private var stringBitMap: String,
@@ -22,7 +22,7 @@ data class Product(
         return name
     }
 
-    fun getPrice():Int{
+    fun getPrice():Double{
         return price
     }
     fun getDescription():String{

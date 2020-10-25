@@ -84,5 +84,6 @@
     <string name="userPrivilege">Privilegio:</string>
     <string name="cart">Carrito</string>
     <string name="userName">Usuario:</string>
+    <string name="newUser">Nuevo usuario</string>
 
 </resources>

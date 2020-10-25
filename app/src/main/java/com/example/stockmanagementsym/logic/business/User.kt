@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 class User(
     private var name: String,
     private var password: String,
-    private var privileges: String
+    private var privilege: String
 ){
     @PrimaryKey(autoGenerate = true)
     @NonNull @ColumnInfo(name = "id_user")
@@ -23,7 +23,7 @@ class User(
         return password
     }
 
-    fun getPrivileges(): String {
-        return privileges
+    fun getPrivilege(): String {
+        return privilege
     }
 }

@@ -30,7 +30,7 @@ object FragmentData{
         return androidView.getUserNae()
     }
 
-    fun getUserPrivileges(): String {
+    fun getUserPrivilege(): String {
         return androidView.getUserPrivileges()
     }
 
@@ -119,7 +119,7 @@ object FragmentData{
         return androidView.getCartList()
     }
 
-    fun getTotalPriceCart(): Double {
+    fun getTotalPriceCart(): String {
         return androidView.getTotalPriceCart()
     }
 
@@ -158,8 +158,8 @@ object FragmentData{
     }
 
 
-    fun showProductListSaleToString(item: Sale, itemView: View) {
-        return androidView.showProductListSaleToString(item,itemView)
+    fun showProductListSaleToString(item: Sale, context: Context) {
+        return androidView.showProductListSaleToString(item,context)
     }
 
     suspend fun getProductList(): List<Product> {

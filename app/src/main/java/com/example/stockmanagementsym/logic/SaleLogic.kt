@@ -52,7 +52,7 @@ class SaleLogic(private var saleDao: SaleDao) {
         return getCartLogic().addProduct(item)
     }
 
-    fun getTotalPriceCart(): Double {
+    fun getTotalPriceCart(): String {
         return getCartLogic().getTotalPrice()
     }
     fun getCartList(): MutableList<Product> {

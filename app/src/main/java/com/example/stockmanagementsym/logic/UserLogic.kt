@@ -69,4 +69,8 @@ class UserLogic(private val userDao: UserDao) {
         return user != null
     }
 
+    suspend fun searchUser(textSearched: String): List<User> {
+        return getUserList().filter { it.getName().toLowerCase().contains(textSearched.toLowerCase())}
+    }
+
 }

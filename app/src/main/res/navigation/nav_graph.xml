@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.example.stockmanagementsym.presentation.fragment.UserFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.UserListFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" >
         <action

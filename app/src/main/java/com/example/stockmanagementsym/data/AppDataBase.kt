@@ -85,7 +85,7 @@ class Converters {
                 val data = dataProduct.split("-lim-")
                 val product = Product(
                     name = data[0],
-                    price = data[1].toInt(),
+                    price = data[1].toDouble(),
                     description = data[2],
                     stringBitMap = data[3],
                     quantity = data[4].toInt()

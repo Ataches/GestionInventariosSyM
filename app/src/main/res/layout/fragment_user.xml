@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.fragment.UserFragment"
+    tools:context=".presentation.fragment.UserListFragment"
     >
 
     <EditText
@@ -38,11 +38,6 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent=".99"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".83"
         />
 
     <Button
@@ -51,7 +46,8 @@
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_add_quantity"
         android:paddingBottom="5dp"
-        android:text="@string/createCustomer"
+        android:layout_margin="8dp"
+        android:text="@string/newUser"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

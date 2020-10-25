@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val headerView = navView.getHeaderView(0)
         headerView.textViewUserNameNavView.text = FragmentData.getUserName()
+        headerView.textViewUserPrivilegeNavView.text = FragmentData.getUserPrivilege()
     }
 
     override fun onSupportNavigateUp(): Boolean {

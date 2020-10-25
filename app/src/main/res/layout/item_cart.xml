@@ -86,9 +86,33 @@
                 app:layout_constraintBottom_toTopOf="@id/buttonAddQuantityProdCart"
                 />
             <Button
+                android:id="@+id/buttonRemoveQuantityProdCart"
+                android:background="@color/buttonPrimary"
+                android:drawableBottom="@drawable/ic_remove"
+                android:paddingBottom="5dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintEnd_toStartOf="@+id/editTextQuantity"
+                app:layout_constraintTop_toTopOf="@+id/buttonAddQuantityProdCart"
+                app:layout_constraintBottom_toBottomOf="@+id/buttonAddQuantityProdCart"
+                />
+            <EditText
+                android:id="@+id/editTextQuantity"
+                android:hint="@string/editTextQuantity"
+                android:inputType="number"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintTop_toTopOf="@+id/buttonAddQuantityProdCart"
+                app:layout_constraintEnd_toStartOf="@id/buttonAddQuantityProdCart"
+                app:layout_constraintBottom_toBottomOf="@+id/buttonAddQuantityProdCart"
+                />
+            <Button
                 android:id="@+id/buttonAddQuantityProdCart"
                 android:background="@color/buttonPrimary"
-                android:drawableBottom="@drawable/ic_add_quantity"
+                android:drawableBottom="@drawable/ic_add"
                 android:paddingBottom="5dp"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -99,16 +123,7 @@
                 app:layout_constraintTop_toBottomOf="@id/buttonRemoveCart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
-            <EditText
-                android:id="@+id/editTextQuantity"
-                android:hint="@string/editTextQuantity"
-                android:inputType="number"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                app:layout_constraintEnd_toStartOf="@id/buttonAddQuantityProdCart"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

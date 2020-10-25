@@ -15,7 +15,7 @@ class SaleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewCity.text = item.getCustomer().getCity()
         itemView.textViewDateSale.text = itemView.context.getString(R.string.saleDate)+" "+ item.getDate()
         itemView.buttonProductListSale.setOnClickListener{
-            FragmentData.showProductListSaleToString(item, itemView)
+            FragmentData.showProductListSaleToString(item, itemView.context)
         }
     }
 }

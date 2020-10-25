@@ -12,11 +12,12 @@ import kotlinx.coroutines.launch
 class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(user: User) {
         itemView.textViewName.text = user.getName()
-        if(FragmentData.getUserPrivileges()!="admin"){
+        if(FragmentData.getUserPrivilege()!="admin"){
             itemView.buttonDeleteUser.visibility = View.GONE
             itemView.buttonDeleteUser.isEnabled = false
             itemView.buttonDeleteUser.isClickable = false
         }
+        itemView.textViewPrivilege.text = user.getPrivilege()
         itemView.buttonDeleteUser.setOnClickListener {
             GlobalScope.launch (Dispatchers.IO){
                 FragmentData.deleteUser(user)
