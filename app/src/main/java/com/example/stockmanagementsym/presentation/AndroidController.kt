@@ -37,7 +37,7 @@ object AndroidController: View.OnClickListener {
             R.id.buttonCartToNewSale -> androidView.confirmNewSale(view)
 
             //Customer list
-            R.id.buttonCustomerListToCreateCustomer -> androidView.registerCustomer(view)
+            R.id.buttonCustomerListToCreateCustomer -> androidView.newCustomer(view)
             R.id.buttonCustomerToSearch -> androidView.searchCustomer(view)
 
             //New product
@@ -52,8 +52,8 @@ object AndroidController: View.OnClickListener {
             //Sale list
             R.id.buttonSaleListToSearch -> androidView.searchSale(view)
 
-            //Item view holder customer
-            R.id.buttonEditCustomer -> androidView.registerCustomer(view)
+            //User fragment
+            R.id.buttonUserListToCreateUser -> androidView.newUser(view)
         }
     }
 

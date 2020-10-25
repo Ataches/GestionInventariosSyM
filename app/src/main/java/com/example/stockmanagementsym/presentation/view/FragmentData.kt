@@ -2,14 +2,10 @@ package com.example.stockmanagementsym.presentation.view
 
 import android.content.Context
 import android.view.View
-import android.widget.Toast
-import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.AndroidController
-import com.example.stockmanagementsym.presentation.AndroidModel
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -26,29 +22,28 @@ object FragmentData{
     private lateinit var cartListener: ListListener
     private lateinit var productListListener: ListListener
     private lateinit var customerListListener: ListListener
+    private lateinit var userListListener: ListListener
 
-    private lateinit var androidModel: AndroidModel
     private lateinit var androidView: AndroidView
-    private lateinit var userName: String
 
-    fun setUser(userName:String){
-        this.userName = userName
-    }
-    fun getUser(): String {
-        return userName
+    fun getUserName(): String {
+        return androidView.getUserNae()
     }
 
-    fun setModel(androidModel: AndroidModel){
-        this.androidModel = androidModel
+    fun getUserPrivileges(): String {
+        return androidView.getUserPrivileges()
+    }
+
+    suspend fun deleteUser(user: User) {
+        androidView.deleteUser(user)
     }
 
     fun setAndroidView(androidView: AndroidView){
         this.androidView = androidView
     }
-
-    fun getAndroidView(): AndroidView {
-        return androidView
-    }
+    /*
+        List listeners
+     */
     fun setProductListListener(productListFragment: ListListener) {
         productListListener = productListFragment
     }
@@ -59,19 +54,32 @@ object FragmentData{
     fun setCustomerListListener(customerListFragment: ListListener){
         customerListListener = customerListFragment
     }
-    suspend fun reloadCustomerList(){
+
+    fun setUserListListener(userListListener: ListListener){
+        this.userListListener = userListListener
+    }
+
+    fun reloadCustomerList(){
         try{
             customerListListener.reloadList()
         }catch (e:Exception){
         }
     }
-    suspend fun reloadProductList(){
+    fun reloadProductList(){
         productListListener.reloadList()
     }
 
-    suspend fun reloadCartList() {
+    fun reloadCartList() {
         cartListener.reloadList()
     }
+
+    fun reloadUserList(){
+        userListListener.reloadList()
+    }
+
+    /*
+        Update bolean
+     */
     fun setBooleanUpdate(confirmUpdate: Boolean) {
         this.booleanUpdate = confirmUpdate
     }
@@ -80,15 +88,13 @@ object FragmentData{
         return booleanUpdate
     }
 
-
-
     fun getDate(date: Calendar): String {
         val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
         return df.format(date.time)
     }
 
     fun showMessage(context: Context, message:String){
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        androidView.showToastMessage(context,message)
     }
     fun setProductToEdit(item: Product) {
         productToEdit = item
@@ -110,19 +116,21 @@ object FragmentData{
     }
 
     fun getCartList(): MutableList<Product> {
-        return androidModel.getCartList()
+        return androidView.getCartList()
     }
 
-    fun getTotalPrice(): Int {
-        return androidModel.getTotalPrice()
+    fun getTotalPriceCart(): Double {
+        return androidView.getTotalPriceCart()
     }
 
     suspend fun getCustomerList(): List<Customer> {
-        return androidModel.getCustomerList()
+        return androidView.getCustomerList()
     }
 
-    fun setCustomerToEdit(customerToEdit: Customer) {
+    fun updateCustomer(customerToEdit: Customer, booleanUpdate: Boolean,view: View) {
         this.customerToEdit = customerToEdit
+        this.booleanUpdate = booleanUpdate
+        androidView.updateCustomer(view)
     }
 
     fun getCustomerToEdit(): Customer {
@@ -130,53 +138,40 @@ object FragmentData{
     }
 
     suspend fun deleteCustomer(customer: Customer) {
-        androidModel.deleteCustomer(customer)
+        androidView.deleteCustomer(customer)
     }
 
     suspend fun getSaleList(): List<Sale> {
-        return androidModel.getSalesList()
+        return androidView.getSalesList()
     }
 
-    fun addProductToCart(item: Product): String {
-        return androidModel.addProductToCart(item)
+    fun addProductToCart(item: Product,view: View){
+        androidView.addProductToCart(item,view)
     }
 
     suspend fun deleteProduct(item: Product) {
-        androidModel.deleteProduct(item)
+        androidView.deleteProduct(item)
     }
 
     fun removeElementCart(context: Context, item: Product) {
-        if(androidModel.removeElementCart(item))
-            showMessage(context,context.getString(R.string.elementAddedToCart))
-        else
-            showMessage(context,context.getString(R.string.elementNotAddedToCart))
+        androidView.removeElementCart(item,context)
+    }
+
+
+    fun showProductListSaleToString(item: Sale, itemView: View) {
+        return androidView.showProductListSaleToString(item,itemView)
     }
 
     suspend fun getProductList(): List<Product> {
         return androidView.getProductList()
     }
 
-    fun goToNewProduct() {
+    fun updateProduct(product: Product, booleanUpdate: Boolean, view: View) {
+        productToEdit = product
+        this.booleanUpdate = booleanUpdate
         androidView.goToNewProduct()
     }
-
-    fun goToNewCustomer(view:View) {
-        androidView.goToNewCustomer(view)
-    }
-
     suspend fun getUserList(): List<User> {
         return androidView.getUserList()
-    }
-
-    fun getController(): AndroidController {
-        return androidView.controller
-    }
-
-    fun getSaleSelected(): Sale {
-        return saleSelected
-    }
-
-    fun showProductListSaleToString(item: Sale, itemView: View) {
-        return androidView.showProductListSaleToString(item,itemView)
     }
 }

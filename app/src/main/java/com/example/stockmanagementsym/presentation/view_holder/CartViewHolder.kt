@@ -10,22 +10,12 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.item_cart.view.*
-import kotlinx.android.synthetic.main.item_cart.view.editTextQuantity
-import kotlinx.android.synthetic.main.item_cart.view.imageViewProduct
-import kotlinx.android.synthetic.main.item_cart.view.textViewDescription
-import kotlinx.android.synthetic.main.item_cart.view.textViewName
-import kotlinx.android.synthetic.main.item_cart.view.textViewPrice
-import kotlinx.android.synthetic.main.item_cart.view.textViewQuantity
-import kotlinx.android.synthetic.main.item_product.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.ViewHolder(itemView) {
 
-    private var product = Product("",1,"","",1)
+    private var product = Product("",0,"","",1)
 
-    fun bind(productCart: Product, listener: ListListener) {
+    fun bind(productCart: Product) {
         itemView.textViewName.text = productCart.getName()
         itemView.textViewPrice.text = "$"+productCart.getPrice()
         itemView.textViewDescription.text = productCart.getDescription()
@@ -50,9 +40,7 @@ class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 val quantity:Int = quantityString.toInt()
                 if((product.getQuantity()>=quantity)&&(quantity > 0)){
                     productCart.setQuantity(quantity)
-                    GlobalScope.launch(Dispatchers.IO){
-                        listener.reloadList()
-                    }
+                    listener.reloadList()
                 }else
                     FragmentData.showMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
             }else

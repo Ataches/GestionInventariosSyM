@@ -12,14 +12,11 @@ import kotlinx.coroutines.launch
 class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Customer) {
         itemView.textViewName.text = item.getName()
-        itemView.textViewAddress.text = item.getAddress()
-        itemView.textViewPhone.text = "Telefono: ${item.getPhone()}"
+        itemView.textViewPassword.text = item.getAddress()
+        itemView.textViewPrivilege.text = "Telefono: ${item.getPhone()}"
         itemView.textViewCity.text = "Ciudad: ${item.getCity()}"
-        //itemView.buttonCart.setBackgroundDrawable(itemView.context.resources.getDrawable(item.getIDiconDrawable()))
         itemView.buttonEditCustomer.setOnClickListener{
-            FragmentData.setCustomerToEdit(item)
-            FragmentData.setBooleanUpdate(true)
-            FragmentData.goToNewCustomer(it)
+            FragmentData.updateCustomer(item,true,it)
         }
         itemView.buttonDeleteCustomer.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO){

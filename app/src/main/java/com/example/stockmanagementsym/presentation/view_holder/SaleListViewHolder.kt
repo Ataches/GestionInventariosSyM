@@ -10,8 +10,8 @@ import kotlinx.android.synthetic.main.item_sale.view.*
 class SaleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Sale) {
         itemView.textViewName.text = item.getCustomer().getName()
-        itemView.textViewAddress.text  = item.getCustomer().getAddress()
-        itemView.textViewPhone.text = item.getCustomer().getPhone()
+        itemView.textViewPassword.text  = item.getCustomer().getAddress()
+        itemView.textViewPrivilege.text = item.getCustomer().getPhone()
         itemView.textViewCity.text = item.getCustomer().getCity()
         itemView.textViewDateSale.text = itemView.context.getString(R.string.saleDate)+" "+ item.getDate()
         itemView.buttonProductListSale.setOnClickListener{

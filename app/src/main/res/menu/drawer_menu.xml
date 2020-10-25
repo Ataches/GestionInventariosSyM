@@ -9,5 +9,5 @@
     <item android:id="@+id/saleList"
         android:title="@string/saleList"/>
     <item android:id="@+id/userFragment"
-        android:title="@string/createUser"/>
+        android:title="@string/userList"/>
 </menu>

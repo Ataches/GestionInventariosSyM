@@ -4,22 +4,26 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity
 class User(
-    private var user: String,
+    private var name: String,
     private var password: String,
+    private var privileges: String
 ){
     @PrimaryKey(autoGenerate = true)
     @NonNull @ColumnInfo(name = "id_user")
     var idSale:Long = 0L
 
-    fun getUser():String{
-        return user
+    fun getName():String{
+        return name
     }
 
     fun getPassword(): String {
         return password
+    }
+
+    fun getPrivileges(): String {
+        return privileges
     }
 }

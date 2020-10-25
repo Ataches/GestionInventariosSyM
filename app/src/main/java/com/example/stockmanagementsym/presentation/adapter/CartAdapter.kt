@@ -18,13 +18,13 @@ class CartAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
-        return CartViewHolder(view)
+        return CartViewHolder(view,listener)
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val productCart = cartList[position]
         holder.setProductOriginal(productList.filter { it.idProduct == productCart.idProduct }[0])
-        holder.bind(productCart, listener)
+        holder.bind(productCart)
     }
 
     override fun getItemCount(): Int {

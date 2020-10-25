@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
@@ -16,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_cart.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 class CartFragment : Fragment(), ListListener {
 
@@ -31,7 +31,7 @@ class CartFragment : Fragment(), ListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CartAdapter(FragmentData.getCartList(), this,)
+        adapter = CartAdapter(FragmentData.getCartList(), this)
 
         recyclerViewCart.adapter = adapter
         recyclerViewCart.layoutManager =
@@ -54,7 +54,9 @@ class CartFragment : Fragment(), ListListener {
             adapter.setProductList(FragmentData.getProductList())
             adapter.setCartList(FragmentData.getCartList())
             requireActivity().runOnUiThread {
-                textViewTotal.text = "Total: ${FragmentData.getTotalPrice()}"
+                val df = DecimalFormat("###,###.###");
+                val totalPrice = FragmentData.getTotalPriceCart()
+                textViewTotal.text = "Total: $ ${df.format(totalPrice)}"
                 adapter.notifyDataSetChanged()
             }
         }

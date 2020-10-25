@@ -13,10 +13,13 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
+import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
+import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
+import kotlinx.android.synthetic.main.fragment_product_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,10 +31,50 @@ class DialogView(private var androidView: AndroidView) {
     private lateinit var layoutInflater:LayoutInflater
     private var customerList:Array<String> =  arrayOf()
 
+    //New user
+    fun dialogRegisterUser(view: View) {
+        layoutInflater =
+            view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val viewNewCustomer = layoutInflater.inflate(R.layout.dialog_new_user, null, false)
+        var dialog: Dialog = Dialog(view.context)
+
+        dialog.setContentView(viewNewCustomer)
+        dialog.show()
+
+        //viewNewCustomer.textViewCustomerTitle.text = viewNewCustomer.context.getString(R.string.titleAlertNewUser)
+
+        viewNewCustomer.buttonNewUserToNewUser.setOnClickListener {
+            val user =
+                User(
+                    viewNewCustomer.editTextUserName.text.toString(),
+                    viewNewCustomer.editTextPassword.text.toString(),
+                    viewNewCustomer.editTextPrivilege.text.toString()
+                )
+
+
+                dialogConfirmRegister(
+                    view,
+                    user,
+                    view.context.getString(R.string.titleAlertNewUser),
+                    view.context.getString(R.string.messageAlertNewUser)
+                )
+
+            dialog.dismiss()
+        }
+        viewNewCustomer.buttonNewUserCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
     // New Sale
     private fun dialogNewSale(view: View) {
         GlobalScope.launch(Dispatchers.IO){
-            customerList = androidView.getCustomerList()
+            customerList = androidView.getCustomerList().map {
+                                                                it.getName()+" "+
+                                                                        it.getAddress()+" "+
+                                                                        it.getPhone()+" "+
+                                                                        it.getCity()
+                                                            }.toTypedArray()
         }
         layoutInflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val viewNewSale = layoutInflater.inflate(R.layout.dialog_new_sale, null, false)
@@ -81,20 +124,20 @@ class DialogView(private var androidView: AndroidView) {
         if(updateBoolean){
             viewNewCustomer.textViewCustomerTitle.text = viewNewCustomer.context.getString(R.string.titleAlertUpdateCustomer)
             viewNewCustomer.editTextCustomerName.setText(androidView.getCustomerToEdit().getName())
-            viewNewCustomer.editTextCustomerAddress.setText(androidView.getCustomerToEdit().getAddress())
-            viewNewCustomer.editTextPhone.setText(androidView.getCustomerToEdit().getPhone())
+            viewNewCustomer.editTextPassword.setText(androidView.getCustomerToEdit().getAddress())
+            viewNewCustomer.editTextPrivilege.setText(androidView.getCustomerToEdit().getPhone())
             viewNewCustomer.editTextCity.setText(androidView.getCustomerToEdit().getCity())
             viewNewCustomer.buttonProductListToNewProduct.setText(viewNewCustomer.context.getString(R.string.titleAlertUpdateCustomer))
         }else
             viewNewCustomer.textViewCustomerTitle.text = viewNewCustomer.context.getString(R.string.titleAlertNewCustomer)
 
 
-        viewNewCustomer.buttonProductListToNewProduct.setOnClickListener {
+        viewNewCustomer.buttonNewCustomerToNewCustomer.setOnClickListener {
             val customer =
                 Customer(
                     viewNewCustomer.editTextCustomerName.text.toString(),
                     viewNewCustomer.editTextCustomerAddress.text.toString(),
-                    viewNewCustomer.editTextPhone.text.toString(),
+                    viewNewCustomer.textViewPhone.text.toString(),
                     viewNewCustomer.editTextCity.text.toString()
                 )
 
@@ -118,7 +161,7 @@ class DialogView(private var androidView: AndroidView) {
 
             dialog.dismiss()
         }
-        viewNewCustomer.buttonNewProductCancel.setOnClickListener {
+        viewNewCustomer.buttonNewCustomerCancel.setOnClickListener {
             dialog.dismiss()
         }
     }
@@ -169,7 +212,7 @@ class DialogView(private var androidView: AndroidView) {
 
                 view.context.getString(R.string.titleAlertUpdateProd) -> {
                     GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(view,androidView.updateProduct(data as Product))
+                        showResultTransaction(view,androidView.goToNewProduct(data as Product))
                     }
                     androidView.goToProductList()
                 }
@@ -181,7 +224,7 @@ class DialogView(private var androidView: AndroidView) {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(
                             view,
-                            androidView.createSale(androidView.getNewSale())
+                            androidView.createSale()
                         )
                     }
                 }
@@ -196,6 +239,11 @@ class DialogView(private var androidView: AndroidView) {
                 view.context.getString(R.string.titleAlertUpdateCustomer) -> {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(view, androidView.updateCustomer(data as Customer))
+                    }
+                }
+                view.context.getString(R.string.titleAlertNewUser) -> {
+                    GlobalScope.launch(Dispatchers.IO){
+                        showResultTransaction(view, androidView.newUser(data as User))
                     }
                 }
             }
@@ -251,8 +299,10 @@ class DialogView(private var androidView: AndroidView) {
         builder.setItems(data) { _, item ->
             when(title){
                 view.context.getString(R.string.selectCustomer) -> {
-                    androidView.setCustomerSelected(item)
-                    showCustomerName(view, customerList.get(item))
+                    GlobalScope.launch(Dispatchers.IO) {
+                        androidView.setCustomerSelected(item)
+                        showCustomerName(view, customerList[item])
+                    }
                 }
             }
         }
@@ -283,6 +333,7 @@ class DialogView(private var androidView: AndroidView) {
         builder.create()
         builder.show()
     }
+
     private class CustomTask(val context: Context, val message: String) :
         AsyncTask<Void?, Void?, Void?>() {
         override fun onPostExecute(param: Void?) {

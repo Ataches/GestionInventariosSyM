@@ -9,30 +9,27 @@ import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-class AndroidView(private val androidModel: AndroidModel)  {
+class AndroidView(private val androidModel: AndroidModel) {
 
-    private var dialogView:DialogView ?= null
-    var controller:AndroidController = AndroidController
-    private var fragmentData:FragmentData ?= null
+    private var dialogView: DialogView? = null
+    var controller: AndroidController = AndroidController
+    private var fragmentData: FragmentData? = null
 
     init {
         controller.setAdroidView(this)
         getFragmentData().setAndroidView(this)
     }
 
-    private fun getFragmentData():FragmentData{
-        if(fragmentData == null){
-            fragmentData  = FragmentData
+    private fun getFragmentData(): FragmentData {
+        if (fragmentData == null) {
+            fragmentData = FragmentData
         }
         return fragmentData!!
     }
 
     private fun getDialogView(): DialogView {
-        if(dialogView==null)
+        if (dialogView == null)
             dialogView = DialogView(this)
         return dialogView!!
     }
@@ -47,6 +44,11 @@ class AndroidView(private val androidModel: AndroidModel)  {
     /*
         User
      */
+
+    fun getUser(): User {
+        return androidModel.getUser()
+    }
+
     suspend fun getUserList(): List<User> {
         return androidModel.getUserList()
     }
@@ -54,9 +56,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
     /*
         Product
      */
-    fun goToNewProduct(){
+    fun goToNewProduct() {
         controller.goNewProduct()
     }
+
     fun registerProduct(view: View, updateBoolean: Boolean) {
         getDialogView().dialogRegisterProduct(view, updateBoolean)
     }
@@ -77,14 +80,12 @@ class AndroidView(private val androidModel: AndroidModel)  {
         androidModel.searchProduct(view)
     }
 
-    suspend fun updateProduct(product: Product):Boolean{
+    suspend fun goToNewProduct(product: Product): Boolean {
         return androidModel.updateProduct(product)
     }
 
     fun goToProductList() {
-        GlobalScope.launch(Dispatchers.IO){
-            getFragmentData().reloadProductList()
-        }
+        reloadProductList()
         controller.goProductList()
     }
 
@@ -92,13 +93,17 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.getProductToString(product)
     }
 
+    fun reloadProductList() {
+        getFragmentData().reloadProductList()
+    }
+
+    fun getProductToEdit(): Product {
+        return getFragmentData().getProductToEdit()
+    }
+
     /*
         Customer
      */
-    fun registerCustomer(view: View) {
-        getDialogView().dialogRegisterCustomer(view,getFragmentData().getBooleanUpdate())
-    }
-
     suspend fun createCustomer(customer: Customer): Boolean {
         return androidModel.createCustomer(customer)
     }
@@ -107,11 +112,19 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.updateCustomer(customer)
     }
 
+    fun updateCustomer(view: View) {
+        getDialogView().dialogRegisterCustomer(view, true)
+    }
+
+    fun newCustomer(view: View) {
+        getDialogView().dialogRegisterCustomer(view, false)
+    }
+
     suspend fun deleteCustomer(customer: Customer): Boolean {
         return androidModel.deleteCustomer(customer)
     }
 
-    fun setCustomerSelected(item: Int) {
+    suspend fun setCustomerSelected(item: Int) {
         return androidModel.setCustomerSelected(item)
     }
 
@@ -119,17 +132,8 @@ class AndroidView(private val androidModel: AndroidModel)  {
         androidModel.searchCustomer(view)
     }
 
-    suspend fun getCustomerList(): Array<String> {
-        return androidModel.getCustomerList().map {
-                                                        it.getName()+" "+
-                                                                it.getAddress()+" "+
-                                                                it.getPhone()+" "+
-                                                                it.getCity()
-                                                    }.toTypedArray()
-    }
-
-    fun goToNewCustomer(view: View) {
-        controller.onClick(view)
+    suspend fun getCustomerList(): List<Customer> {
+        return androidModel.getCustomerList()
     }
 
     fun getCustomerToEdit(): Customer {
@@ -138,6 +142,10 @@ class AndroidView(private val androidModel: AndroidModel)  {
 
     fun getCustomerToString(customer: Customer): String {
         return androidModel.getCustomerToString(customer)
+    }
+
+    fun reloadCustomerList() {
+        getFragmentData().reloadCustomerList()
     }
 
     /*
@@ -152,8 +160,8 @@ class AndroidView(private val androidModel: AndroidModel)  {
         )
     }
 
-    suspend fun createSale(newSale: Sale): Boolean {
-        return androidModel.createSale(newSale)
+    suspend fun createSale(): Boolean {
+        return androidModel.createSale()
     }
 
     fun getNewSale(): Sale {
@@ -164,7 +172,6 @@ class AndroidView(private val androidModel: AndroidModel)  {
         return androidModel.setDateSale(date)
     }
 
-
     fun searchSale(view: View) {
         androidModel.searchSale(view)
     }
@@ -174,9 +181,15 @@ class AndroidView(private val androidModel: AndroidModel)  {
     }
 
     fun showProductListSaleToString(item: Sale, view: View) {
-        showAlertMessage(view.context.getString(R.string.productList),
-                         androidModel.getSaleToString(item),
-                         view)
+        showAlertMessage(
+            view.context.getString(R.string.saleList),
+            androidModel.getSaleToString(item),
+            view
+        )
+    }
+
+    suspend fun getSalesList(): List<Sale> {
+        return androidModel.getSalesList()
     }
 
     /*
@@ -184,6 +197,25 @@ class AndroidView(private val androidModel: AndroidModel)  {
      */
     fun getCartListToString(mutableList: MutableList<Product>): String {
         return androidModel.getCartListToString(mutableList)
+    }
+
+    fun removeElementCart(item: Product, context: Context) {
+        if (androidModel.removeElementCart(item))
+            showToastMessage(context, context.getString(R.string.elementAddedToCart))
+        else
+            showToastMessage(context, context.getString(R.string.elementNotAddedToCart))
+    }
+
+    fun getCartList(): MutableList<Product> {
+        return androidModel.getCartList()
+    }
+
+    fun reloadCartList() {
+        getFragmentData().reloadCartList()
+    }
+
+    fun getTotalPriceCart(): Double {
+        return androidModel.getTotalPriceCart()
     }
 
     /*
@@ -194,6 +226,36 @@ class AndroidView(private val androidModel: AndroidModel)  {
     }
 
     fun showAlertMessage(title:String, message: String, view: View){
-        getDialogView().showAlertMessage(title,message,view)
+        //getDialogView().showAlertMessage(title,message,view)
+    }
+
+    suspend fun deleteUser(user: User): Boolean {
+        return androidModel.deleteUser(user)
+    }
+
+    /*
+        User
+     */
+    fun getUserNae(): String {
+        return androidModel.getUserName()
+    }
+
+    fun getUserPrivileges(): String {
+        return androidModel.getUserPrivileges()
+    }
+
+    fun reloadUserList() {
+        getFragmentData().reloadUserList()
+    }
+
+    fun newUser(view: View) {
+        getDialogView().dialogRegisterUser(view)
+    }
+    suspend fun newUser(user: User): Boolean {
+        return androidModel.newUser(user)
+    }
+
+    fun addProductToCart(item: Product,view: View) {
+        androidModel.addProductToCart(item,view)
     }
 }

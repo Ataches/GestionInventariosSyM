@@ -17,10 +17,10 @@ class CartLogic {
         return getCartData().getCartList()
     }
 
-    fun getTotalPrice():Int{
+    fun getTotalPrice(): Double {
         if(getCartList().isNullOrEmpty())
-            return 1
-        return getCartList().map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it}
+            return 0.0
+        return getCartList().map{it.getPrice()*it.getQuantity()}.reduce{ acc, it -> acc + it} + 0.0
     }
 
     fun addProduct(item: Product):String{

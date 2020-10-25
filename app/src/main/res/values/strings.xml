@@ -3,7 +3,7 @@
     <string name="tittle">Gestion inventarios SyM</string>
 
     <!-- Login -->
-    <string name="textViewUser">Uuario:</string>
+    <string name="textViewUser">Usuario:</string>
     <string name="textViewPass">Contraseña:</string>
     <string name="buttonLogin">Iniciar sesión</string>
 
@@ -35,14 +35,14 @@
     <!-- Customer -->
     <string name="customer">Cliente</string>
     <string name="customerName">Nombre del cliente: </string>
-    <string name="customerNameHint">Ejemplo: Carlos Perez</string>
+    <string name="nameHint">Ejemplo: Carlos Perez</string>
     <string name="customerAddress">Dirección: </string>
     <string name="customerAddressHint">Ejemplo: Calle falsa 123</string>
     <string name="customerPhoneHint">Ejemplo: 3203992323</string>
     <string name="customerPhone">Número telefonico</string>
     <string name="customerCity">Ciudad:</string>
     <string name="customerCityHint">Ejemplo: Bogotá</string>
-    <string name="Cancel">Cancelar</string>
+    <string name="cancel">Cancelar</string>
     <string name="createSale">Nueva venta</string>
     <string name="titleAlertNewSale">Registrar nueva venta</string>
     <string name="messageAlertNewSale">¿Desea reistrar una nueva venta con los siguientes productos?:</string>
@@ -76,5 +76,13 @@
     <string name="shopFragment">Tienda</string>
     <string name="home">Inicio</string>
     <string name="product">Producto</string>
+    <string name="userPasswordHint">****</string>
+    <string name="userPassword">Contraseña:</string>
+    <string name="messageAlertNewUser">¿Desea registrar un nuevo usuario con los siguientes datos?:</string>
+    <string name="titleAlertNewUser">Nuevo usuario</string>
+    <string name="userPrivilegeHint">Ej: user</string>
+    <string name="userPrivilege">Privilegio:</string>
+    <string name="cart">Carrito</string>
+    <string name="userName">Usuario:</string>
 
 </resources>

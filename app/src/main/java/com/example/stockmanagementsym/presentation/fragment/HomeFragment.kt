@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.home)
-        textViewUserName.text = FragmentData.getUser()
+        textViewUserName.text = FragmentData.getUserName()
         buttonHomeToShop.setOnClickListener(AndroidController)
         buttonHomeToSaleList.setOnClickListener(AndroidController)
         buttonHomeToCustomersList.setOnClickListener(AndroidController)

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
@@ -36,9 +35,8 @@ class ProductListFragment : Fragment(), ListListener{
         recyclerViewProductList.adapter = adapter
         recyclerViewProductList.layoutManager = GridLayoutManager(view.context, 2)
 
-        reloadList()
-
         FragmentData.setProductListListener(this)
+        reloadList()
 
         buttonProductListToSearch.setOnClickListener(AndroidController)
         buttonProductListToNewProduct.setOnClickListener(AndroidController)

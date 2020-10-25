@@ -17,7 +17,6 @@ import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
 import com.example.stockmanagementsym.presentation.view.AndroidView
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
@@ -29,41 +28,80 @@ import kotlinx.coroutines.withContext
 class AndroidModel{
 
     private lateinit var dataBaseLogic: DataBaseLogic
-
     private var androidView:AndroidView ?= null
-    private var customerLogic: CustomerLogic ?= null
 
+    private var customerLogic: CustomerLogic ?= null
     private var productLogic: ProductLogic ?= null
+
+    private var user: User? = null
     private var saleLogic: SaleLogic ?= null
     private var userLogic:UserLogic ?= null
     private lateinit var dateSale: String
     private lateinit var customerNewSale: Customer
     private var newSale: Sale ?= null
 
-    init{
-        getAndroidView()
-        FragmentData.setModel(this)
-    }
     //User
+    fun getUser():User{
+        if(user==null)
+            user = getUserLogic().getUser()
+        return user!!
+    }
+
+    suspend fun newUser(user: User): Boolean {
+        return try{
+            if(getUserPrivileges()!="admin")
+                return false
+            withContext(Dispatchers.IO) {
+                getUserLogic().insertUser(user)
+            }
+            getAndroidView().reloadUserList()
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
+
+    suspend fun deleteUser(user: User): Boolean {
+        return try{
+            if(getUserPrivileges()!="admin")
+                return false
+            withContext(Dispatchers.IO) {
+                getUserLogic().deleteUser(user)
+            }
+            getAndroidView().reloadUserList()
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
+
+    fun getUserName(): String {
+        return getUser().getName()
+    }
+
+    fun getUserPrivileges(): String {
+        return getUser().getPrivileges()
+    }
+
     suspend fun getUserList(): List<User> {
         var list:List<User> = listOf()
         withContext(Dispatchers.IO) {
-            list = getUserLogic().selectUserList()
+            list = getUserLogic().getUserList()
         }
         return list
     }
 
     //Sale
-    suspend fun createSale(newSale: Sale): Boolean {
+    suspend fun createSale(): Boolean {
         return try{
             withContext(Dispatchers.IO) {
-                newSale.getProductList().forEach {
+                getNewSale().getProductList().forEach {
                         val product  = getProductLogic().searchProducts(it.idProduct)
                         product.setQuantity(product.getQuantity() - it.getQuantity())
                         getProductLogic().updateProduct(product)
                     }
-                getSaleLogic().createSale(newSale)
-                FragmentData.reloadCartList()
+                getSaleLogic().createSale(getNewSale())
+                getAndroidView().reloadCartList()
             }
             this.newSale = null
             true
@@ -86,12 +124,13 @@ class AndroidModel{
         this.dateSale = dateSale
     }
 
-    fun addProductToCart(item: Product): String {
-        val stringResult = getSaleLogic().addProductToCart(item)
+    fun addProductToCart(item: Product,view: View){
         GlobalScope.launch (Dispatchers.IO){
-            FragmentData.reloadCartList()
+            getAndroidView().showAlertMessage(view.context.getString(R.string.cart),
+                                                getSaleLogic().addProductToCart(item),
+                                                view)
+            getAndroidView().reloadCartList()
         }
-        return stringResult
     }
 
     fun removeElementCart(item: Product): Boolean {
@@ -109,7 +148,7 @@ class AndroidModel{
         return getSaleLogic().getCartList()
     }
 
-    fun getTotalPrice(): Int {
+    fun getTotalPriceCart(): Double {
         return getSaleLogic().getTotalPriceCart()
     }
 
@@ -119,10 +158,10 @@ class AndroidModel{
 
     //Customer
     suspend fun updateCustomer(customerToUpdate: Customer): Boolean {
-        val customerToEdit = FragmentData.getCustomerToEdit()
+        val customerToEdit = getAndroidView().getCustomerToEdit()
         customerToUpdate.idCustomer = customerToEdit.idCustomer
         val resultTransaction = getCustomerLogic().updateCustomer(customerToUpdate)
-        FragmentData.reloadCustomerList()
+        getAndroidView().reloadCustomerList()
         return resultTransaction
     }
 
@@ -130,8 +169,8 @@ class AndroidModel{
         return getCustomerLogic().getCustomerList()
     }
 
-    fun setCustomerSelected(item: Int) {
-        GlobalScope.launch(Dispatchers.IO){
+    suspend fun setCustomerSelected(item: Int) {
+        withContext(Dispatchers.IO) {
             customerNewSale = getCustomerList()[item]
         }
     }
@@ -139,13 +178,13 @@ class AndroidModel{
     suspend fun createCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().createCustomer(customer)
         customerNewSale = customer //If it is a new customer register from new sale fragment
-        FragmentData.reloadCustomerList()
+        getAndroidView().reloadCustomerList()
         return resultTransaction
     }
 
     suspend fun deleteCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().deleteCustomer(customer)
-        FragmentData.reloadCustomerList()
+        getAndroidView().reloadCustomerList()
         return resultTransaction
     }
 
@@ -169,10 +208,10 @@ class AndroidModel{
     suspend fun updateProduct(productToUpdate: Product):Boolean {
         return try{
             withContext(Dispatchers.IO) {
-                val productToEdit = FragmentData.getProductToEdit()
+                val productToEdit = getAndroidView().getProductToEdit()
                 productToUpdate.idProduct = productToEdit.idProduct
                 getProductLogic().updateProduct(productToUpdate)
-                FragmentData.reloadProductList()
+                getAndroidView().reloadProductList()
             }
             true
         }catch (e: Exception){
@@ -185,6 +224,7 @@ class AndroidModel{
             withContext(Dispatchers.IO) {
                 getProductLogic().deleteProduct(product)
             }
+            getAndroidView().reloadProductList()
             true
         }catch (e: Exception){
             false
@@ -198,7 +238,7 @@ class AndroidModel{
     //   New product creation
     suspend fun createProduct(product: Product): Boolean {
         val result = getProductLogic().createProduct(product)
-        FragmentData.reloadProductList()
+        getAndroidView().reloadProductList()
         return result
     }
 
@@ -276,8 +316,7 @@ class AndroidModel{
     suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
         if(getUserLogic().confirmLogin(user, password)){
-            FragmentData.setUser(userName = user)
-            getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+user)
+            getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+getUser().getName())
 
             val intent = Intent(login, MainActivity::class.java)
             login.startActivity(intent)
@@ -287,7 +326,6 @@ class AndroidModel{
                 login,
                 "Usuario $user no encontrado o contraseña incorrecta"
             )
-
-
     }
+
 }

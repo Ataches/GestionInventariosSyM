@@ -90,11 +90,9 @@
 
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-
                 app:layout_constraintTop_toTopOf="@+id/textViewName"
                 app:layout_constraintBottom_toBottomOf="@+id/textViewName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textViewName"
                 />
 
             <EditText

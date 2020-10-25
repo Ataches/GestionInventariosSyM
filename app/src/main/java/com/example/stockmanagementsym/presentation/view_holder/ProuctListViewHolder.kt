@@ -10,14 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.item_cart.view.*
 import kotlinx.android.synthetic.main.item_product.view.*
-import kotlinx.android.synthetic.main.item_product.view.editTextQuantity
-import kotlinx.android.synthetic.main.item_product.view.imageViewProduct
-import kotlinx.android.synthetic.main.item_product.view.textViewDescription
-import kotlinx.android.synthetic.main.item_product.view.textViewName
-import kotlinx.android.synthetic.main.item_product.view.textViewPrice
-import kotlinx.android.synthetic.main.item_product.view.textViewQuantity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,21 +43,18 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         quantity = quantity
                     )
                     cartProduct.idProduct = product.idProduct
-                    FragmentData.showMessage(it.context, FragmentData.addProductToCart(cartProduct))
+                    FragmentData.addProductToCart(cartProduct,it)
                 }else
                     FragmentData.showMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
             }else
                 FragmentData.showMessage(it.context, "Digite un numero correcto")
         }
         itemView.buttonEditProduct.setOnClickListener {
-            FragmentData.setProductToEdit(product)
-            FragmentData.setBooleanUpdate(true)
-            FragmentData.goToNewProduct()
+            FragmentData.updateProduct(product,true, it)
         }
         itemView.buttonDeleteProduct.setOnClickListener{
             GlobalScope.launch(Dispatchers.IO){
                 FragmentData.deleteProduct(product)
-                FragmentData.reloadProductList()
             }
         }
     }
