@@ -70,6 +70,4 @@ Desde el menú de inicio o el botón toolbar se puede acceder al menú de ventas
 
 * **Juan Sebastián Sánchez Mancilla** - [ataches](https://github.com/Ataches)
 
-## Expresiones de Gratitud 🎁
-
-* Agradecimientos a los profesores Carlos, Jaime y Cristian, y al equipo de ScotiaBank.
+_Aplicativo generado a  partir de las lecciones tomadas en el curso de Kotlin del 2020 desarrollado por ScotiaBank y auto aprendizaje_
