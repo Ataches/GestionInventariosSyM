@@ -6,24 +6,24 @@ _Aplicativo para manejo de inventarios._
 
 Proyecto realizado aplicando arquitectura tres capas y modelo MVC.
 
-### Pre-requisitos ??
+### Pre-requisitos 馃搵
 
 _Elementos necesarios_
 
 ```
 Android studio 4.1
 ```
-## Demo de la app ??
+## Demo de la app 鈿欙笍
 
-### Inicio de sesión
-Funcionalidades de la aplicación: 
+### Inicio de sesi贸n
+Funcionalidades de la aplicaci贸n: 
 
 * Registro de usuarios
 * Registro de productos
 * Registro de clientes
 * Registro de ventas
 
-_Todos los registros realizados se almacenan en la base de datos de la aplicación_
+_Todos los registros realizados se almacenan en la base de datos de la aplicaci贸n_
 
 ![](DemoApp.gif)
 
@@ -31,26 +31,26 @@ _Para el registro de nuevos usuarios es necesario que un administrador lo regist
 
 ### Registro de productos
 
-Es posible el registro de productos por medio del acceso a la tienda de la aplicación, donde se registran los siguientes campos:
+Es posible el registro de productos por medio del acceso a la tienda de la aplicaci贸n, donde se registran los siguientes campos:
 
 * Nombre del producto
 * Precio del producto
-* Descripción del producto
+* Descripci贸n del producto
 * Cantidad de unidades del producto
 * Imagen del producto (opcional)
 
 ![](DemoGifs/DemoNewProduct.gif)
 
-_El producto registrado queda almacenado en la base de datos para compras posteriores o edición del mismo_
+_El producto registrado queda almacenado en la base de datos para compras posteriores o edici贸n del mismo_
 
-### Creación y eliminación de usuarios, edición de productos
+### Creaci贸n y eliminaci贸n de usuarios, edici贸n de productos
 
 Para crear o eliminar un usuario es necesario tener el privilegio de administrador el cual lo otorga otro administrador.
 
 Campos para crear un nuevo usuario:
 
 * Nombre de usuario
-* Contrase?a de usuario
+* Contrase帽a de usuario
 * Privilegio de usuario
 
 ![](DemoGifs/DemoUsersAndEditProduct.gif)
@@ -58,18 +58,18 @@ Campos para crear un nuevo usuario:
 ### Registro de ventas en el aplicativo
 
 Para registrar una venta es necesario tener un cliente registrado, el cual se puede crear desde la ventana de nueva venta o desde el fragmento de listado de clientes.
-Desde el menú de inicio o el botón toolbar se puede acceder al menú de ventas registradas una vez hecha la venta, la cual muestra el detalle de la venta.
+Desde el men煤 de inicio o el bot贸n toolbar se puede acceder al men煤 de ventas registradas una vez hecha la venta, la cual muestra el detalle de la venta.
 
 ![](DemoGifs/DemoVenta.gif)
 
-### Edición y eliminación de clientes
+### Edici贸n y eliminaci贸n de clientes
 
 ![](DemoGifs/DemoCustomerEdit.gif)
 
-## Autor ??
+## Autor 鉁掞笍
 
-* **Juan Sebastián Sánchez Mancilla** - [ataches](https://github.com/Ataches)
+* **Juan Sebasti谩n S谩nchez Mancilla** - [ataches](https://github.com/Ataches)
 
-## Expresiones de Gratitud ??
+## Expresiones de Gratitud 馃巵
 
 * Agradecimientos a los profesores Carlos, Jaime y Cristian, y al equipo de ScotiaBank.
