@@ -9,11 +9,6 @@ import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
-import kotlinx.android.synthetic.main.dialog_new_sale.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AndroidView(private val androidModel: AndroidModel) {
 
@@ -190,7 +185,7 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun showProductListSaleToString(item: Sale, context: Context) {
         showAlertMessage(
-            view.context.getString(R.string.saleList),
+            context.getString(R.string.saleList),
             androidModel.getSaleToString(item),
             context
         )

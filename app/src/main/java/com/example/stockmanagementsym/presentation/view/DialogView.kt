@@ -237,10 +237,10 @@ class DialogView(private var androidView: AndroidView) {
                     val customer = data as Customer
                     GlobalScope.launch(Dispatchers.IO) {
                         showResultTransaction(androidView.createCustomer(customer,view))
+                        loadCustomerList()
                     }
                     androidView.getCustomerToString(customer)
                     showCustomerSelected(androidView.getCustomerToString(customer))
-                    loadCustomerList()
                 }
 
                 viewElement.context.getString(R.string.titleAlertUpdateCustomer) -> {

@@ -85,5 +85,8 @@
     <string name="cart">Carrito</string>
     <string name="userName">Usuario:</string>
     <string name="newUser">Nuevo usuario</string>
+    <string name="saveLastLocation">Guardar localización</string>
+    <string name="location">Localización</string>
+    <string name="saveLastLocationObs">Localización periodica</string>
 
 </resources>

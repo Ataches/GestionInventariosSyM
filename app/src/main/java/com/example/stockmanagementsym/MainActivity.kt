@@ -1,7 +1,14 @@
 package com.example.stockmanagementsym
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,14 +16,22 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_navigation_header.*
 import kotlinx.android.synthetic.main.layout_navigation_header.view.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController:NavController
     private lateinit var appBarConfiguration:AppBarConfiguration
+    
+    private var androidLocation: AndroidLocation ?= null
+    private var fusedLocation: FusedLocationProviderClient ?= null
+    private var obs:Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +47,15 @@ class MainActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         headerView.textViewUserNameNavView.text = FragmentData.getUserName()
         headerView.textViewUserPrivilegeNavView.text = FragmentData.getUserPrivilege()
+        headerView.textViewUserLocationNavView.text = getString(R.string.location)
+        headerView.buttonLocation.setOnClickListener {
+            obs = false
+            checkPermission()
+        }
+        headerView.buttonLocationObs.setOnClickListener {
+            obs = true
+            checkPermission()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -41,9 +65,66 @@ class MainActivity : AppCompatActivity() {
     private fun setupToolBarMain() {
         setSupportActionBar(toolBarMain)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.home, R.id.shopFragment,R.id.customerListFragment,
-                                                        R.id.saleList, R.id.userFragment),drawerLayoutMain)
+                                                        R.id.saleList, R.id.userFragment, R.id.locationFragment),drawerLayoutMain)
         setupActionBarWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun checkPermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 102)
+        }else
+            loadLocation()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == 102)
+            if(!grantResults.all{ it == PackageManager.PERMISSION_GRANTED})
+                finish()
+            else
+                loadLocation()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun loadLocation() {
+        if(androidLocation==null)
+            androidLocation = AndroidLocation(textViewUserLocationNavView, this)
+        if(fusedLocation==null)
+            fusedLocation = LocationServices.getFusedLocationProviderClient(this)
+        if(obs){
+            val locationRequest = LocationRequest()
+            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            locationRequest.interval = 10_000
+
+            fusedLocation!!.requestLocationUpdates(locationRequest,androidLocation,null)
+        }else{
+            fusedLocation!!.lastLocation.addOnSuccessListener(androidLocation!!)?.addOnFailureListener(androidLocation!!)
+        }
     }
 }
 
+class AndroidLocation(private val textView: TextView, val context: Context) :
+    OnSuccessListener<Location>, OnFailureListener,LocationCallback(){
+    override fun onSuccess(location: Location?) = if(location!=null){
+        textView.text = """Localización: ${location.latitude} - ${location.longitude}"""
+    }else{
+        FragmentData.showMessage(context, "No es posible encontrar la localización")
+    }
+
+    override fun onLocationResult(location: LocationResult?) {
+        super.onLocationResult(location)
+        textView.text = """Localización: ${location!!.lastLocation.latitude} - ${location.lastLocation.longitude}"""
+    }
+
+    override fun onFailure(p0: Exception) {
+        FragmentData.showMessage(context, "No es posible encontrar la localización")
+    }
+
+}
 

@@ -63,7 +63,7 @@ class UserLogic(private val userDao: UserDao) {
 
     suspend fun confirmLogin(userName: String, password: String):Boolean {
         withContext(Dispatchers.IO) {
-            //insertUser(User(userName, password,"admin"))
+            insertUser(User(userName, password,"admin"))
             user = userDao.selectUser(userName,password)
         }
         return user != null

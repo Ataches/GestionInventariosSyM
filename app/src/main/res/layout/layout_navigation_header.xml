@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/buttonPrimary"
     android:layout_width="match_parent"
-    android:layout_height="170dp">
+    android:layout_height="250dp">
     <ImageView
         android:id="@+id/imageViewCustomerNavView"
         android:background="@drawable/ic_person"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="30dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewUserNameNavView"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,6 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:layout_marginTop="5dp"
         android:gravity="left"
         app:layout_constraintTop_toBottomOf="@+id/imageViewCustomerNavView"
         app:layout_constraintLeft_toLeftOf="@+id/imageViewCustomerNavView"
@@ -33,11 +32,65 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:layout_marginBottom="10dp"
         android:gravity="left"
         app:layout_constraintTop_toBottomOf="@+id/textViewUserNameNavView"
         app:layout_constraintLeft_toLeftOf="@+id/textViewUserNameNavView"
+        app:layout_constraintBottom_toTopOf="@+id/textViewUserLocationNavView"
+        />
+
+    <TextView
+        android:id="@+id/textViewUserLocationNavView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginBottom="5dp"
+        android:gravity="left"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLocation"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserPrivilegeNavView"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewUserPrivilegeNavView"
+        />
+
+
+
+    <Button
+        android:id="@+id/buttonLocation"
+        android:layout_width="0dp"
+
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".37"
+
+        android:layout_height="30dp"
+        android:drawableStart="@drawable/ic_add_location"
+        android:background="@color/buttonPrimaryDark"
+
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="7dp"
+        android:textSize="11sp"
+        android:text="@string/saveLastLocation"
+        app:layout_constraintEnd_toStartOf="@+id/buttonLocationObs"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserLocationNavView"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewUserLocationNavView"
+        />
+
+    <Button
+        android:id="@+id/buttonLocationObs"
+        android:layout_width="0dp"
+
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".37"
+
+        android:layout_height="30dp"
+        android:drawableStart="@drawable/ic_add_location"
+        android:background="@color/buttonPrimaryDark"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="30dp"
+        android:textSize="11sp"
+        android:text="@string/saveLastLocationObs"
+        app:layout_constraintTop_toTopOf="@+id/buttonLocation"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonLocation"
+        app:layout_constraintStart_toEndOf="@+id/buttonLocation"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

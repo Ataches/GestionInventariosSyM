@@ -1,11 +1,14 @@
 package com.example.stockmanagementsym.presentation.fragment
 
-import android.annotation.SuppressLint
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.view.FragmentData
@@ -26,11 +29,20 @@ class LocationFragment : Fragment(), OnSuccessListener<Location>, OnFailureListe
         return inflater.inflate(R.layout.fragment_location, container, false)
     }
 
-    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fusedLocation = LocationServices.getFusedLocationProviderClient(requireContext())
         buttonToLocate.setOnClickListener {
+            if (ActivityCompat.checkSelfPermission(
+                    this.requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this.requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d("Test location","else")
+            }
             fusedLocation.lastLocation.addOnSuccessListener(this).addOnFailureListener(this)
         }
 
@@ -64,6 +76,6 @@ class LocationFragment : Fragment(), OnSuccessListener<Location>, OnFailureListe
     }
 
     override fun onFailure(p0: Exception) {
-
+        FragmentData.showMessage(this.requireContext(), "No es posible encontrar la localización")
     }
 }
