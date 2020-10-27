@@ -10,6 +10,7 @@ class User(
     private var name: String,
     private var password: String,
     private var privilege: String,
+    private val photoData: String,
     private var latitude: Double,
     private var longitude: Double
 ){
@@ -27,6 +28,10 @@ class User(
 
     fun getPrivilege(): String {
         return privilege
+    }
+
+    fun getPhotoData(): String {
+        return photoData
     }
 
     fun setLatitude(latitude: Double) {

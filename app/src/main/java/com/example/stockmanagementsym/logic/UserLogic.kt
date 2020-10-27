@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.logic
 
+import android.util.Log
 import com.example.stockmanagementsym.data.dao.UserDao
 import com.example.stockmanagementsym.logic.business.User
 import kotlinx.coroutines.Dispatchers
@@ -73,9 +74,8 @@ class UserLogic(private val userDao: UserDao) {
         return userList
     }
 
-    suspend fun confirmLogin(userName: String, password: String):Boolean {
+    suspend fun confirmLogin(userName: String, password: String,photoUri:String):Boolean {
         withContext(Dispatchers.IO) {
-            //insertUser(User(userName, password,"admin",-1.0,-1.0))
             user = userDao.selectUser(userName,password)
         }
         return user != null

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="250dp">
     <ImageView
+        android:visibility="gone"
         android:id="@+id/imageViewCustomerNavView"
         android:background="@drawable/ic_person"
         android:layout_width="100dp"

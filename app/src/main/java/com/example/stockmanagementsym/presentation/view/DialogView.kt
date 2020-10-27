@@ -49,7 +49,8 @@ class DialogView(private var androidView: AndroidView) {
                     view.editTextUserName.text.toString(),
                     view.editTextPassword.text.toString(),
                     view.editTextPrivilege.text.toString(),
-                    -1.0,-1.0
+                    androidView.getStringBitMap(),
+                    -1.0, -1.0,
                 )
 
 
@@ -180,7 +181,7 @@ class DialogView(private var androidView: AndroidView) {
                 newProductFragment.editTextProductName.text.toString(),
                 newProductFragment.editTextProductPrice.text.toString().toDouble(),
                 newProductFragment.editTextProductDesc.text.toString(),
-                FragmentData.getStringBitMap(),
+                androidView.getStringBitMap(),
                 newProductFragment.editTextProductQuantity.text.toString().toInt()
             )
         if (updateBoolean) {
@@ -254,15 +255,25 @@ class DialogView(private var androidView: AndroidView) {
                     }
                 }
                 viewElement.context.getString(R.string.location) -> {
-                    androidView.logOut(true,viewElement.context)
+                    androidView.saveUserLocation(viewElement.context)
+                    androidView.askLogOut(viewElement.context)
+                }
+                viewElement.context.getString(R.string.logOut) ->{
+                    androidView.logOut(viewElement.context)
                 }
             }
         }
         builder.setNegativeButton("No") { _, _ ->
             FragmentData.setBooleanUpdate(false)
-
-            GlobalScope.launch(Dispatchers.IO) {
-                showToastMessage(viewElement.context.getString(R.string.modifyIfIsNecessary),viewElement.context)
+            when(title){
+                viewElement.context.getString(R.string.location) -> {
+                    androidView.askLogOut(viewElement.context)
+                }
+                else -> {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        showToastMessage(viewElement.context.getString(R.string.modifyIfIsNecessary),viewElement.context)
+                    }
+                }
             }
         }
         builder.setMessage(messageDialog)

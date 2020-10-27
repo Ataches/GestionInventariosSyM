@@ -3,7 +3,7 @@ package com.example.stockmanagementsym.presentation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
+import android.graphics.Bitmap
 import android.view.View
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
@@ -11,12 +11,18 @@ import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.*
+import com.example.stockmanagementsym.logic.adapter.bit_map.BitMapConcreteAdapter
+import com.example.stockmanagementsym.logic.adapter.bit_map.IBitMapAdapter
+import com.example.stockmanagementsym.logic.adapter.photo.IPhotoAdapter
+import com.example.stockmanagementsym.logic.adapter.photo.PhotoConcreteAdapter
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.*
 import com.example.stockmanagementsym.presentation.view.AndroidView
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
@@ -28,21 +34,29 @@ import kotlinx.coroutines.withContext
 
 class AndroidModel{
 
-    private var logOutBoolean: Boolean = false
     private var userLatitude: Double = -1.0
     private var userLongitude: Double = -1.0
     private lateinit var dataBaseLogic: DataBaseLogic
     private var androidView:AndroidView ?= null
-
     private var customerLogic: CustomerLogic ?= null
     private var productLogic: ProductLogic ?= null
-
     private var user: User? = null
-    private var saleLogic: SaleLogic ?= null
+    private var googleAccount: GoogleSignInAccount ?= null
+
+    private var googleSingInClient: GoogleSignInClient ?= null
+    private lateinit var userPhotoData: String
     private var userLogic:UserLogic ?= null
+    private var saleLogic: SaleLogic ?= null
     private lateinit var dateSale: String
+
     private lateinit var customerNewSale: Customer
     private var newSale: Sale ?= null
+    //adapters
+    private var photoConcreteAdapter: IPhotoAdapter ?= null
+    private var bitMapConcreteAdapter: IBitMapAdapter ?= null
+
+    private var stringBitmap: String = ""
+    private var bitMap: Bitmap ?= null
 
     //User
     fun getUser():User{
@@ -120,6 +134,22 @@ class AndroidModel{
 
     fun getUserLongitude(): Double {
         return userLongitude
+    }
+
+    fun setGoogleAccount(googleAccount: GoogleSignInAccount?) {
+        this.googleAccount = googleAccount
+    }
+
+    fun setGoogleSingInClient(googleSingInClient: GoogleSignInClient?) {
+        this.googleSingInClient = googleSingInClient
+    }
+
+    fun setUserPhotoData(userPhotoData: String) {
+        this.userPhotoData = userPhotoData
+    }
+
+    fun getUserPhotoData(): String {
+        return getUser().getPhotoData()
     }
 
     //Sale
@@ -273,12 +303,28 @@ class AndroidModel{
 
     fun getPhotoCamera(viewElement: View) {
         val newProductFragment = viewElement.findFragment<NewProductFragment>()
-        newProductFragment.startCamera()
+        getPhotoAdapter().startCamera(newProductFragment.requireActivity(),viewElement.context)
     }
 
     fun getPhotoGallery(viewElement: View) {
         val newProductFragment = viewElement.findFragment<NewProductFragment>()
         newProductFragment.startGallery()
+    }
+    //BitMap generation
+    fun setBitMap(bitMap: Bitmap) {
+        this.bitMap = bitMap
+    }
+
+    fun getBitMap(): Bitmap {
+        if(bitMap==null)
+            bitMap = getBitMapAdapter().decoderStringToBitMap(getUser().getPhotoData())
+        return bitMap!!
+    }
+
+    fun getStringBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
+        val stringEncoded = getBitMapAdapter().encoderBitMapToString(getBitMap())
+        stringBitmap = stringEncoded
+        return stringEncoded
     }
 
     //Searches
@@ -321,13 +367,13 @@ class AndroidModel{
             )
         }
     }
-
     //Logic classes
     private fun getUserLogic(): UserLogic {
         if(userLogic==null)
             userLogic = UserLogic(dataBaseLogic.getUserDao())
         return userLogic!!
     }
+
     private fun getCustomerLogic(): CustomerLogic {
         if(customerLogic == null)
             customerLogic = CustomerLogic(dataBaseLogic.getCustomerDao())
@@ -352,13 +398,31 @@ class AndroidModel{
         return androidView!!
     }
 
+    //Adapters
+    private fun getPhotoAdapter(): IPhotoAdapter {
+        if(photoConcreteAdapter==null)
+            photoConcreteAdapter = PhotoConcreteAdapter()
+        return photoConcreteAdapter!!
+    }
+    private fun getBitMapAdapter(): IBitMapAdapter {
+        if(bitMapConcreteAdapter==null)
+            bitMapConcreteAdapter = BitMapConcreteAdapter()
+        return bitMapConcreteAdapter!!
+    }
+
     suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
-        if(getUserLogic().confirmLogin(user, password)){
+        if(getUserLogic().confirmLogin(user, password,googleAccount!!.photoUrl.toString())){
             getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+getUser().getName())
 
             userLatitude = getUser().getLatitude()
             userLongitude = getUser().getLongitude()
+
+            if(googleSingInClient!=null){
+                setUserPhotoData(googleAccount!!.photoUrl.toString())
+            }else{
+                setUserPhotoData(getUser().getPhotoData())
+            }
 
             val intent = Intent(login, MainActivity::class.java)
             login.startActivity(intent)
@@ -370,7 +434,7 @@ class AndroidModel{
             )
     }
 
-    suspend fun askLogOut(context: Context){
+    suspend fun askSaveLocation(context: Context){
         val location = context.getString(R.string.location)+" "+userLatitude+" - "+userLongitude
         val activity = context as Activity
         withContext(Dispatchers.IO) {
@@ -378,19 +442,33 @@ class AndroidModel{
         }
     }
 
-    suspend fun logOut(logOutBoolean:Boolean, context: Context){
+    suspend fun askLogOut(context: Context){
+        val location = context.getString(R.string.location)+" "+userLatitude+" - "+userLongitude
         val activity = context as Activity
-        if(logOutBoolean){
-            user!!.setLatitude(userLatitude)
-            user!!.setLongitude(userLongitude)
+        withContext(Dispatchers.IO) {
+            getAndroidView().dialogConfirmRegister(getUser().getName(),context.getString(R.string.logOut), context.getString(R.string.messageLogOut),activity)
+        }
+    }
 
-            withContext(Dispatchers.IO) {
-                getAndroidView().showResultTransaction(getUserLogic().updateUser(user!!), context)
-            }
+    suspend fun saveUserLocation(context: Context){
+        user!!.setLatitude(userLatitude)
+        user!!.setLongitude(userLongitude)
 
-            activity.finish()
-            user = null
-        }else
-            getAndroidView().showToastMessage(context, context.getString(R.string.modifyIfIsNecessary))
+        withContext(Dispatchers.IO) {
+            getAndroidView().showResultTransaction(getUserLogic().updateUser(user!!), context)
+        }
+    }
+
+    fun logOut(context: Context){
+        user = null
+        googleAccount = null
+        if(googleSingInClient!=null)
+            googleSingInClient!!.signOut()
+        val activity = context as Activity
+        activity.finish()
+    }
+
+    fun showToastMessage(context: Context,message:String){
+        getAndroidView().showToastMessage(context,message)
     }
 }

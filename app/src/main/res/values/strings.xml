@@ -86,11 +86,17 @@
     <string name="userName">Usuario:</string>
     <string name="newUser">Nuevo usuario</string>
     <string name="saveLastLocation">Guardar localización</string>
+
+    <!--Location-->
     <string name="location">Localización</string>
     <string name="saveLastLocationObs">Localización periodica</string>
     <string name="saveLocation">"¿Desea registrar la ultima localización?: "</string>
-    <string name="logOut">Cerrar sesión</string>
     <string name="locationFailure">No es posible encontrar la localización</string>
     <string name="pressToReloadMap">Presione el mapa para recargar la ubicación</string>
+
+    <!--Logout-->
+    <string name="logOut">Cerrar sesión</string>
+    <string name="messageLogOut">¿Desea cerrar la sesión?</string>
+    <string name="loginFailure">Fallo en inicio de sesión</string>
 
 </resources>

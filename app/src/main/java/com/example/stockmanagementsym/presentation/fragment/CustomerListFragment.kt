@@ -12,7 +12,7 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.fragment_customer_list.*
+import kotlinx.android.synthetic.main.fragment_customer_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,8 +35,8 @@ class CustomerListFragment : Fragment(), ListListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.customerList)
 
         adapter = CustomerListAdapter(listOf())
-        recyclerViewCustomerList.adapter = adapter
-        recyclerViewCustomerList.layoutManager = LinearLayoutManager(
+        view.recyclerViewCustomerList.adapter = adapter
+        view.recyclerViewCustomerList.layoutManager = LinearLayoutManager(
             view.context,
             LinearLayoutManager.VERTICAL,
             false
@@ -46,8 +46,8 @@ class CustomerListFragment : Fragment(), ListListener {
 
         FragmentData.setCustomerListListener(this)
 
-        buttonCustomerToSearch.setOnClickListener(AndroidController)
-        buttonCustomerListToCreateCustomer.setOnClickListener(AndroidController)
+        view.buttonCustomerToSearch.setOnClickListener(AndroidController)
+        view.buttonCustomerListToCreateCustomer.setOnClickListener(AndroidController)
     }
 
     override fun onResume() {

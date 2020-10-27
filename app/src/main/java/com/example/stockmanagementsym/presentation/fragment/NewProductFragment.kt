@@ -15,13 +15,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.fragment_new_product.*
+import kotlinx.android.synthetic.main.fragment_new_product.view.*
 import java.io.ByteArrayOutputStream
 
 class NewProductFragment: Fragment(){
+
+    private lateinit var viewElement:View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,22 +34,23 @@ class NewProductFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewElement = view
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.product)
 
         if(FragmentData.getBooleanUpdate()){
             val product = FragmentData.getProductToEdit()
-            editTextProductName.setText(product.getName())
-            editTextProductPrice.setText(product.getPrice().toString())
-            editTextProductDesc.setText(product.getDescription())
-            editTextProductQuantity.setText(product.getQuantity().toString())
-            imageViewNewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
+            view.editTextProductName.setText(product.getName())
+            view.editTextProductPrice.setText(product.getPrice().toString())
+            view.editTextProductDesc.setText(product.getDescription())
+            view.editTextProductQuantity.setText(product.getQuantity().toString())
+            view.imageViewNewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
         }
 
-        buttonNewProductToHome.setOnClickListener (AndroidController)
-        buttonNewProductToProductList.setOnClickListener (AndroidController)
-        buttonNewProductToNewProduct.setOnClickListener (AndroidController)
-        buttonNewProductToGallery.setOnClickListener(AndroidController)
-        buttonNewProductToCamera.setOnClickListener(AndroidController)
+        view.buttonNewProductToHome.setOnClickListener (AndroidController)
+        view.buttonNewProductToProductList.setOnClickListener (AndroidController)
+        view.buttonNewProductToNewProduct.setOnClickListener (AndroidController)
+        view.buttonNewProductToGallery.setOnClickListener(AndroidController)
+        view.buttonNewProductToCamera.setOnClickListener(AndroidController)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -56,21 +58,21 @@ class NewProductFragment: Fragment(){
         if(requestCode == 10 && resultCode == RESULT_OK){
             val bitMap = data?.extras?.get("data") as Bitmap
 
-            imageViewNewProduct.setImageBitmap(bitMap)
+            viewElement.imageViewNewProduct.setImageBitmap(bitMap)
 
-            FragmentData.setStringBitMap(encoderBitMapToString(bitMap))
+            FragmentData.setBitMap(bitMap)
         }
         if(requestCode == 101 && resultCode == RESULT_OK){
             val imageUri = data!!.data!!
 
-            imageViewNewProduct.setImageURI(imageUri)
+            viewElement.imageViewNewProduct.setImageURI(imageUri)
 
             val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver, imageUri))
             } else {
                 MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
             }
-            FragmentData.setStringBitMap(encoderBitMapToString(bitMap))
+            FragmentData.setBitMap(bitMap)
         }
     }
 

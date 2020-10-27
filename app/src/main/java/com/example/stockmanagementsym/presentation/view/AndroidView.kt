@@ -2,6 +2,7 @@ package com.example.stockmanagementsym.presentation.view
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
@@ -289,6 +290,11 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun getUserLongitude(): Double {
         return androidModel.getUserLongitude()
     }
+
+    fun getUserPhotoData(): String {
+        return androidModel.getUserPhotoData()
+    }
+
     fun searchUser(view: View) {
         androidModel.searchUser(view)
     }
@@ -299,10 +305,32 @@ class AndroidView(private val androidModel: AndroidModel) {
         }
     }
 
-    fun logOut(logOutBoolean: Boolean, context:Context) {
+    fun askSaveLocation(context: Context) {
         GlobalScope.launch(Dispatchers.IO){
-            androidModel.logOut(logOutBoolean, context)
+            androidModel.askSaveLocation(context)
         }
+    }
+
+    fun saveUserLocation(context: Context) {
+        GlobalScope.launch(Dispatchers.IO){
+            androidModel.saveUserLocation(context)
+        }
+    }
+
+    fun logOut(context:Context) {
+        androidModel.logOut(context)
+    }
+
+    fun setBitMap(bitMap: Bitmap) {
+        androidModel.setBitMap(bitMap)
+    }
+
+    fun getStringBitMap(): String {
+        return androidModel.getStringBitMap()
+    }
+
+    fun getBitMap(): Bitmap {
+        return androidModel.getBitMap()
     }
 
 }

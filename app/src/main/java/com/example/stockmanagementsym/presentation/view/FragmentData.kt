@@ -1,6 +1,7 @@
 package com.example.stockmanagementsym.presentation.view
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
@@ -11,9 +12,8 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-object FragmentData{
+object FragmentData {
 
-    private var stringBitmap: String = ""
     private lateinit var saleSelected: Sale
     private lateinit var customerToEdit: Customer
     private lateinit var productToEdit: Product
@@ -38,6 +38,18 @@ object FragmentData{
         androidView.deleteUser(user)
     }
 
+    suspend fun getUserList(): List<User> {
+        return androidView.getUserList()
+    }
+
+    fun getUserPhotoData(): String {
+        return androidView.getUserPhotoData()
+    }
+
+    fun getBitMap(): Bitmap {
+        return androidView.getBitMap()
+    }
+
     fun setAndroidView(androidView: AndroidView){
         this.androidView = androidView
     }
@@ -53,13 +65,13 @@ object FragmentData{
     fun getUserLongitude(): Double {
         return androidView.getUserLongitude()
     }
-
     /*
         List listeners
      */
     fun setProductListListener(productListFragment: ListListener) {
         productListListener = productListFragment
     }
+
     fun setCartListener(cartFragment: ListListener) {
         cartListener = cartFragment
     }
@@ -71,13 +83,13 @@ object FragmentData{
     fun setUserListListener(userListListener: ListListener){
         this.userListListener = userListListener
     }
-
     fun reloadCustomerList(){
         try{
             customerListListener.reloadList()
         }catch (e:Exception){
         }
     }
+
     fun reloadProductList(){
         productListListener.reloadList()
     }
@@ -105,10 +117,10 @@ object FragmentData{
         val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
         return df.format(date.time)
     }
-
     fun showToastMessage(context: Context, message:String){
         androidView.showToastMessage(context,message)
     }
+
     fun setProductToEdit(item: Product) {
         productToEdit = item
     }
@@ -117,15 +129,9 @@ object FragmentData{
         return productToEdit
     }
 
-    fun setStringBitMap(stringBitmap: String) {
-        this.stringBitmap = stringBitmap
-    }
 
-
-    fun getStringBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
-        val string = stringBitmap
-        stringBitmap = ""
-        return string
+    fun setBitMap(bitMap: Bitmap) {
+        androidView.setBitMap(bitMap)
     }
 
     fun getCartList(): MutableList<Product> {
@@ -166,10 +172,10 @@ object FragmentData{
         androidView.deleteProduct(item)
     }
 
+
     fun removeElementCart(context: Context, item: Product) {
         androidView.removeElementCart(item,context)
     }
-
 
     fun showProductListSaleToString(item: Sale, context: Context) {
         return androidView.showProductListSaleToString(item,context)
@@ -178,17 +184,13 @@ object FragmentData{
     suspend fun getProductList(): List<Product> {
         return androidView.getProductList()
     }
-
     fun updateProduct(product: Product, booleanUpdate: Boolean, view: View) {
         productToEdit = product
         this.booleanUpdate = booleanUpdate
         androidView.goToNewProduct()
     }
-    suspend fun getUserList(): List<User> {
-        return androidView.getUserList()
-    }
 
-    fun askLogOut(context: Context) {
-        androidView.askLogOut(context)
+    fun askSaveLocation(context: Context) {
+        androidView.askSaveLocation(context)
     }
 }

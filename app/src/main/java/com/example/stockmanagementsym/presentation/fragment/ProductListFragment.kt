@@ -11,7 +11,7 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.ProductListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.fragment_product_list.*
+import kotlinx.android.synthetic.main.fragment_product_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -32,14 +32,14 @@ class ProductListFragment : Fragment(), ListListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        recyclerViewProductList.adapter = adapter
-        recyclerViewProductList.layoutManager = GridLayoutManager(view.context, 2)
+        view.recyclerViewProductList.adapter = adapter
+        view.recyclerViewProductList.layoutManager = GridLayoutManager(view.context, 2)
 
         FragmentData.setProductListListener(this)
         reloadList()
 
-        buttonProductListToSearch.setOnClickListener(AndroidController)
-        buttonProductListToNewProduct.setOnClickListener(AndroidController)
+        view.buttonProductListToSearch.setOnClickListener(AndroidController)
+        view.buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
 
     override fun reloadList() {

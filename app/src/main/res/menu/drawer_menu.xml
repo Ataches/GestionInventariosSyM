@@ -14,5 +14,5 @@
         android:title="@string/location"/>
     <item android:id="@+id/buttonLogOut"
         android:title="@string/logOut"
-        android:onClick="askLogOut"/>
+        android:onClick="askSaveLocation"/>
 </menu>

@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +23,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_navigation_header.*
 import kotlinx.android.synthetic.main.layout_navigation_header.view.*
@@ -40,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.nav_host_fragment)
 
-        askLogOut()
+        setupToolBarMain()
 
         val navView: NavigationView = findViewById(R.id.navigation_view)
         navView.setupWithNavController(navController)
@@ -50,6 +53,20 @@ class MainActivity : AppCompatActivity() {
         headerView.textViewUserPrivilegeNavView.text = FragmentData.getUserPrivilege()
         val userLatitude = FragmentData.getUserLatitude()
         val userLongitude = FragmentData.getUserLongitude()
+
+        headerView.imageViewCustomerNavView.visibility = View.VISIBLE
+        val userPhotoData = FragmentData.getUserPhotoData()
+
+        try{
+            Picasso.get().load(userPhotoData).into(headerView.imageViewCustomerNavView)
+            headerView.imageViewCustomerNavView.background = null
+        }catch (e:Exception){
+            Log.d("TEST IMAGE USER ","FAILED "+e)
+            if(userPhotoData!=""){
+                headerView.imageViewCustomerNavView.setImageBitmap(FragmentData.getBitMap())
+                headerView.imageViewCustomerNavView.background = null
+            }
+        }
 
         if((userLatitude==-1.0)&&(userLongitude==-1.0))
             headerView.textViewUserLocationNavView.text =
@@ -72,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun askLogOut() {
+    private fun setupToolBarMain() {
         setSupportActionBar(toolBarMain)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.home, R.id.shopFragment,R.id.customerListFragment,
                                                         R.id.saleList, R.id.userFragment, R.id.locationFragment, R.id.buttonLogOut),drawerLayoutMain)
@@ -118,8 +135,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun askLogOut(item: MenuItem) {
-        FragmentData.askLogOut(this)
+    fun askSaveLocation(item: MenuItem) {
+        FragmentData.askSaveLocation(this)
     }
 
 }

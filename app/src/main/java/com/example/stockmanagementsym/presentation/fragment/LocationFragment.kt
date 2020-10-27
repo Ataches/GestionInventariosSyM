@@ -1,7 +1,6 @@
 package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,7 +31,7 @@ class LocationFragment : SupportMapFragment(), OnMapReadyCallback, GoogleMap.OnM
         loadUserLocation()
     }
 
-    fun loadUserLocation(){
+    private fun loadUserLocation(){
         userLatitude = FragmentData.getUserLatitude()
         userLongitude = FragmentData.getUserLongitude()
         if((userLatitude != -1.0) && (userLongitude != -1.0)){

@@ -19,16 +19,8 @@ data class Sale(
         return customer
     }
 
-    fun setCustomer(customer: Customer) {
-        this.customer = customer
-    }
-
     fun getDate(): String {
         return date
-    }
-
-    fun setDate(date: String) {
-        this.date = date
     }
 
     fun getProductList():MutableList<Product>{
