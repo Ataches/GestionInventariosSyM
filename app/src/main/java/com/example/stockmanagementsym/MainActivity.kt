@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.nav_host_fragment)
 
-        setupToolBarMain()
+        askLogOut()
 
         val navView: NavigationView = findViewById(R.id.navigation_view)
         navView.setupWithNavController(navController)
@@ -47,7 +48,16 @@ class MainActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         headerView.textViewUserNameNavView.text = FragmentData.getUserName()
         headerView.textViewUserPrivilegeNavView.text = FragmentData.getUserPrivilege()
-        headerView.textViewUserLocationNavView.text = getString(R.string.location)
+        val userLatitude = FragmentData.getUserLatitude()
+        val userLongitude = FragmentData.getUserLongitude()
+
+        if((userLatitude==-1.0)&&(userLongitude==-1.0))
+            headerView.textViewUserLocationNavView.text =
+                getString(R.string.locationFailure)
+        else
+            headerView.textViewUserLocationNavView.text =
+                getString(R.string.location)+" "+userLatitude+" "+userLongitude
+
         headerView.buttonLocation.setOnClickListener {
             obs = false
             checkPermission()
@@ -62,10 +72,10 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun setupToolBarMain() {
+    private fun askLogOut() {
         setSupportActionBar(toolBarMain)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.home, R.id.shopFragment,R.id.customerListFragment,
-                                                        R.id.saleList, R.id.userFragment, R.id.locationFragment),drawerLayoutMain)
+                                                        R.id.saleList, R.id.userFragment, R.id.locationFragment, R.id.buttonLogOut),drawerLayoutMain)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
@@ -75,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 102)
         }else
-            loadLocation()
+            loadLocation() //The permission is al ready
     }
 
     override fun onRequestPermissionsResult(
@@ -88,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             if(!grantResults.all{ it == PackageManager.PERMISSION_GRANTED})
                 finish()
             else
-                loadLocation()
+                loadLocation() //Permission was granted by user
     }
 
     @SuppressLint("MissingPermission")
@@ -107,23 +117,34 @@ class MainActivity : AppCompatActivity() {
             fusedLocation!!.lastLocation.addOnSuccessListener(androidLocation!!)?.addOnFailureListener(androidLocation!!)
         }
     }
+
+    fun askLogOut(item: MenuItem) {
+        FragmentData.askLogOut(this)
+    }
+
 }
 
 class AndroidLocation(private val textView: TextView, val context: Context) :
     OnSuccessListener<Location>, OnFailureListener,LocationCallback(){
     override fun onSuccess(location: Location?) = if(location!=null){
         textView.text = """Localización: ${location.latitude} - ${location.longitude}"""
+        FragmentData.setUserLocation(location.latitude, location.longitude)
     }else{
-        FragmentData.showMessage(context, "No es posible encontrar la localización")
+        FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
     }
 
     override fun onLocationResult(location: LocationResult?) {
         super.onLocationResult(location)
-        textView.text = """Localización: ${location!!.lastLocation.latitude} - ${location.lastLocation.longitude}"""
+        if(location != null){
+            textView.text = """Localización: ${location!!.lastLocation.latitude} - ${location.lastLocation.longitude}"""
+            FragmentData.setUserLocation(location.lastLocation.latitude, location.lastLocation.longitude)
+        }else{
+            FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
+        }
     }
 
     override fun onFailure(p0: Exception) {
-        FragmentData.showMessage(context, "No es posible encontrar la localización")
+        FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
     }
 
 }

@@ -57,9 +57,9 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                     productCart.setQuantity(quantity)
                 listener.reloadList()
             }else
-                FragmentData.showMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
+                FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
         }else
-            FragmentData.showMessage(it.context, "Digite un numero correcto")
+            FragmentData.showToastMessage(it.context, "Digite un numero correcto")
     }
 
     private fun decoderStringToBitMap(string: String): Bitmap? {

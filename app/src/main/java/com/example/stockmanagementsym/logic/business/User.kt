@@ -9,7 +9,9 @@ import androidx.room.PrimaryKey
 class User(
     private var name: String,
     private var password: String,
-    private var privilege: String
+    private var privilege: String,
+    private var latitude: Double,
+    private var longitude: Double
 ){
     @PrimaryKey(autoGenerate = true)
     @NonNull @ColumnInfo(name = "id_user")
@@ -25,5 +27,21 @@ class User(
 
     fun getPrivilege(): String {
         return privilege
+    }
+
+    fun setLatitude(latitude: Double) {
+        this.latitude = latitude
+    }
+
+    fun getLatitude(): Double {
+        return latitude
+    }
+
+    fun setLongitude(longitude: Double) {
+        this.longitude = longitude
+    }
+
+    fun getLongitude(): Double {
+        return longitude
     }
 }

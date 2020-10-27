@@ -47,6 +47,18 @@ class UserLogic(private val userDao: UserDao) {
         }
     }
 
+    suspend fun updateUser(user: User): Boolean {
+        return try {
+            withContext(Dispatchers.IO) {
+                userDao.update(user)
+            }
+            updateUserList()
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
+
     private suspend fun updateUserList() {
         withContext(Dispatchers.IO) {
             userList = userDao.selectUserList()
@@ -63,7 +75,7 @@ class UserLogic(private val userDao: UserDao) {
 
     suspend fun confirmLogin(userName: String, password: String):Boolean {
         withContext(Dispatchers.IO) {
-            insertUser(User(userName, password,"admin"))
+            //insertUser(User(userName, password,"admin",-1.0,-1.0))
             user = userDao.selectUser(userName,password)
         }
         return user != null

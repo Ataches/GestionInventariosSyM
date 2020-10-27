@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
-import kotlinx.android.synthetic.main.fragment_product_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -49,7 +48,8 @@ class DialogView(private var androidView: AndroidView) {
                 User(
                     view.editTextUserName.text.toString(),
                     view.editTextPassword.text.toString(),
-                    view.editTextPrivilege.text.toString()
+                    view.editTextPrivilege.text.toString(),
+                    -1.0,-1.0
                 )
 
 
@@ -212,14 +212,14 @@ class DialogView(private var androidView: AndroidView) {
             when (title) {
                 viewElement.context.getString(R.string.titleAlertNewProd) -> {
                     GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(androidView.createProduct(data as Product))
+                        showResultTransaction(androidView.createProduct(data as Product),view.context)
                     }
                     androidView.goToProductList()
                 }
 
                 viewElement.context.getString(R.string.titleAlertUpdateProd) -> {
                     GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(androidView.goToNewProduct(data as Product))
+                        showResultTransaction(androidView.goToNewProduct(data as Product),view.context)
                     }
                     androidView.goToProductList()
                 }
@@ -229,14 +229,14 @@ class DialogView(private var androidView: AndroidView) {
 
                 viewElement.context.getString(R.string.titleAlertNewSaleBd) ->{
                     GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(androidView.createSale())
+                        showResultTransaction(androidView.createSale(),view.context)
                     }
                 }
 
                 viewElement.context.getString(R.string.titleAlertNewCustomer) -> {
                     val customer = data as Customer
                     GlobalScope.launch(Dispatchers.IO) {
-                        showResultTransaction(androidView.createCustomer(customer,view))
+                        showResultTransaction(androidView.createCustomer(customer,view),view.context)
                         loadCustomerList()
                     }
                     androidView.getCustomerToString(customer)
@@ -245,13 +245,16 @@ class DialogView(private var androidView: AndroidView) {
 
                 viewElement.context.getString(R.string.titleAlertUpdateCustomer) -> {
                     GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(androidView.updateCustomer(data as Customer))
+                        showResultTransaction(androidView.updateCustomer(data as Customer),view.context)
                     }
                 }
                 viewElement.context.getString(R.string.titleAlertNewUser) -> {
                     GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(androidView.newUser(data as User))
+                        showResultTransaction(androidView.newUser(data as User),view.context)
                     }
+                }
+                viewElement.context.getString(R.string.location) -> {
+                    androidView.logOut(true,viewElement.context)
                 }
             }
         }
@@ -321,11 +324,11 @@ class DialogView(private var androidView: AndroidView) {
         view.textViewSaleCustomerNameSelected?.text = customerNewSale
     }
 
-    private fun showResultTransaction(resultTransaction: Boolean) {
+    fun showResultTransaction(resultTransaction: Boolean, context:Context) {
         if (resultTransaction)
-            showToastMessage("Se realizo la operación con exito",view.context)
+            showToastMessage("Se realizo la operación con exito",context)
         else
-            showToastMessage("No se pudo realizar la operación",view.context)
+            showToastMessage("No se pudo realizar la operación",context)
     }
     fun showToastMessage(message: String, context: Context) {
         MessageTask("", message,"Toast",context).execute()

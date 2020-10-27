@@ -41,6 +41,19 @@ object FragmentData{
     fun setAndroidView(androidView: AndroidView){
         this.androidView = androidView
     }
+
+    fun setUserLocation(latitude: Double, longitude: Double) {
+        androidView.setUserLocation(latitude,longitude)
+    }
+
+    fun getUserLatitude(): Double {
+        return androidView.getUserLatitude()
+    }
+
+    fun getUserLongitude(): Double {
+        return androidView.getUserLongitude()
+    }
+
     /*
         List listeners
      */
@@ -93,7 +106,7 @@ object FragmentData{
         return df.format(date.time)
     }
 
-    fun showMessage(context: Context, message:String){
+    fun showToastMessage(context: Context, message:String){
         androidView.showToastMessage(context,message)
     }
     fun setProductToEdit(item: Product) {
@@ -173,5 +186,9 @@ object FragmentData{
     }
     suspend fun getUserList(): List<User> {
         return androidView.getUserList()
+    }
+
+    fun askLogOut(context: Context) {
+        androidView.askLogOut(context)
     }
 }

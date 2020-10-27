@@ -9,7 +9,10 @@
     <item android:id="@+id/saleList"
         android:title="@string/saleList"/>
     <item android:id="@+id/userFragment"
-        android:title="@string/userList"/>locationFragment
+        android:title="@string/userList"/>
     <item android:id="@+id/locationFragment"
         android:title="@string/location"/>
+    <item android:id="@+id/buttonLogOut"
+        android:title="@string/logOut"
+        android:onClick="askLogOut"/>
 </menu>

@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.presentation.view
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import com.example.stockmanagementsym.R
@@ -9,6 +10,10 @@ import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 
 class AndroidView(private val androidModel: AndroidModel) {
 
@@ -52,6 +57,10 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     suspend fun getUserList(): List<User> {
         return androidModel.getUserList()
+    }
+
+    fun setUserLocation(latitude: Double, longitude: Double) {
+        androidModel.setUserLocation(latitude, longitude)
     }
 
     /*
@@ -220,20 +229,30 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun getTotalPriceCart(): String {
         return androidModel.getTotalPriceCart()
     }
+    fun addProductToCart(item: Product, view: View) {
+        androidModel.addProductToCart(item, view)
+    }
+
 
     /*
         Messages
      */
-    fun showToastMessage(context: Context, message:String){
-        getDialogView().showToastMessage(message,context)
+    fun showToastMessage(context: Context, message: String){
+        getDialogView().showToastMessage(message, context)
     }
 
-    fun showAlertMessage(title:String, message: String,context: Context){
-        getDialogView().showAlertMessage(title,message,context)
+    fun showAlertMessage(title: String, message: String, context: Context){
+        getDialogView().showAlertMessage(title, message, context)
     }
 
-    suspend fun deleteUser(user: User): Boolean {
-        return androidModel.deleteUser(user)
+    fun showResultTransaction(updateUser: Boolean, context: Context) {
+        getDialogView().showResultTransaction(updateUser, context)
+    }
+
+    fun dialogConfirmRegister(data: Any, title: String, message: String, activity: Activity) {
+        activity.runOnUiThread {
+            getDialogView().dialogConfirmRegister(activity.findViewById(R.id.nav_host_fragment), data, title, message)
+        }
     }
 
     /*
@@ -254,15 +273,36 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun newUser(view: View) {
         getDialogView().dialogRegisterUser(view)
     }
+
+    suspend fun deleteUser(user: User): Boolean {
+        return androidModel.deleteUser(user)
+    }
+
     suspend fun newUser(user: User): Boolean {
         return androidModel.newUser(user)
     }
 
-    fun addProductToCart(item: Product,view: View) {
-        androidModel.addProductToCart(item,view)
+    fun getUserLatitude(): Double {
+        return androidModel.getUserLatitude()
     }
 
+    fun getUserLongitude(): Double {
+        return androidModel.getUserLongitude()
+    }
     fun searchUser(view: View) {
         androidModel.searchUser(view)
     }
+
+    fun askLogOut(context: Context) {
+        GlobalScope.launch(Dispatchers.IO){
+            androidModel.askLogOut(context)
+        }
+    }
+
+    fun logOut(logOutBoolean: Boolean, context:Context) {
+        GlobalScope.launch(Dispatchers.IO){
+            androidModel.logOut(logOutBoolean, context)
+        }
+    }
+
 }

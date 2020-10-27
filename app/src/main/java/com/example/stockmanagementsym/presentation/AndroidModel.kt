@@ -1,10 +1,10 @@
 package com.example.stockmanagementsym.presentation
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.provider.Settings.Global.getString
-import android.provider.Settings.System.getString
+import android.util.Log
 import android.view.View
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.stockmanagementsym.LoginActivity
@@ -18,7 +18,7 @@ import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.*
 import com.example.stockmanagementsym.presentation.view.AndroidView
 import kotlinx.android.synthetic.main.fragment_customer_list.*
-import kotlinx.android.synthetic.main.fragment_product_list.editTextSearchProductList
+import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +28,9 @@ import kotlinx.coroutines.withContext
 
 class AndroidModel{
 
+    private var logOutBoolean: Boolean = false
+    private var userLatitude: Double = -1.0
+    private var userLongitude: Double = -1.0
     private lateinit var dataBaseLogic: DataBaseLogic
     private var androidView:AndroidView ?= null
 
@@ -76,6 +79,20 @@ class AndroidModel{
         }
     }
 
+    suspend fun updateUser(user: User): Boolean {
+        return try{
+            if(getUserPrivileges()!="admin")
+                return false
+            withContext(Dispatchers.IO) {
+                getUserLogic().updateUser(user)
+            }
+            getAndroidView().reloadUserList()
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
+
     fun getUserName(): String {
         return getUser().getName()
     }
@@ -90,6 +107,19 @@ class AndroidModel{
             list = getUserLogic().getUserList()
         }
         return list
+    }
+
+    fun setUserLocation(latitude: Double, longitude: Double) {
+        userLatitude = (latitude)
+        userLongitude = (longitude)
+    }
+
+    fun getUserLatitude(): Double {
+        return userLatitude
+    }
+
+    fun getUserLongitude(): Double {
+        return userLongitude
     }
 
     //Sale
@@ -327,6 +357,9 @@ class AndroidModel{
         if(getUserLogic().confirmLogin(user, password)){
             getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+getUser().getName())
 
+            userLatitude = getUser().getLatitude()
+            userLongitude = getUser().getLongitude()
+
             val intent = Intent(login, MainActivity::class.java)
             login.startActivity(intent)
         }
@@ -337,4 +370,27 @@ class AndroidModel{
             )
     }
 
+    suspend fun askLogOut(context: Context){
+        val location = context.getString(R.string.location)+" "+userLatitude+" - "+userLongitude
+        val activity = context as Activity
+        withContext(Dispatchers.IO) {
+            getAndroidView().dialogConfirmRegister(location,context.getString(R.string.location), context.getString(R.string.saveLocation),activity)
+        }
+    }
+
+    suspend fun logOut(logOutBoolean:Boolean, context: Context){
+        val activity = context as Activity
+        if(logOutBoolean){
+            user!!.setLatitude(userLatitude)
+            user!!.setLongitude(userLongitude)
+
+            withContext(Dispatchers.IO) {
+                getAndroidView().showResultTransaction(getUserLogic().updateUser(user!!), context)
+            }
+
+            activity.finish()
+            user = null
+        }else
+            getAndroidView().showToastMessage(context, context.getString(R.string.modifyIfIsNecessary))
+    }
 }

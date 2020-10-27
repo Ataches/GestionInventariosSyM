@@ -25,6 +25,4 @@ class LoginActivity : AppCompatActivity() {
 
         androidModel.confirmLogin(this,editTextUser.text.toString(), editTextPass.text.toString())
     }
-
-
 }

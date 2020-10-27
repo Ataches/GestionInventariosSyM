@@ -3,7 +3,6 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
@@ -46,9 +45,9 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     cartProduct.idProduct = product.idProduct
                     FragmentData.addProductToCart(cartProduct,it)
                 }else
-                    FragmentData.showMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
+                    FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
             }else
-                FragmentData.showMessage(it.context, "Digite un numero correcto")
+                FragmentData.showToastMessage(it.context, "Digite un numero correcto")
         }
         itemView.buttonEditProduct.setOnClickListener {
             FragmentData.updateProduct(product,true, it)

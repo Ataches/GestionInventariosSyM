@@ -64,10 +64,12 @@ Desde el menú de inicio o el botón toolbar se puede acceder al menú de ventas
 
 ### Edición y eliminación de clientes
 
+Desde la sección de listado de clientes es posible la edición y eliminación de clientes, al igual que los productos es posible editar los datos o suprimir los registros. 
+
 ![](DemoGifs/DemoCustomerEdit.gif)
 
 ## Autor ✒️
 
 * **Juan Sebastián Sánchez Mancilla** - [ataches](https://github.com/Ataches)
 
-_Aplicativo generado a  partir de las lecciones tomadas en el curso de Kotlin del 2020 desarrollado por ScotiaBank y auto aprendizaje_
+_Aplicación creada aplicando los conocimientos adquiridos en el curso de desarrollo Android con Kotlin dirigido por ScotiaBank y auto aprendizaje_
