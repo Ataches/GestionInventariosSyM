@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,9 +24,19 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewDescription.text = product.getDescription()
         itemView.textViewPrice.text = df.format(product.getPrice())
         itemView.textViewQuantity.text = "Cantidad: ${product.getQuantity()}"
-        if(product.getStringBitMap().isNotEmpty()){
-            itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
-            itemView.imageViewProduct.setBackgroundResource(0)
+        val userPhotoData = product.getStringBitMap()
+        if(userPhotoData.isNotEmpty()){
+            if(userPhotoData.length<400){
+                try {
+                    Picasso.get().load(userPhotoData).into(itemView.imageViewProduct)
+                    itemView.imageViewProduct.background = null
+                }catch (e:Exception){
+                    FragmentData.showToastMessage(itemView.context, ""+e)
+                }
+            }else{
+                itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
+                itemView.imageViewProduct.background = null
+            }
         }else{
             itemView.imageViewProduct.setImageBitmap(null)
             itemView.imageViewProduct.setBackgroundResource(R.drawable.ic_image)

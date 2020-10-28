@@ -13,6 +13,6 @@ interface APIService {
     @POST("/location/value")
     fun petition(@Body data:RequestREST): Call<ResponseREST>
 
-    @GET("/location/value")
+    @GET("master/app/src/main/java/com/example/stockmanagementsym/data/product_list.json")
     fun getProductList(): Call<ProductListResponse>
 }

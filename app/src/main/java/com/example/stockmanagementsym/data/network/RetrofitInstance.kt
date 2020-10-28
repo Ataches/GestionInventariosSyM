@@ -13,7 +13,7 @@ class RetrofitInstance {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("PUT LINK")
+            .baseUrl("https://raw.githubusercontent.com/Ataches/GestionInventariosSyM/")
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
