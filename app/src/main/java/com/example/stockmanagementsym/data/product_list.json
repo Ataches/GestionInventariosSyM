@@ -1,0 +1,39 @@
+{
+    "products":[
+        {
+            "name": "Tablet",
+            "price": 220000.0,
+            "description": "Camera: 12mp, Ram: 4GB, Rom: 16GB",
+            "photoUrl": "https://www.lenovo.com/medias/lenovo-tablet-m10-hero-1-.png?context=bWFzdGVyfHJvb3R8NjI0MTF8aW1hZ2UvcG5nfGgyMi9oMmIvOTk4ODM0NjQ0NTg1NC5wbmd8MDYxMDlmYTE0M2YxZDMyM2VjYTUyMThjNDQwM2VlNzgyYTQ5ZTM0OTVlZmM4OWI3OTc0ZjA1NjI4YjYwNTQxZQhttps://www.lenovo.com/medias/lenovo-tablet-m10-hero-1-.png?context=bWFzdGVyfHJvb3R8NjI0MTF8aW1hZ2UvcG5nfGgyMi9oMmIvOTk4ODM0NjQ0NTg1NC5wbmd8MDYxMDlmYTE0M2YxZDMyM2VjYTUyMThjNDQwM2VlNzgyYTQ5ZTM0OTVlZmM4OWI3OTc0ZjA1NjI4YjYwNTQxZQ",
+            "quantity": 10
+        },
+        {
+            "name": "Computador",
+            "price": 2220000.0,
+            "description": "Ram: 32GB, Rom: 500GB SSD, Procedor: i7",
+            "photoUrl": "https://5.imimg.com/data5/RK/IA/XY/SELLER-4244808/intel-core-i7-8700-8gb-ddr4-ram-1tb-hdd-win10-pro-with-odd-20-wired-keyboard-500x500.png",
+            "quantity": 2
+        },
+        {
+            "name": "Celular",
+            "price": 700000.0,
+            "description": "Camera: 16mp, Ram: 4GB, Rom: 64GB",
+            "photoUrl": "https://www.freepngimg.com/thumb/samsung_mobile_phone/5-2-samsung-mobile-phone-png-hd.png",
+            "quantity": 5
+        },
+        {
+            "name": "TV",
+            "price": 1220000.0,
+            "description": "Conexión a internet",
+            "photoUrl": "https://assets.stickpng.com/thumbs/580b57fbd9996e24bc43c007.png",
+            "quantity": 3
+        },
+        {
+            "name": "Router",
+            "price": 120000.0,
+            "description": "5GHZ",
+            "photoUrl": "https://www.netgear.com/images/Products/Wireless/SOHOWireless/WAC124/Desktop-PDP-WAC124-Left-transparent.png",
+            "quantity": 3
+        }
+    ]
+}
