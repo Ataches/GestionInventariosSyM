@@ -3,11 +3,9 @@ package com.example.stockmanagementsym
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stockmanagementsym.presentation.AndroidModel
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -16,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class LoginActivity : AppCompatActivity() {
     private var account: GoogleSignInAccount ?= null
@@ -35,14 +33,18 @@ class LoginActivity : AppCompatActivity() {
                 val userName = editTextUser.text.toString()
                 val password = editTextPass.text.toString()
                 if(userName.isEmpty()||password.isEmpty()){
-                    androidModel.showToastMessage(context,getString(R.string.loginFailure)+". "+getString(R.string.voidData))
+                    androidModel.showToastMessage(
+                        context, getString(R.string.loginFailure) + ". " + getString(
+                            R.string.voidData
+                        )
+                    )
                     (context as LoginActivity).runOnUiThread {
                         showLoading(false)
                     }
                 }else{
                     androidModel.setGoogleAccount(null)
                     androidModel.setGoogleSingInClient(null)
-                    login(userName,password)
+                    login(userName, password)
                 }
             }
         }
@@ -65,19 +67,20 @@ class LoginActivity : AppCompatActivity() {
                 androidModel.setGoogleSingInClient(googleSignInClient)
 
                 GlobalScope.launch(Dispatchers.IO){
-                    login(account!!.displayName.toString(),account!!.id.toString())
+                    login(account!!.displayName.toString(), account!!.id.toString())
                 }
 
-            }catch (e:Exception){
-                androidModel.showToastMessage(context,getString(R.string.loginFailure)+" "+e)
+            }catch (e: Exception){
+                androidModel.showToastMessage(context, getString(R.string.loginFailure) + " " + e)
                 showLoading(false)
             }
         }
     }
 
+
     private suspend fun login(user: String, password: String) {
         showLoading(false)
-        androidModel.confirmLogin(this,user, password)
+        androidModel.confirmLogin(this, user, password)
     }
 
     private fun configureGoogleClient(){
@@ -87,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
             .requestId()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this,gso)
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
     private fun showLoading(booleanLoading: Boolean){
         if(booleanLoading){

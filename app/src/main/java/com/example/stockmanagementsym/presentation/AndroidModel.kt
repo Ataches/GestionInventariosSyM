@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,30 +32,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class AndroidModel{
 
     private var userLatitude: Double = -1.0
     private var userLongitude: Double = -1.0
     private lateinit var dataBaseLogic: DataBaseLogic
+
     private var androidView:AndroidView ?= null
+
     private var customerLogic: CustomerLogic ?= null
     private var productLogic: ProductLogic ?= null
     private var user: User? = null
-    private var googleAccount: GoogleSignInAccount ?= null
-
-    private var googleSingInClient: GoogleSignInClient ?= null
-    private lateinit var userPhotoData: String
     private var userLogic:UserLogic ?= null
     private var saleLogic: SaleLogic ?= null
+    private var restLogic: RESTLogic ?= null
+
+    private var googleSingInClient: GoogleSignInClient ?= null
+    private var googleAccount: GoogleSignInAccount ?= null
+    private lateinit var userPhotoData: String
     private lateinit var dateSale: String
 
     private lateinit var customerNewSale: Customer
     private var newSale: Sale ?= null
+
     //adapters
     private var photoConcreteAdapter: IPhotoAdapter ?= null
     private var bitMapConcreteAdapter: IBitMapAdapter ?= null
 
+    //bitmap
     private var stringBitmap: String = ""
     private var bitMap: Bitmap ?= null
 
@@ -115,8 +123,8 @@ class AndroidModel{
         return getUser().getPrivilege()
     }
 
-    suspend fun getUserList(): List<User> {
-        var list:List<User> = listOf()
+    suspend fun getUserList(): MutableList<User> {
+        var list:MutableList<User> = mutableListOf()
         withContext(Dispatchers.IO) {
             list = getUserLogic().getUserList()
         }
@@ -177,7 +185,7 @@ class AndroidModel{
         return newSale!!
     }
 
-    suspend fun getSalesList(): List<Sale> {
+    suspend fun getSalesList(): MutableList<Sale> {
         return getSaleLogic().getSaleList()
     }
 
@@ -224,7 +232,7 @@ class AndroidModel{
         return resultTransaction
     }
 
-    suspend fun getCustomerList(): List<Customer> {
+    suspend fun getCustomerList(): MutableList<Customer> {
         return getCustomerLogic().getCustomerList()
     }
 
@@ -252,15 +260,15 @@ class AndroidModel{
     }
 
     //Product
-    suspend fun getProductList(): List<Product> {
+    suspend fun getProductList(): MutableList<Product> {
         return try {
-            var list = listOf<Product>()
+            var list = mutableListOf<Product>()
             withContext(Dispatchers.IO) {
                 list = getProductLogic().getProductList()
             }
             list
         }catch (e: Exception){
-            listOf()
+            mutableListOf()
         }
     }
 
@@ -270,7 +278,7 @@ class AndroidModel{
                 val productToEdit = getAndroidView().getProductToEdit()
                 productToUpdate.idProduct = productToEdit.idProduct
                 getProductLogic().updateProduct(productToUpdate)
-                getAndroidView().reloadProductList()
+                reloadProductList()
             }
             true
         }catch (e: Exception){
@@ -283,7 +291,7 @@ class AndroidModel{
             withContext(Dispatchers.IO) {
                 getProductLogic().deleteProduct(product)
             }
-            getAndroidView().reloadProductList()
+            reloadProductList()
             true
         }catch (e: Exception){
             false
@@ -294,10 +302,14 @@ class AndroidModel{
         return getProductLogic().productToString(product,false)
     }
 
+    fun loadProductListFromREST(view: View){
+        getRESTLogic().getProductList(view)
+    }
+
     //   New product creation
     suspend fun createProduct(product: Product): Boolean {
         val result = getProductLogic().createProduct(product)
-        getAndroidView().reloadProductList()
+        reloadProductList()
         return result
     }
 
@@ -323,6 +335,15 @@ class AndroidModel{
         val stringEncoded = getBitMapAdapter().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
         return stringEncoded
+    }
+    fun addProductsToProductList(list:List<Product>,view: View){
+        GlobalScope.launch(Dispatchers.IO){
+            val view = view.findFragment<ProductListFragment>()
+            view.addElementsToList(list.toMutableList())
+        }
+    }
+    fun reloadProductList() {
+        getAndroidView().reloadProductList()
     }
 
     //Searches
@@ -385,8 +406,9 @@ class AndroidModel{
     }
 
     private fun getProductLogic(): ProductLogic {
-        if(productLogic==null)
+        if(productLogic==null){
             productLogic = ProductLogic(dataBaseLogic.getProductDao())
+        }
         return productLogic!!
     }
 
@@ -394,6 +416,12 @@ class AndroidModel{
         if(androidView == null)
             androidView = AndroidView(this)
         return androidView!!
+    }
+    //REST
+    private fun getRESTLogic(): RESTLogic {
+        if(restLogic==null)
+            restLogic = RESTLogic(this)
+        return restLogic!!
     }
 
     //Adapters
@@ -469,4 +497,5 @@ class AndroidModel{
     fun showToastMessage(context: Context,message:String){
         getAndroidView().showToastMessage(context,message)
     }
+
 }

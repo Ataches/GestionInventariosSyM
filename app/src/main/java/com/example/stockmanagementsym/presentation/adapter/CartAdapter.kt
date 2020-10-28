@@ -35,7 +35,12 @@ class CartAdapter (
         this.cartList = cartList
     }
 
+    fun getCartList(): MutableList<Product> {
+        return cartList
+    }
+
     fun setProductList(productList: List<Product>) {
         this.productList = productList
     }
+
 }

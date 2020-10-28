@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.UserListAdapter
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class UserListFragment : Fragment(), ListListener {
 
-    private var userList: List<User> = listOf()
+    private var userList: MutableList<User> = mutableListOf()
     private var adapter: UserListAdapter = UserListAdapter(userList)
     private lateinit var viewElement:View
 
@@ -94,6 +95,15 @@ class UserListFragment : Fragment(), ListListener {
     override fun setList(list: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
             adapter.setUserList(list as MutableList<User>)
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun addElementsToList(list: MutableList<Any>) {
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.getUserList().addAll(list as MutableList<User>)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

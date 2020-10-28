@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class CartFragment : Fragment(), ListListener {
+class CartListFragment : Fragment(), ListListener {
 
     private lateinit var adapter: CartAdapter
 
@@ -63,6 +63,15 @@ class CartFragment : Fragment(), ListListener {
         adapter.setCartList(list as MutableList<Product>)
         requireActivity().runOnUiThread {
             adapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun addElementsToList(list: MutableList<Any>) {
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.getCartList().addAll(list as MutableList<Product>)
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 }

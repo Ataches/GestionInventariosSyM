@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 class SaleLogic(private var saleDao: SaleDao) {
 
     private var cartLogic:CartLogic ?= null
-    private var saleList: List<Sale> = listOf()
+    private var saleList: MutableList<Sale> = mutableListOf()
 
     private fun getCartLogic(): CartLogic {
         if(cartLogic==null)
@@ -17,7 +17,7 @@ class SaleLogic(private var saleDao: SaleDao) {
         return cartLogic!!
     }
 
-    suspend fun getSaleList(): List<Sale> {
+    suspend fun getSaleList(): MutableList<Sale> {
         withContext(Dispatchers.IO) {
             saleList = saleDao.selectSaleList()
         }

@@ -9,7 +9,7 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view_holder.ProductViewHolder
 
 
-class ProductListAdapter(private var productList: List<Product>) : RecyclerView.Adapter<ProductViewHolder>() {
+class ProductListAdapter(private var productList: MutableList<Product>) : RecyclerView.Adapter<ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
@@ -24,7 +24,10 @@ class ProductListAdapter(private var productList: List<Product>) : RecyclerView.
         return productList.size
     }
 
-    fun setProductList(productList: List<Product>){
+    fun setProductList(productList: MutableList<Product>){
         this.productList = productList
+    }
+    fun getProductList():MutableList<Product>{
+        return productList
     }
 }

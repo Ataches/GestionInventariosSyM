@@ -16,7 +16,7 @@ interface ProductDao {
     fun update(productEdited: Product)
 
     @Query("SELECT * FROM PRODUCT")
-    fun selectProductList():List<Product>
+    fun selectProductList():MutableList<Product>
 
 }
 

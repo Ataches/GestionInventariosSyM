@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 class UserLogic(private val userDao: UserDao) {
 
-    private var userList: List<User> = listOf()
+    private var userList: MutableList<User> = mutableListOf()
     private var user: User ?= null
 
     fun getUser(): User {
@@ -65,7 +65,7 @@ class UserLogic(private val userDao: UserDao) {
         }
     }
 
-    suspend fun getUserList():List<User> {
+    suspend fun getUserList():MutableList<User> {
         withContext(Dispatchers.IO) {
             if(userList.isEmpty())
                 userList = userDao.selectUserList()

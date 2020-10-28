@@ -8,7 +8,7 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.view_holder.UserListViewHolder
 
-class UserListAdapter(private var userList: List<User>) : RecyclerView.Adapter<UserListViewHolder>() {
+class UserListAdapter(private var userList: MutableList<User>) : RecyclerView.Adapter<UserListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
         var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false)
@@ -23,7 +23,10 @@ class UserListAdapter(private var userList: List<User>) : RecyclerView.Adapter<U
         return userList.size
     }
 
-    fun setUserList(productList: List<User>){
-        this.userList = productList
+    fun setUserList(userList: MutableList<User>){
+        this.userList = userList
+    }
+    fun getUserList(): MutableList<User> {
+        return userList
     }
 }

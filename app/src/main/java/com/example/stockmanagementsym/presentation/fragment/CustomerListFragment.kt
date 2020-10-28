@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
+import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
@@ -34,7 +35,7 @@ class CustomerListFragment : Fragment(), ListListener {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.customerList)
 
-        adapter = CustomerListAdapter(listOf())
+        adapter = CustomerListAdapter(mutableListOf())
         view.recyclerViewCustomerList.adapter = adapter
         view.recyclerViewCustomerList.layoutManager = LinearLayoutManager(
             view.context,
@@ -57,7 +58,7 @@ class CustomerListFragment : Fragment(), ListListener {
 
     override fun reloadList() {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.customerList = FragmentData.getCustomerList()
+            adapter.setCustomerList(FragmentData.getCustomerList())
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }
@@ -66,7 +67,16 @@ class CustomerListFragment : Fragment(), ListListener {
 
     override fun setList(list: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.customerList = list as MutableList<Customer>
+            adapter.setCustomerList(list as MutableList<Customer>)
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun addElementsToList(list: MutableList<Any>) {
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.getCustomerList().addAll(list as MutableList<Customer>)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

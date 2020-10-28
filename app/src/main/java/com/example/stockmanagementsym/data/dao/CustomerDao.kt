@@ -16,7 +16,7 @@ interface CustomerDao {
     fun update(customerEdited: Customer)
 
     @Query("SELECT * FROM CUSTOMER")
-    fun selectCustomerList():List<Customer>
+    fun selectCustomerList():MutableList<Customer>
 
 }
 

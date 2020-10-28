@@ -4,14 +4,20 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Product(
+    @SerializedName("name")
     private val name: String,
+    @SerializedName("price")
     private val price: Double,
+    @SerializedName("description")
     private val description: String,
+    @SerializedName("photoUrl")
     @ColumnInfo(name = "id_image")
     private var stringBitMap: String,
+    @SerializedName("quantity")
     private var quantity: Int
 ){
     @PrimaryKey(autoGenerate = true)

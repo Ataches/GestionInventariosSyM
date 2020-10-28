@@ -8,7 +8,7 @@ import java.text.DecimalFormat
 
 class ProductLogic(private var productDao: ProductDao) {
 
-    private var productList:List<Product> = listOf()
+    private var productList: MutableList<Product> = mutableListOf()
 
     suspend fun updateProduct(productToUpdate: Product):Boolean {
         return try{
@@ -54,7 +54,7 @@ class ProductLogic(private var productDao: ProductDao) {
         return getProductList().filter { it.getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
-    suspend fun getProductList(): List<Product> {
+    suspend fun getProductList(): MutableList<Product> {
         withContext(Dispatchers.IO) {
             if(productList.isEmpty()){
                 productList = productDao.selectProductList()

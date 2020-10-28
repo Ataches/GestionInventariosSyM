@@ -1,6 +1,7 @@
 package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,12 +16,14 @@ import kotlinx.android.synthetic.main.fragment_product_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class ProductListFragment : Fragment(), ListListener{
 
-    private var productList: List<Product> = listOf()
-    private var adapter:ProductListAdapter = ProductListAdapter(productList)
+    private var productList: MutableList<Product> = mutableListOf()
+    private var adapter: ProductListAdapter = ProductListAdapter(productList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +40,7 @@ class ProductListFragment : Fragment(), ListListener{
 
         FragmentData.setProductListListener(this)
         reloadList()
-
+        FragmentData.loadProductListFromREST(view)
         view.buttonProductListToSearch.setOnClickListener(AndroidController)
         view.buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
@@ -54,6 +57,15 @@ class ProductListFragment : Fragment(), ListListener{
     override fun setList(list: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
             adapter.setProductList(list as MutableList<Product>)
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun addElementsToList(mutableList: MutableList<Any>) {
+        GlobalScope.launch(Dispatchers.IO){
+            adapter.getProductList().addAll(mutableList as MutableList<Product>)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

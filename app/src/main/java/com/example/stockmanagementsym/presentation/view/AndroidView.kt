@@ -56,7 +56,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getUser()
     }
 
-    suspend fun getUserList(): List<User> {
+    suspend fun getUserList():MutableList<User> {
         return androidModel.getUserList()
     }
 
@@ -83,7 +83,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.deleteProduct(product)
     }
 
-    suspend fun getProductList(): List<Product> {
+    suspend fun getProductList(): MutableList<Product> {
         return androidModel.getProductList()
     }
 
@@ -145,7 +145,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         androidModel.searchCustomer(view)
     }
 
-    suspend fun getCustomerList(): List<Customer> {
+    suspend fun getCustomerList(): MutableList<Customer> {
         return androidModel.getCustomerList()
     }
 
@@ -201,7 +201,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         )
     }
 
-    suspend fun getSalesList(): List<Sale> {
+    suspend fun getSalesList(): MutableList<Sale> {
         return androidModel.getSalesList()
     }
 
@@ -336,6 +336,10 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun getBitMapFromString(string:String): Bitmap {
         return androidModel.getBitMapFromstring(string)
+    }
+
+    fun loadProductListFromREST(view: View) {
+        androidModel.loadProductListFromREST(view)
     }
 
 

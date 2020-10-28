@@ -16,7 +16,7 @@ interface UserDao {
     fun update(user: User)
 
     @Query("SELECT * FROM USER")
-    fun selectUserList(): List<User>
+    fun selectUserList(): MutableList<User>
 
     @Query("SELECT * FROM USER WHERE :name = name AND :password = password")
     fun selectUser(name: String, password: String): User

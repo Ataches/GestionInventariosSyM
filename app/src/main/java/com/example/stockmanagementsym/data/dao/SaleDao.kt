@@ -16,7 +16,7 @@ interface SaleDao {
     fun update(sale: Sale)
 
     @Query("SELECT * FROM SALE")
-    fun selectSaleList():List<Sale>
+    fun selectSaleList():MutableList<Sale>
 
 }
 

@@ -38,7 +38,7 @@ object FragmentData {
         androidView.deleteUser(user)
     }
 
-    suspend fun getUserList(): List<User> {
+    suspend fun getUserList(): MutableList<User> {
         return androidView.getUserList()
     }
 
@@ -142,7 +142,7 @@ object FragmentData {
         return androidView.getTotalPriceCart()
     }
 
-    suspend fun getCustomerList(): List<Customer> {
+    suspend fun getCustomerList(): MutableList<Customer> {
         return androidView.getCustomerList()
     }
 
@@ -160,7 +160,7 @@ object FragmentData {
         androidView.deleteCustomer(customer)
     }
 
-    suspend fun getSaleList(): List<Sale> {
+    suspend fun getSaleList(): MutableList<Sale> {
         return androidView.getSalesList()
     }
 
@@ -181,7 +181,7 @@ object FragmentData {
         return androidView.showProductListSaleToString(item,context)
     }
 
-    suspend fun getProductList(): List<Product> {
+    suspend fun getProductList(): MutableList<Product> {
         return androidView.getProductList()
     }
     fun updateProduct(product: Product, booleanUpdate: Boolean, view: View) {
@@ -192,5 +192,9 @@ object FragmentData {
 
     fun askSaveLocation(context: Context) {
         androidView.askSaveLocation(context)
+    }
+
+    fun loadProductListFromREST(view:View) {
+        androidView.loadProductListFromREST(view)
     }
 }

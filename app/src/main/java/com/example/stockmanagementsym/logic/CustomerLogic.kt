@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 
 class CustomerLogic(private val customerDao: CustomerDao) {
 
-    private var customerList: List<Customer> = listOf()
+    private var customerList: MutableList<Customer> = mutableListOf()
 
     suspend fun updateCustomer(customer: Customer):Boolean {
         return try{
@@ -49,7 +49,7 @@ class CustomerLogic(private val customerDao: CustomerDao) {
         return getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText.toLowerCase())}
     }
 
-    suspend fun getCustomerList(): List<Customer> {
+    suspend fun getCustomerList(): MutableList<Customer> {
         if(customerList.isEmpty()){
             withContext(Dispatchers.IO) {
                 customerList = customerDao.selectCustomerList()

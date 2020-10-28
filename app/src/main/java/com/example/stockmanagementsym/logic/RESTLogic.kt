@@ -1,35 +1,30 @@
 package com.example.stockmanagementsym.logic
 
-import android.content.Context
+import android.view.View
 import com.example.stockmanagementsym.data.network.RetrofitInstance
 import com.example.stockmanagementsym.data.network.apis.APIService
-import com.example.stockmanagementsym.data.network.request.RequestREST
 import com.example.stockmanagementsym.presentation.AndroidModel
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class RESTLogic(private val androidModel: AndroidModel) {
 
-    fun getData(context: Context){
-        val dataToConfirmInServer=""
+    fun getProductList(view: View){
         doAsync{
-
-            val requestREST = RequestREST(dataToConfirmInServer)
             val callRetrofit =
-                RetrofitInstance().getInstance()
+                RetrofitInstance()
+                    .getInstance()
                     .create(APIService::class.java)
-                    .petition(requestREST)
+                    .getProductList()
                     .execute()
-
             uiThread{
                 if(callRetrofit.isSuccessful){
-                    androidModel.showToastMessage(context,callRetrofit.message())
+                    val productList = callRetrofit.body()?.productList?: listOf()
+                    androidModel.addProductsToProductList(productList, view)
                 }else{
-                    androidModel.showToastMessage(context,callRetrofit.message())
+                    androidModel.showToastMessage(view.context,callRetrofit.message())
                 }
             }
         }
     }
-
-
 }

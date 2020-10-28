@@ -9,17 +9,24 @@ import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.view_holder.SaleListViewHolder
 
 
-class SaleListAdapter(var salesList: List<Sale>): RecyclerView.Adapter<SaleListViewHolder>() {
+class SaleListAdapter(private var saleList: MutableList<Sale>): RecyclerView.Adapter<SaleListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaleListViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_sale, parent, false)
         return SaleListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: SaleListViewHolder, position: Int) {
-        holder.bind(salesList[position])
+        holder.bind(saleList[position])
     }
 
     override fun getItemCount(): Int {
-        return salesList.size
+        return saleList.size
+    }
+    
+    fun getSaleList():MutableList<Sale>{
+        return saleList
+    }
+    fun setSaleList(saleList:MutableList<Sale>){
+        this.saleList = saleList
     }
 }
