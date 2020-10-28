@@ -98,5 +98,8 @@
     <string name="logOut">Cerrar sesión</string>
     <string name="messageLogOut">¿Desea cerrar la sesión?</string>
     <string name="loginFailure">Fallo en inicio de sesión</string>
+    <string name="voidData">Campos vacios</string>
+    <string name="productDescriptionHint">"Ejemplo: Pieza de repuesto para autos "</string>
+    <string name="productQuantityHint">Ej: 20</string>
 
 </resources>

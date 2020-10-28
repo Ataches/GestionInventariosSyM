@@ -10,7 +10,7 @@ class GalleryAdaptee {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         if(intent.resolveActivity(context.packageManager) != null){
-            startActivityForResult(activity, intent, 101,null)
+            activity.startActivityForResult(intent, 101)
         }
     }
 }

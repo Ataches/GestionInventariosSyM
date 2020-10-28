@@ -18,10 +18,8 @@ import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.UserListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
-import kotlinx.android.synthetic.main.dialog_new_user.view.*
-import kotlinx.android.synthetic.main.fragment_new_product.view.*
+import kotlinx.android.synthetic.main.fragment_new_user.view.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
-import kotlinx.android.synthetic.main.item_cart.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -58,6 +56,7 @@ class UserListFragment : Fragment(), ListListener {
         view.recyclerViewUserList.layoutManager = GridLayoutManager(view.context, 2)
 
         view.buttonUserListToCreateUser.setOnClickListener(AndroidController)
+        view.buttonUserListToSearch.setOnClickListener(AndroidController)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

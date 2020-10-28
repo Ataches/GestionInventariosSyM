@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_userFragment_to_home"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_userFragment_to_newUserFragment"
+            app:destination="@id/newUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/shopFragment"
@@ -82,5 +85,16 @@
         <action
             android:id="@+id/action_locationFragment_to_home"
             app:destination="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/newUserFragment"
+        android:name="com.example.stockmanagementsym.presentation.fragment.NewUserFragment"
+        android:label="NewUserFragment" >
+        <action
+            android:id="@+id/action_newUserFragment_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_newUserFragment_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
 </navigation>

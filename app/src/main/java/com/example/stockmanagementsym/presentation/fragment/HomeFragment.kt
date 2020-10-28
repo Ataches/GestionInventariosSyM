@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
         }catch (e:Exception){
             Log.d("TEST IMAGE USER ","FAILED "+e)
             if(userPhotoData!=""){
-                view.imageViewCustomer.setImageBitmap(FragmentData.getBitMap())
+                view.imageViewCustomer.setImageBitmap(FragmentData.getBitMapFromString(FragmentData.getUserPhotoData()))
                 view.imageViewCustomer.background = null
             }
         }

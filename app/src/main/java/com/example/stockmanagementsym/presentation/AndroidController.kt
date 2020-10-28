@@ -1,7 +1,6 @@
 package com.example.stockmanagementsym.presentation
 
 import android.view.View
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.stockmanagementsym.R
@@ -12,7 +11,6 @@ import com.example.stockmanagementsym.presentation.view.FragmentData
 object AndroidController: View.OnClickListener {
 
     private lateinit var navController: NavController
-    private lateinit var transaction: FragmentTransaction
     private lateinit var androidView: AndroidView
 
     fun setAdroidView(androidView: AndroidView){
@@ -43,18 +41,23 @@ object AndroidController: View.OnClickListener {
             //New product
             R.id.buttonNewProductToHome -> navController.navigate(R.id.action_newProductFragment_to_home)
             R.id.buttonNewProductToProductList -> navController.navigate(R.id.action_newProductFragment_to_shopFragment)
-            R.id.buttonNewProductToGallery -> androidView.getPhotoGallery(view)
-            R.id.buttonNewProductToCamera -> androidView.getPhotoCamera(view)
-            R.id.buttonNewProductToNewProduct -> {
-                androidView.registerProduct(view, FragmentData.getBooleanUpdate())
-            }
+            R.id.buttonNewProductToGallery -> androidView.getGallery(view)
+            R.id.buttonNewProductToCamera -> androidView.getCamera(view)
+            R.id.buttonNewProduct -> androidView.registerProduct(view, FragmentData.getBooleanUpdate())
 
             //Sale list
             R.id.buttonSaleListToSearch -> androidView.searchSale(view)
 
             //User fragment
-            R.id.buttonUserListToCreateUser -> androidView.newUser(view)
+            R.id.buttonUserListToCreateUser -> navController.navigate(R.id.action_userFragment_to_newUserFragment)
             R.id.buttonUserListToSearch -> androidView.searchUser(view)
+            //User fragment - new user
+            R.id.buttonNewUserToUserList-> navController.navigate(R.id.action_newUserFragment_to_userFragment)
+            R.id.buttonNewUserToHome -> navController.navigate(R.id.action_newUserFragment_to_home)
+            R.id.buttonNewUserToGallery -> androidView.getGallery(view)
+            R.id.buttonNewUserToCamera -> androidView.getCamera(view)
+            R.id.buttonNewUserToNewUser -> androidView.newUser(view)
+            R.id.buttonNewUserCancel -> navController.navigate(R.id.action_newUserFragment_to_home)
         }
     }
 
@@ -64,5 +67,9 @@ object AndroidController: View.OnClickListener {
 
     fun goNewProduct(){
         navController.navigate(R.id.action_shopFragment_to_newProductFragment)
+    }
+
+    fun goNewUserToUserList() {
+        navController.navigate(R.id.action_newUserFragment_to_userFragment)
     }
 }

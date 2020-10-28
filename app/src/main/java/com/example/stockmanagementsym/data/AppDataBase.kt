@@ -1,4 +1,4 @@
-    package com.example.stockmanagementsym.data
+package com.example.stockmanagementsym.data
 
 import android.content.Context
 import androidx.room.*

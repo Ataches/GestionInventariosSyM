@@ -3,9 +3,14 @@ package com.example.stockmanagementsym
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -25,6 +30,9 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_new_product.*
+import kotlinx.android.synthetic.main.fragment_new_product.view.*
+import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.android.synthetic.main.layout_navigation_header.*
 import kotlinx.android.synthetic.main.layout_navigation_header.view.*
 
@@ -61,11 +69,11 @@ class MainActivity : AppCompatActivity() {
             Picasso.get().load(userPhotoData).into(headerView.imageViewCustomerNavView)
             headerView.imageViewCustomerNavView.background = null
         }catch (e:Exception){
-            Log.d("TEST IMAGE USER ","FAILED "+e)
             if(userPhotoData!=""){
-                headerView.imageViewCustomerNavView.setImageBitmap(FragmentData.getBitMap())
+                headerView.imageViewCustomerNavView.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
                 headerView.imageViewCustomerNavView.background = null
-            }
+            }else
+                FragmentData.showToastMessage(headerView.context, ""+e)
         }
 
         if((userLatitude==-1.0)&&(userLongitude==-1.0))
@@ -84,6 +92,37 @@ class MainActivity : AppCompatActivity() {
             checkPermission()
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 10 && resultCode == RESULT_OK){
+            val bitMap = data?.extras?.get("data") as Bitmap
+
+            imageViewNewProduct?.setImageBitmap(bitMap)
+            imageViewNewProduct?.visibility = View.VISIBLE
+            imageViewNewUser?.setImageBitmap(bitMap)
+            imageViewNewUser?.visibility = View.VISIBLE
+
+            FragmentData.setBitMap(bitMap)
+        }
+        if(requestCode == 101 && resultCode == RESULT_OK){
+            val imageUri = data!!.data!!
+
+            imageViewNewProduct?.setImageURI(imageUri)
+            imageViewNewProduct?.visibility = View.VISIBLE
+            imageViewNewUser?.setImageURI(imageUri)
+            imageViewNewUser?.visibility = View.VISIBLE
+
+
+            val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, imageUri))
+            } else {
+                MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+            }
+            FragmentData.setBitMap(bitMap)
+        }
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()

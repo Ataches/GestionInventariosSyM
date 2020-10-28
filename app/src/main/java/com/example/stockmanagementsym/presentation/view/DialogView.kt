@@ -15,10 +15,11 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
+import com.example.stockmanagementsym.presentation.fragment.NewUserFragment
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
-import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
+import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,39 +34,23 @@ class DialogView(private var androidView: AndroidView) {
 
     //New user
     fun dialogRegisterUser(viewElement: View) {
-        layoutInflater =
-            viewElement.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        view = layoutInflater.inflate(R.layout.dialog_new_user, null, false)
-        val dialog: Dialog = Dialog(view.context)
-
-        dialog.setContentView(view)
-        dialog.show()
-
-        view.textViewUserTitle.text = view.context.getString(R.string.titleAlertNewUser)
-
-        view.buttonNewUserToNewUser.setOnClickListener {
-            val user =
-                User(
-                    view.editTextUserName.text.toString(),
-                    view.editTextPassword.text.toString(),
-                    view.editTextPrivilege.text.toString(),
-                    androidView.getStringBitMap(),
+        view = viewElement
+        val newUserFragment:NewUserFragment = viewElement.findFragment()
+        val user =
+            User(
+                    newUserFragment.editTextUserName.text.toString(),
+                    newUserFragment.editTextPassword.text.toString(),
+                    newUserFragment.editTextPrivilege.text.toString(),
+                    androidView.getStringFromBitMap(),
                     -1.0, -1.0,
-                )
+            )
 
-
-                dialogConfirmRegister(
-                    viewElement,
-                    user,
-                    view.context.getString(R.string.titleAlertNewUser),
-                    view.context.getString(R.string.messageAlertNewUser)
-                )
-
-            dialog.dismiss()
-        }
-        view.buttonNewUserCancel.setOnClickListener {
-            dialog.dismiss()
-        }
+        dialogConfirmRegister(
+            viewElement,
+            user,
+            view.context.getString(R.string.titleAlertNewUser),
+            view.context.getString(R.string.messageAlertNewUser)
+        )
     }
 
     // New Sale
@@ -121,7 +106,7 @@ class DialogView(private var androidView: AndroidView) {
     fun dialogRegisterCustomer(viewElement: View, updateBoolean: Boolean) {
         layoutInflater =
             viewElement.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        view = layoutInflater.inflate(R.layout.dialog_new_customer, null, false)
+        val view = layoutInflater.inflate(R.layout.dialog_new_customer, null, false)
         val dialog: Dialog = Dialog(viewElement.context)
 
         dialog.setContentView(view)
@@ -172,7 +157,7 @@ class DialogView(private var androidView: AndroidView) {
         }
     }
 
-    //New product - Search or create fragment data and obtains it's information, after asks to create or update product
+    //New product - Search fragment data and obtains it's information, after asks to create or update product
     fun dialogRegisterProduct(viewElement: View, updateBoolean: Boolean){
         view = viewElement
         val newProductFragment:NewProductFragment = viewElement.findFragment()
@@ -181,7 +166,7 @@ class DialogView(private var androidView: AndroidView) {
                 newProductFragment.editTextProductName.text.toString(),
                 newProductFragment.editTextProductPrice.text.toString().toDouble(),
                 newProductFragment.editTextProductDesc.text.toString(),
-                androidView.getStringBitMap(),
+                androidView.getStringFromBitMap(),
                 newProductFragment.editTextProductQuantity.text.toString().toInt()
             )
         if (updateBoolean) {
@@ -253,6 +238,7 @@ class DialogView(private var androidView: AndroidView) {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(androidView.newUser(data as User),view.context)
                     }
+                    androidView.goNewUserToUserList()
                 }
                 viewElement.context.getString(R.string.location) -> {
                     androidView.saveUserLocation(viewElement.context)

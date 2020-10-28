@@ -72,4 +72,4 @@ Desde la sección de listado de clientes es posible la edición y eliminación d
 
 * **Juan Sebastián Sánchez Mancilla** - [ataches](https://github.com/Ataches)
 
-_Aplicación creada aplicando los conocimientos adquiridos en el curso de desarrollo Android con Kotlin dirigido por ScotiaBank y auto aprendizaje_
+_Aplicación creada a partir de auto aprendizaje y aplicando los conocimientos adquiridos en el curso de desarrollo Android con Kotlin dirigido por ScotiaBank_

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stockmanagementsym.R
 import com.gorillazuniversity.clase8_1.ShopPagerAdapter
-import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_shop.*
 
 class ShopFragment : Fragment() {

@@ -301,28 +301,24 @@ class AndroidModel{
         return result
     }
 
-    fun getPhotoCamera(viewElement: View) {
-        val newProductFragment = viewElement.findFragment<NewProductFragment>()
-        getPhotoAdapter().startCamera(newProductFragment.requireActivity(),viewElement.context)
+    fun getPhotoCamera(activity: Activity, context: Context) {
+        getPhotoAdapter().startCamera(activity,context)
     }
 
-    fun getPhotoGallery(viewElement: View) {
-        val newProductFragment = viewElement.findFragment<NewProductFragment>()
-        newProductFragment.startGallery()
+    fun getPhotoGallery(activity: Activity, context: Context) {
+        getPhotoAdapter().startGallery(activity,context)
     }
     //BitMap generation
     fun setBitMap(bitMap: Bitmap) {
         this.bitMap = bitMap
     }
 
-    fun getBitMap(): Bitmap {
-        if(bitMap==null)
-            bitMap = getBitMapAdapter().decoderStringToBitMap(getUser().getPhotoData())
-        return bitMap!!
+    fun getBitMapFromstring(string: String): Bitmap {
+        return getBitMapAdapter().decoderStringToBitMap(string)
     }
 
-    fun getStringBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
-        val stringEncoded = getBitMapAdapter().encoderBitMapToString(getBitMap())
+    fun getStringFromBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
+        val stringEncoded = getBitMapAdapter().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
         return stringEncoded
     }

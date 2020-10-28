@@ -46,10 +46,6 @@ object FragmentData {
         return androidView.getUserPhotoData()
     }
 
-    fun getBitMap(): Bitmap {
-        return androidView.getBitMap()
-    }
-
     fun setAndroidView(androidView: AndroidView){
         this.androidView = androidView
     }
@@ -64,6 +60,10 @@ object FragmentData {
 
     fun getUserLongitude(): Double {
         return androidView.getUserLongitude()
+    }
+
+    fun getBitMapFromString(stringBitMap: String): Bitmap {
+        return androidView.getBitMapFromString(stringBitMap)
     }
     /*
         List listeners

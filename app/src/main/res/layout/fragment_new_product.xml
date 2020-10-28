@@ -27,10 +27,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonNewProductToProductList"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayoutNewProduct"
+        app:layout_constraintBottom_toTopOf="@+id/scrollViewNewProduct"
         />
     <ScrollView
-        android:id="@+id/constraintLayoutNewProduct"
+        android:id="@+id/scrollViewNewProduct"
         android:layout_height="0dp"
         android:layout_width="match_parent"
 
@@ -42,9 +42,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent=".88"
             >
             <TextView
                 android:id="@+id/textViewProductName"
@@ -62,7 +59,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Ejemplo: Inyector"
-                android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toStartOf="@+id/textViewProductName"
                 app:layout_constraintTop_toBottomOf="@+id/textViewProductName"
                 app:layout_constraintBottom_toTopOf="@id/textViewProductPrice"
@@ -84,7 +80,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="Ejemplo: 20000"
-                android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toStartOf="@+id/textViewProductPrice"
                 app:layout_constraintTop_toBottomOf="@+id/textViewProductPrice"
                 app:layout_constraintBottom_toTopOf="@id/textViewProductDesc"
@@ -104,8 +99,8 @@
                 android:id="@+id/editTextProductDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Ejemplo: Pieza de repuesto para autos "
-                android:layout_marginBottom="20dp"
+                android:hint="@string/productDescriptionHint"
+                android:autofillHints="@string/productDescriptionHint"
                 app:layout_constraintStart_toStartOf="@+id/textViewProductDesc"
                 app:layout_constraintTop_toBottomOf="@+id/textViewProductDesc"
                 app:layout_constraintBottom_toTopOf="@id/textViewProductQuantity"
@@ -126,8 +121,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Ejemplo: 20"
-                android:layout_marginBottom="20dp"
+                android:autofillHints="@string/productQuantityHint"
+                android:hint="@string/productQuantityHint"
                 app:layout_constraintStart_toStartOf="@+id/textViewProductQuantity"
                 app:layout_constraintTop_toBottomOf="@+id/textViewProductQuantity"
                 app:layout_constraintBottom_toTopOf="@id/textViewProductPhoto"
@@ -172,6 +167,7 @@
 
             <ImageView
                 android:id="@+id/imageViewNewProduct"
+                android:visibility="gone"
                 android:layout_width="280dp"
                 android:layout_height="300dp"
                 android:layout_marginBottom="20dp"
@@ -179,11 +175,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonNewProductToCamera"
-                app:layout_constraintBottom_toTopOf="@id/buttonNewProductToNewProduct"
+                app:layout_constraintBottom_toTopOf="@id/buttonNewProduct"
                 />
 
             <Button
-                android:id="@+id/buttonNewProductToNewProduct"
+                android:id="@+id/buttonNewProduct"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:drawableStart="@drawable/ic_edit"

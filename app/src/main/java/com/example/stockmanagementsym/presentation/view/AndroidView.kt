@@ -41,12 +41,12 @@ class AndroidView(private val androidModel: AndroidModel) {
         return dialogView!!
     }
 
-    fun getPhotoGallery(view: View) {
-        androidModel.getPhotoGallery(view)
+    fun getGallery(view: View) {
+        androidModel.getPhotoGallery(view.context as Activity, view.context)
     }
 
-    fun getPhotoCamera(view: View) {
-        androidModel.getPhotoCamera(view)
+    fun getCamera(view: View) {
+        androidModel.getPhotoCamera(view.context as Activity, view.context)
     }
     /*
         User
@@ -283,6 +283,11 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.newUser(user)
     }
 
+    fun goNewUserToUserList() {
+        reloadUserList()
+        controller.goNewUserToUserList()
+    }
+
     fun getUserLatitude(): Double {
         return androidModel.getUserLatitude()
     }
@@ -325,12 +330,13 @@ class AndroidView(private val androidModel: AndroidModel) {
         androidModel.setBitMap(bitMap)
     }
 
-    fun getStringBitMap(): String {
-        return androidModel.getStringBitMap()
+    fun getStringFromBitMap(): String {
+        return androidModel.getStringFromBitMap()
     }
 
-    fun getBitMap(): Bitmap {
-        return androidModel.getBitMap()
+    fun getBitMapFromString(string:String): Bitmap {
+        return androidModel.getBitMapFromstring(string)
     }
+
 
 }

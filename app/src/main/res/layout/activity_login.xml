@@ -14,8 +14,8 @@
         android:text="@string/tittle"
         android:textSize="30sp"
         android:textColor="@color/tittleColor"
-        android:layout_width="320dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
         android:layout_marginBottom="40dp"
         android:layout_marginStart="20dp"
         android:layout_gravity="start"
@@ -37,7 +37,6 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/nameHint"
-        android:layout_marginBottom="40dp"
         android:layout_marginStart="20dp"
         android:layout_gravity="start"
         />
@@ -83,5 +82,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
         />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="start"/>
 </LinearLayout>
