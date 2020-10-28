@@ -44,6 +44,12 @@ dependencies {
     implementation 'androidx.test:runner:1.3.0@aar'
     implementation 'androidx.test:core:1.3.0@aar'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'
+    //Threads Anko
+    implementation 'org.jetbrains.anko:anko-common:0.9'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     //maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -68,8 +74,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.google.android.material:material:1.2.1'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
 }

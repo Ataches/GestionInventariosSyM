@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageViewUser"
+                android:id="@+id/imageViewUserItem"
                 android:background="@drawable/ic_person"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                app:layout_constraintStart_toEndOf="@+id/imageViewUser"
+                app:layout_constraintStart_toEndOf="@+id/imageViewUserItem"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/textViewPrivilege"
                 />

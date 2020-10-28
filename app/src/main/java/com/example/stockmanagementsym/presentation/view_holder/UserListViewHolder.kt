@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.logic.business.User
@@ -23,14 +22,14 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         if(userPhotoData!=""){
             if(userPhotoData.length<400){
                 try {
-                    Picasso.get().load(userPhotoData).into(itemView.imageViewUser)
-                    itemView.imageViewUser.background = null
+                    Picasso.get().load(userPhotoData).into(itemView.imageViewUserItem)
+                    itemView.imageViewUserItem.background = null
                 }catch (e:Exception){
                     FragmentData.showToastMessage(itemView.context, ""+e)
                 }
             }else{
-                itemView.imageViewUser.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
-                itemView.imageViewUser.background = null
+                itemView.imageViewUserItem.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
+                itemView.imageViewUserItem.background = null
             }
         }
         itemView.textViewPrivilege.text = user.getPrivilege()

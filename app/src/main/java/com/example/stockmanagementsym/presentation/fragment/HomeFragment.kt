@@ -36,14 +36,17 @@ class HomeFragment : Fragment() {
 
         val userPhotoData = FragmentData.getUserPhotoData()
 
-        try{
-            Picasso.get().load(userPhotoData).into(view.imageViewCustomer)
-            view.imageViewCustomer.background = null
-        }catch (e:Exception){
-            Log.d("TEST IMAGE USER ","FAILED "+e)
-            if(userPhotoData!=""){
-                view.imageViewCustomer.setImageBitmap(FragmentData.getBitMapFromString(FragmentData.getUserPhotoData()))
-                view.imageViewCustomer.background = null
+        if(userPhotoData!=""){
+            if(userPhotoData.length<400){
+                try {
+                    Picasso.get().load(userPhotoData).into(view.imageViewUserHome)
+                    view.imageViewUserHome.background = null
+                }catch (e:Exception){
+                    FragmentData.showToastMessage(view.context, ""+e)
+                }
+            }else{
+                view.imageViewUserHome.setImageBitmap(FragmentData.getBitMapFromString(FragmentData.getUserPhotoData()))
+                view.imageViewUserHome.background = null
             }
         }
     }

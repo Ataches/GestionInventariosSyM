@@ -73,14 +73,13 @@ class UserLogic(private val userDao: UserDao) {
         return userList
     }
 
-    suspend fun confirmLogin(userName: String, password: String,photoUri:String):Boolean {
+    suspend fun confirmLogin(userName: String, password: String):Boolean {
         withContext(Dispatchers.IO){
-        insertUser(User(userName, password,"admin",photoUri,-1.0,-1.0))
             user = userDao.selectUser(userName,password)
         }
         return user != null
     }
-
+    
     suspend fun searchUser(textSearched: String): List<User> {
         return getUserList().filter { it.getName().toLowerCase().contains(textSearched.toLowerCase())}
     }

@@ -35,6 +35,7 @@
         android:inputType="text"
         android:textColor="@color/subtitleColor"
         android:layout_width="300dp"
+        android:layout_marginBottom="20dp"
         android:layout_height="wrap_content"
         android:hint="@string/nameHint"
         android:layout_marginStart="20dp"
@@ -58,10 +59,17 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/userPasswordHint"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginStart="20dp"
         android:layout_gravity="start"
         />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="start"/>
     <Button
         android:id="@+id/buttonLogin"
         android:textStyle="bold"
@@ -84,11 +92,4 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
         />
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_gravity="start"/>
 </LinearLayout>

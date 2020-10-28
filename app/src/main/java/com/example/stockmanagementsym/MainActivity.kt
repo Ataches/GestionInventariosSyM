@@ -11,7 +11,6 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -30,8 +29,8 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
-import kotlinx.android.synthetic.main.fragment_new_product.view.*
 import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.android.synthetic.main.layout_navigation_header.*
 import kotlinx.android.synthetic.main.layout_navigation_header.view.*
@@ -62,18 +61,20 @@ class MainActivity : AppCompatActivity() {
         val userLatitude = FragmentData.getUserLatitude()
         val userLongitude = FragmentData.getUserLongitude()
 
-        headerView.imageViewCustomerNavView.visibility = View.VISIBLE
         val userPhotoData = FragmentData.getUserPhotoData()
 
-        try{
-            Picasso.get().load(userPhotoData).into(headerView.imageViewCustomerNavView)
-            headerView.imageViewCustomerNavView.background = null
-        }catch (e:Exception){
-            if(userPhotoData!=""){
-                headerView.imageViewCustomerNavView.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
-                headerView.imageViewCustomerNavView.background = null
-            }else
-                FragmentData.showToastMessage(headerView.context, ""+e)
+        if(userPhotoData!=""){
+            if(userPhotoData.length<400){
+                try {
+                    Picasso.get().load(userPhotoData).into(headerView.imageViewUserNavHeader)
+                    headerView.imageViewUserNavHeader.background = null
+                }catch (e:Exception){
+                    FragmentData.showToastMessage(headerView.context, ""+e)
+                }
+            }else{
+                headerView.imageViewUserNavHeader.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
+                headerView.imageViewUserNavHeader.background = null
+            }
         }
 
         if((userLatitude==-1.0)&&(userLongitude==-1.0))

@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="250dp">
     <ImageView
-        android:visibility="gone"
-        android:id="@+id/imageViewCustomerNavView"
+        android:id="@+id/imageViewUserNavHeader"
         android:background="@drawable/ic_person"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -23,8 +22,8 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:gravity="left"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewCustomerNavView"
-        app:layout_constraintLeft_toLeftOf="@+id/imageViewCustomerNavView"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewUserNavHeader"
+        app:layout_constraintLeft_toLeftOf="@+id/imageViewUserNavHeader"
         app:layout_constraintBottom_toTopOf="@+id/textViewUserPrivilegeNavView"
         />
 

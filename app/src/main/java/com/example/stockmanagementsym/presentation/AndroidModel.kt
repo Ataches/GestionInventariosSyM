@@ -318,6 +318,8 @@ class AndroidModel{
     }
 
     fun getStringFromBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
+        if(bitMap == null)
+            return ""
         val stringEncoded = getBitMapAdapter().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
         return stringEncoded
@@ -408,7 +410,7 @@ class AndroidModel{
 
     suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
-        if(getUserLogic().confirmLogin(user, password,googleAccount!!.photoUrl.toString())){
+        if(getUserLogic().confirmLogin(user, password)){
             getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+getUser().getName())
 
             userLatitude = getUser().getLatitude()

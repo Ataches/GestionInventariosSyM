@@ -93,12 +93,14 @@ class LoginActivity : AppCompatActivity() {
         if(booleanLoading){
             this.runOnUiThread {
                 progressBar.visibility = View.VISIBLE
-                buttonLogin.isEnabled = true
+                buttonLogin.isEnabled = false
+                buttonLoginGoogle.isEnabled = false
             }
         }else{
             this.runOnUiThread {
                 progressBar.visibility = View.GONE
-                buttonLogin.isEnabled = false
+                buttonLogin.isEnabled = true
+                buttonLoginGoogle.isEnabled = true
             }
         }
     }
