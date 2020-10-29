@@ -7,6 +7,7 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
+import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -14,9 +15,9 @@ import java.util.*
 
 object FragmentData {
 
-    private lateinit var saleSelected: Sale
     private lateinit var customerToEdit: Customer
     private lateinit var productToEdit: Product
+    private lateinit var productToCart: Product
     private var booleanUpdate: Boolean = false
 
     private lateinit var cartListener: ListListener
@@ -26,14 +27,16 @@ object FragmentData {
 
     private lateinit var androidView: AndroidView
 
+    fun getController(): AndroidController{
+        return androidView.controller
+    }
+
     fun getUserName(): String {
         return androidView.getUserNae()
     }
-
     fun getUserPrivilege(): String {
         return androidView.getUserPrivileges()
     }
-
     suspend fun deleteUser(user: User) {
         androidView.deleteUser(user)
     }
@@ -65,6 +68,7 @@ object FragmentData {
     fun getBitMapFromString(stringBitMap: String): Bitmap {
         return androidView.getBitMapFromString(stringBitMap)
     }
+
     /*
         List listeners
      */
@@ -83,11 +87,12 @@ object FragmentData {
     fun setUserListListener(userListListener: ListListener){
         this.userListListener = userListListener
     }
+
+    /*
+        List listeners - reload list
+     */
     fun reloadCustomerList(){
-        try{
-            customerListListener.reloadList()
-        }catch (e:Exception){
-        }
+        customerListListener.reloadList()
     }
 
     fun reloadProductList(){
@@ -121,25 +126,8 @@ object FragmentData {
         androidView.showToastMessage(context,message)
     }
 
-    fun setProductToEdit(item: Product) {
-        productToEdit = item
-    }
-
-    fun getProductToEdit(): Product {
-        return productToEdit
-    }
-
-
     fun setBitMap(bitMap: Bitmap) {
         androidView.setBitMap(bitMap)
-    }
-
-    fun getCartList(): MutableList<Product> {
-        return androidView.getCartList()
-    }
-
-    fun getTotalPriceCart(): String {
-        return androidView.getTotalPriceCart()
     }
 
     suspend fun getCustomerList(): MutableList<Customer> {
@@ -164,21 +152,18 @@ object FragmentData {
         return androidView.getSalesList()
     }
 
-    fun addProductToCart(item: Product,view: View){
-        androidView.addProductToCart(item,view)
+    /*
+        Product data
+     */
+    fun getProductToEdit(): Product {
+        return productToEdit
     }
 
-    suspend fun deleteProduct(item: Product) {
-        androidView.deleteProduct(item)
+    fun getProductToCart(): Product {
+        return productToCart
     }
-
-
-    fun removeElementCart(context: Context, item: Product) {
-        androidView.removeElementCart(item,context)
-    }
-
-    fun showProductListSaleToString(item: Sale, context: Context) {
-        return androidView.showProductListSaleToString(item,context)
+    fun setProductToCart(product: Product) {
+        productToCart = product
     }
 
     suspend fun getProductList(): MutableList<Product> {
@@ -190,6 +175,34 @@ object FragmentData {
         androidView.goToNewProduct()
     }
 
+    suspend fun deleteProduct(item: Product) {
+        androidView.deleteProduct(item)
+    }
+
+    fun showProductListSaleToString(item: Sale, context: Context) {
+        return androidView.showProductListSaleToString(item,context)
+    }
+
+    /*
+        Cart data
+     */
+    fun addProductToCart(item: Product,view: View){
+        androidView.addProductToCart(item,view)
+    }
+
+
+    fun removeElementCart(context: Context, item: Product) {
+        androidView.removeElementCart(item,context)
+    }
+
+    fun getCartList(): MutableList<Product> {
+        return androidView.getCartList()
+    }
+
+    fun getTotalPriceCart(): String {
+        return androidView.getTotalPriceCart()
+    }
+
     fun askSaveLocation(context: Context) {
         androidView.askSaveLocation(context)
     }
@@ -197,4 +210,13 @@ object FragmentData {
     fun loadProductListFromREST(view:View) {
         androidView.loadProductListFromREST(view)
     }
+
+    fun showAlertMessage(title: String, message: String, context: Context) {
+        androidView.showAlertMessage(title,message,context)
+    }
+
+    fun confirmNewProduct(product: Product,itemView: View) {
+        androidView.confirmNewProduct(product,itemView)
+    }
+
 }

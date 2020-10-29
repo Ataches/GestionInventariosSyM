@@ -14,6 +14,8 @@ import com.example.stockmanagementsym.presentation.AndroidModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class AndroidView(private val androidModel: AndroidModel) {
@@ -112,6 +114,15 @@ class AndroidView(private val androidModel: AndroidModel) {
         return getFragmentData().getProductToEdit()
     }
 
+    fun confirmNewProduct(product: Product,view: View) {
+        getDialogView().dialogConfirmRegister(
+            view,
+            data = product,
+            title = view.context.getString(R.string.titleAlertNewProd),
+            message = view.context.getString(R.string.messageAlertNewProd)
+        )
+    }
+
     /*
         Customer
      */
@@ -129,7 +140,12 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
 
     fun newCustomer(view: View) {
-        getDialogView().dialogRegisterCustomer(view, false)
+        doAsync {
+            getDialogView().dialogRegisterCustomer(view, false)
+            uiThread {
+                reloadCustomerList()
+            }
+        }
     }
 
     suspend fun deleteCustomer(customer: Customer): Boolean {
@@ -231,9 +247,8 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getTotalPriceCart()
     }
     fun addProductToCart(item: Product, view: View) {
-        androidModel.addProductToCart(item, view)
+        androidModel.addProductToCart(item,view)
     }
-
 
     /*
         Messages

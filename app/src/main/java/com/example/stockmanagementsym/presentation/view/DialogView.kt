@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -23,6 +22,8 @@ import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.util.*
 
 
@@ -176,6 +177,7 @@ class DialogView(private var androidView: AndroidView) {
                 newProductFragment.getString(R.string.titleAlertUpdateProd),
                 newProductFragment.getString(R.string.messageAlertUpdateProd)
             )
+            androidView.goToProductList()
             FragmentData.setBooleanUpdate(false)
         }else {
             dialogConfirmRegister(
@@ -200,7 +202,6 @@ class DialogView(private var androidView: AndroidView) {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(androidView.createProduct(data as Product),view.context)
                     }
-                    androidView.goToProductList()
                 }
 
                 viewElement.context.getString(R.string.titleAlertUpdateProd) -> {
@@ -328,38 +329,22 @@ class DialogView(private var androidView: AndroidView) {
             showToastMessage("No se pudo realizar la operación",context)
     }
     fun showToastMessage(message: String, context: Context) {
-        MessageTask("", message,"Toast",context).execute()
-    }
-    fun showAlertMessage(title: String, message: String, context:Context) {
-        MessageTask(title,message,"Alert",context).execute()
-    }
-
-    private class MessageTask(
-        val title: String,
-        val message: String,
-        val type: String,
-        val context: Context
-    ) : AsyncTask<Void?, Void?, Void?>() {
-        override fun onPostExecute(param: Void?) {
-            when(type){
-                "Toast" -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                "Alert" -> showAlertMessage(title,message, context)
+        doAsync {
+            uiThread {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         }
-
-        fun showAlertMessage(title: String, message: String, context:Context) {
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle(title)
-            builder.setMessage(message)
-            builder.setNeutralButton("Cerrar"){_,_->}
-            builder.create()
-            builder.show()
-        }
-
-        override fun doInBackground(vararg p0: Void?): Void? {
-            return null
+    }
+    fun showAlertMessage(title: String, message: String, context:Context) {
+        doAsync {
+            uiThread {
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle(title)
+                builder.setMessage(message)
+                builder.setNeutralButton("Cerrar"){_,_->}
+                builder.create()
+                builder.show()
+            }
         }
     }
-
-
 }

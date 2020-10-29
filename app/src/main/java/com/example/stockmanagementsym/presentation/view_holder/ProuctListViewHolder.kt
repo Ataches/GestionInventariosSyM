@@ -46,18 +46,23 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val quantityString = itemView.editTextQuantity.text.toString()
             if(quantityString.isDigitsOnly()&&quantityString.isNotEmpty()){
                 val quantity:Int = quantityString.toInt()
-                if((product.getQuantity() >= quantity) && (quantity > 0)){
-                    val cartProduct = Product(
-                        name = product.getName(),
-                        description = product.getDescription(),
-                        price = product.getPrice(),
-                        stringBitMap = product.getStringBitMap(),
-                        quantity = quantity
-                    )
-                    cartProduct.idProduct = product.idProduct
-                    FragmentData.addProductToCart(cartProduct,it)
-                }else
-                    FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
+                if(product.idProduct != 0L){
+                    if((product.getQuantity() >= quantity) && (quantity > 0)){
+                        val cartProduct = Product(
+                            name = product.getName(),
+                            description = product.getDescription(),
+                            price = product.getPrice(),
+                            stringBitMap = product.getStringBitMap(),
+                            quantity = quantity
+                        )
+                        cartProduct.idProduct = product.idProduct
+                        FragmentData.addProductToCart(cartProduct,it)
+                    }else
+                        FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
+                }else{
+                    FragmentData.showToastMessage(it.context,"Producto no registrado, redirigiendo")
+                    FragmentData.confirmNewProduct(product,itemView)
+                }
             }else
                 FragmentData.showToastMessage(it.context, "Digite un numero correcto")
         }

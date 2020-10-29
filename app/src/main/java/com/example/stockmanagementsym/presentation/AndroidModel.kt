@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +19,10 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.fragment.*
+import com.example.stockmanagementsym.presentation.fragment.CustomerListFragment
+import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
+import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
+import com.example.stockmanagementsym.presentation.fragment.UserListFragment
 import com.example.stockmanagementsym.presentation.view.AndroidView
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -33,7 +35,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class AndroidModel{
 
@@ -193,8 +194,8 @@ class AndroidModel{
         this.dateSale = dateSale
     }
 
-    fun addProductToCart(item: Product,view: View){
-        GlobalScope.launch (Dispatchers.IO){
+    fun addProductToCart(item: Product, view: View){
+        doAsync{
             getAndroidView().showAlertMessage(view.context.getString(R.string.cart),getSaleLogic().addProductToCart(item),view.context)
             getAndroidView().reloadCartList()
         }
@@ -227,9 +228,7 @@ class AndroidModel{
     suspend fun updateCustomer(customerToUpdate: Customer): Boolean {
         val customerToEdit = getAndroidView().getCustomerToEdit()
         customerToUpdate.idCustomer = customerToEdit.idCustomer
-        val resultTransaction = getCustomerLogic().updateCustomer(customerToUpdate)
-        getAndroidView().reloadCustomerList()
-        return resultTransaction
+        return getCustomerLogic().updateCustomer(customerToUpdate)
     }
 
     suspend fun getCustomerList(): MutableList<Customer> {
@@ -245,7 +244,6 @@ class AndroidModel{
     suspend fun createCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().createCustomer(customer)
         customerNewSale = customer //If it is a new customer register from new sale fragment
-        getAndroidView().reloadCustomerList()
         return resultTransaction
     }
 

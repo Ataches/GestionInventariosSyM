@@ -6,10 +6,19 @@ import android.util.Base64
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_cart.view.*
+import kotlinx.android.synthetic.main.item_cart.view.editTextQuantity
+import kotlinx.android.synthetic.main.item_cart.view.imageViewProduct
+import kotlinx.android.synthetic.main.item_cart.view.textViewDescription
+import kotlinx.android.synthetic.main.item_cart.view.textViewName
+import kotlinx.android.synthetic.main.item_cart.view.textViewPrice
+import kotlinx.android.synthetic.main.item_cart.view.textViewQuantity
+import kotlinx.android.synthetic.main.item_product.view.*
 import java.text.DecimalFormat
 
 class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.ViewHolder(itemView) {
@@ -23,14 +32,26 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
         itemView.textViewDescription.text = productCart.getDescription()
         itemView.textViewQuantity.text = "Cantidad: ${productCart.getQuantity()}"
         itemView.editTextQuantity.setText("""${productCart.getQuantity()}""")
-        if(product.getStringBitMap().isNotEmpty()){
-            itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
-            itemView.imageViewProduct.setBackgroundResource(0)
+
+
+        val userPhotoData = product.getStringBitMap()
+        if(userPhotoData.isNotEmpty()){
+            if(userPhotoData.length<400){
+                try {
+                    Picasso.get().load(userPhotoData).into(itemView.imageViewProduct)
+                    itemView.imageViewProduct.background = null
+                }catch (e:Exception){
+                    FragmentData.showToastMessage(itemView.context, ""+e)
+                }
+            }else{
+                itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
+                itemView.imageViewProduct.background = null
+            }
         }
 
         itemView.textViewProdRealQuantity.text =
             "Disponibles: ${(product.getQuantity()-productCart.getQuantity())}" +
-                    ", total: ${product.getQuantity()}"
+                    "de total: ${product.getQuantity()}"
 
         itemView.buttonRemoveCart.setOnClickListener{
             FragmentData.removeElementCart(it.context,productCart)

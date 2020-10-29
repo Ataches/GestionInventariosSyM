@@ -53,7 +53,7 @@ class CartListFragment : Fragment(), ListListener {
             adapter.setProductList(FragmentData.getProductList())
             adapter.setCartList(FragmentData.getCartList())
             requireActivity().runOnUiThread {
-                textViewTotal.text = "Total: $ ${FragmentData.getTotalPriceCart()}"
+                textViewTotal.text = "Total: ${FragmentData.getTotalPriceCart()}"
                 adapter.notifyDataSetChanged()
             }
         }

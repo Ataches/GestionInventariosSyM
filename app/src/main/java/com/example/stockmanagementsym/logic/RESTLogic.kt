@@ -22,10 +22,8 @@ class RESTLogic(private val androidModel: AndroidModel) {
                 if(callRetrofit.isSuccessful){
                     val productList = callRetrofit.body()?.productList?: listOf()
                     androidModel.addProductsToProductList(productList, view)
-                    Log.d("Llega", "Llega3 $productList")
                 }else{
                     androidModel.showToastMessage(view.context,callRetrofit.message())
-                    Log.d("Llega","Llega4")
                 }
             }
         }
