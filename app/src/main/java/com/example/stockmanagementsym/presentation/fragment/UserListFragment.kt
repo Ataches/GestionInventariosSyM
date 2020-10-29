@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.UserListAdapter
@@ -101,9 +100,9 @@ class UserListFragment : Fragment(), ListListener {
         }
     }
 
-    override fun addElementsToList(list: MutableList<Any>) {
+    override fun addElementsToList(mutableList: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.getUserList().addAll(list as MutableList<User>)
+            adapter.getUserList().addAll(mutableList as MutableList<User>)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

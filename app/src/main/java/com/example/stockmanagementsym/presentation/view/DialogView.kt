@@ -161,27 +161,31 @@ class DialogView(private var androidView: AndroidView) {
     //New product - Search fragment data and obtains it's information, after asks to create or update product
     fun dialogRegisterProduct(viewElement: View, updateBoolean: Boolean){
         view = viewElement
-        val newProductFragment:NewProductFragment = viewElement.findFragment()
+        val newProductFragment:NewProductFragment = view.findFragment()
         val product =
-            Product(
-                newProductFragment.editTextProductName.text.toString(),
-                newProductFragment.editTextProductPrice.text.toString().toDouble(),
-                newProductFragment.editTextProductDesc.text.toString(),
-                androidView.getStringFromBitMap(),
-                newProductFragment.editTextProductQuantity.text.toString().toInt()
-            )
+                try{
+                    Product(
+                            newProductFragment.editTextProductName.text.toString(),
+                            newProductFragment.editTextProductPrice.text.toString().toDouble(),
+                            newProductFragment.editTextProductDesc.text.toString(),
+                            androidView.getStringFromBitMap(),
+                            newProductFragment.editTextProductQuantity.text.toString().toInt()
+                    )
+                }catch (e:Exception){
+                    showToastMessage(view.context.getString(R.string.voidData),view.context)
+                }
         if (updateBoolean) {
             dialogConfirmRegister(
-                viewElement,
+                view,
                 product,
                 newProductFragment.getString(R.string.titleAlertUpdateProd),
                 newProductFragment.getString(R.string.messageAlertUpdateProd)
             )
-            androidView.goToProductList()
+            androidView.goToProductList(view)
             FragmentData.setBooleanUpdate(false)
         }else {
             dialogConfirmRegister(
-                viewElement,
+                view,
                 product,
                 newProductFragment.getString(R.string.titleAlertNewProd),
                 newProductFragment.getString(R.string.messageAlertNewProd)
@@ -199,18 +203,17 @@ class DialogView(private var androidView: AndroidView) {
         builder.setPositiveButton("Si") { _, _ ->
             when (title) {
                 viewElement.context.getString(R.string.titleAlertNewProd) -> {
-                    GlobalScope.launch(Dispatchers.IO){
-                        showResultTransaction(androidView.createProduct(data as Product),view.context)
-                    }
+                    androidView.createProduct(data as Product,view.context)
+                    androidView.goToProductList(view)
                 }
 
                 viewElement.context.getString(R.string.titleAlertUpdateProd) -> {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(androidView.goToNewProduct(data as Product),view.context)
                     }
-                    androidView.goToProductList()
+                    androidView.goToProductList(view)
                 }
-
+                viewElement.context.getString(R.string.titleAlertDeleteProd) -> androidView.deleteProduct(data as Product, view.context)
 
                 viewElement.context.getString(R.string.titleAlertNewSale) -> dialogNewSale(viewElement)
 
@@ -225,6 +228,7 @@ class DialogView(private var androidView: AndroidView) {
                     GlobalScope.launch(Dispatchers.IO) {
                         showResultTransaction(androidView.createCustomer(customer,view),view.context)
                         loadCustomerList()
+                        FragmentData.reloadCustomerList()
                     }
                     androidView.getCustomerToString(customer)
                     showCustomerSelected(androidView.getCustomerToString(customer))
@@ -233,13 +237,14 @@ class DialogView(private var androidView: AndroidView) {
                 viewElement.context.getString(R.string.titleAlertUpdateCustomer) -> {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(androidView.updateCustomer(data as Customer),view.context)
+                        FragmentData.reloadCustomerList()
                     }
                 }
                 viewElement.context.getString(R.string.titleAlertNewUser) -> {
                     GlobalScope.launch(Dispatchers.IO){
                         showResultTransaction(androidView.newUser(data as User),view.context)
                     }
-                    androidView.goNewUserToUserList()
+                    androidView.goNewUserToUserList(view)
                 }
                 viewElement.context.getString(R.string.location) -> {
                     androidView.saveUserLocation(viewElement.context)
@@ -268,10 +273,9 @@ class DialogView(private var androidView: AndroidView) {
         builder.show()
     }
 
-    private fun getRegisterData(data: Any, title: String, view: View): String {
+    private fun getRegisterData(data: Any, title: String, view: View): String { //Converts the data to string or the way to show to user
         return when(title){
             view.context.getString(R.string.titleAlertNewCustomer) -> androidView.getCustomerToString(data as Customer)
-
             view.context.getString(R.string.titleAlertUpdateCustomer) -> androidView.getCustomerToString(data as Customer)
 
             view.context.getString(R.string.titleAlertNewSale) -> androidView.getCartListToString(data as MutableList<Product>)
@@ -280,6 +284,9 @@ class DialogView(private var androidView: AndroidView) {
 
             view.context.getString(R.string.titleAlertNewProd) -> androidView.getProductToString(data as Product)
             view.context.getString(R.string.titleAlertUpdateProd) -> androidView.getProductToString(data as Product)
+            view.context.getString(R.string.titleAlertDeleteProd) -> androidView.getProductToString(data as Product)
+
+            view.context.getString(R.string.titleAlertNewUser) -> androidView.getUserToString(data as User)
 
             else -> ""+data
         }

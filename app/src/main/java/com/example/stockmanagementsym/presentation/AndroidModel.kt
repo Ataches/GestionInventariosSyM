@@ -24,6 +24,7 @@ import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
 import com.example.stockmanagementsym.presentation.fragment.UserListFragment
 import com.example.stockmanagementsym.presentation.view.AndroidView
+import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.android.synthetic.main.fragment_customer_list.*
@@ -35,6 +36,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class AndroidModel{
 
@@ -305,10 +307,11 @@ class AndroidModel{
     }
 
     //   New product creation
-    suspend fun createProduct(product: Product): Boolean {
-        val result = getProductLogic().createProduct(product)
-        reloadProductList()
-        return result
+    fun createProduct(product: Product,context: Context) {
+        GlobalScope.launch(Dispatchers.IO){
+            getAndroidView().showResultTransaction(getProductLogic().createProduct(product),context)
+            reloadProductList()
+        }
     }
 
     fun getPhotoCamera(activity: Activity, context: Context) {
@@ -334,13 +337,14 @@ class AndroidModel{
         stringBitmap = stringEncoded
         return stringEncoded
     }
-    fun addProductsToProductList(list:List<Product>,view: View){
+    fun addProductsToProductList(list:List<Product>, view:View){
         GlobalScope.launch(Dispatchers.IO){
-            val view = view.findFragment<ProductListFragment>()
-            view.addElementsToList(list.toMutableList())
+            val productListFragment:ProductListFragment = view.findFragment()
+            productListFragment.addElementsToList(list.toMutableList())
+            getProductLogic().addElementsToProductList(list.toMutableList())
         }
     }
-    fun reloadProductList() {
+    private fun reloadProductList() {
         getAndroidView().reloadProductList()
     }
 
@@ -377,9 +381,9 @@ class AndroidModel{
 
     fun searchUser(view: View) {
         GlobalScope.launch(Dispatchers.IO){
-            val view = view.findFragment<UserListFragment>()
-            view.setList(
-                getUserLogic().searchUser(view.editTextSearchUserList.text.toString())
+            val userListFragment = view.findFragment<UserListFragment>()
+            userListFragment.setList(
+                getUserLogic().searchUser(userListFragment.editTextSearchUserList.text.toString())
                     .toMutableList()
             )
         }
@@ -434,10 +438,11 @@ class AndroidModel{
         return bitMapConcreteAdapter!!
     }
 
-    suspend fun confirmLogin(login: LoginActivity, user: String, password: String) {
+    suspend fun confirmLogin(login: LoginActivity, userName: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
-        if(getUserLogic().confirmLogin(user, password)){
-            getAndroidView().showToastMessage(login,login.getString(R.string.welcome)+" "+getUser().getName())
+        //getUserLogic().insertTest(userName,password,googleAccount?.photoUrl.toString())
+        if(getUserLogic().confirmLogin(userName, password)){
+            getAndroidView().showToastMessage(login.getString(R.string.welcome)+" "+getUser().getName(),login)
 
             userLatitude = getUser().getLatitude()
             userLongitude = getUser().getLongitude()
@@ -452,10 +457,7 @@ class AndroidModel{
             login.startActivity(intent)
         }
         else
-            getAndroidView().showToastMessage(
-                login,
-                "Usuario $user no encontrado o contraseña incorrecta"
-            )
+            getAndroidView().showToastMessage("Usuario $userName no encontrado o contraseña incorrecta", login)
     }
 
     suspend fun askSaveLocation(context: Context){
@@ -467,7 +469,6 @@ class AndroidModel{
     }
 
     suspend fun askLogOut(context: Context){
-        val location = context.getString(R.string.location)+" "+userLatitude+" - "+userLongitude
         val activity = context as Activity
         withContext(Dispatchers.IO) {
             getAndroidView().dialogConfirmRegister(getUser().getName(),context.getString(R.string.logOut), context.getString(R.string.messageLogOut),activity)
@@ -488,12 +489,27 @@ class AndroidModel{
         googleAccount = null
         if(googleSingInClient!=null)
             googleSingInClient!!.signOut()
-        val activity = context as Activity
-        activity.finish()
+        FragmentData.finish()
+        AndroidController.finish()
+
+        val intent = Intent(context, LoginActivity::class.java)
+        context.startActivity(intent)
     }
 
-    fun showToastMessage(context: Context,message:String){
-        getAndroidView().showToastMessage(context,message)
+    fun showToastMessage(message:String, context: Context){
+        getAndroidView().showToastMessage(message,context)
+    }
+
+    fun showAlertMessage(title:String,message: String, context: Context) {
+        getAndroidView().showAlertMessage(title,message,context)
+    }
+
+    fun getUserToString(user:User): String {
+        return getUserLogic().getUserToString(user)
+    }
+
+    fun addElementsToProductList(mutableList: MutableList<Product>) {
+        getProductLogic().addElementsToProductList(mutableList)
     }
 
 }

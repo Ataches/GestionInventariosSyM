@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
-import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
 import com.example.stockmanagementsym.presentation.view.FragmentData
@@ -74,9 +73,9 @@ class CustomerListFragment : Fragment(), ListListener {
         }
     }
 
-    override fun addElementsToList(list: MutableList<Any>) {
+    override fun addElementsToList(mutableList: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.getCustomerList().addAll(list as MutableList<Customer>)
+            adapter.getCustomerList().addAll(mutableList as MutableList<Customer>)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

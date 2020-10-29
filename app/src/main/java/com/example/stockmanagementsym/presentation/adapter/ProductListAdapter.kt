@@ -30,4 +30,8 @@ class ProductListAdapter(private var productList: MutableList<Product>) : Recycl
     fun getProductList():MutableList<Product>{
         return productList
     }
+
+    fun addElementsToProductList(mutableList: MutableList<Product>) {
+        productList.addAll(mutableList)
+    }
 }

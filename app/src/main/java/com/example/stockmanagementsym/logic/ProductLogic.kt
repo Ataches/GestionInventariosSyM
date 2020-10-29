@@ -47,7 +47,7 @@ class ProductLogic(private var productDao: ProductDao) {
     }
 
     suspend fun searchProducts(id:Long): Product {
-        return getProductList().filter { product -> product.idProduct == id }[0]
+        return getProductList().filter { it.idProduct == id }[0]
     }
 
     suspend fun searchProduct(searchText: String): List<Product> {
@@ -61,6 +61,10 @@ class ProductLogic(private var productDao: ProductDao) {
             }
         }
         return productList
+    }
+    
+    fun addElementsToProductList(mutableList: MutableList<Product>) {
+        productList.addAll(mutableList)
     }
 
     private suspend fun updateProductList() {

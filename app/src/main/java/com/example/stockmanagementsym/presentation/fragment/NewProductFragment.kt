@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.view.*
 
 class NewProductFragment: Fragment(){
@@ -33,11 +35,30 @@ class NewProductFragment: Fragment(){
 
         if(FragmentData.getBooleanUpdate()){
             val product = FragmentData.getProductToEdit()
+            view.textViewTitleProduct.text = getString(R.string.titleAlertUpdateProd)
             view.editTextProductName.setText(product.getName())
             view.editTextProductPrice.setText(product.getPrice().toString())
             view.editTextProductDesc.setText(product.getDescription())
             view.editTextProductQuantity.setText(product.getQuantity().toString())
-            view.imageViewNewProduct.setImageBitmap(FragmentData.getBitMapFromString(product.getStringBitMap()))
+
+            val userPhotoData = product.getStringBitMap()
+
+            if(userPhotoData!=""){
+                if(userPhotoData.length<400){
+                    try {
+                        Picasso.get().load(userPhotoData).into(view.imageViewNewProduct)
+                        view.imageViewNewProduct.background = null
+                    }catch (e:Exception){
+                        FragmentData.showToastMessage(view.context, ""+e)
+                    }
+                }else{
+                    view.imageViewNewProduct.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
+                    view.imageViewNewProduct.visibility = View.VISIBLE
+                    view.imageViewNewProduct.background = null
+                }
+            }
+        }else{
+            view.textViewTitleProduct.text = getString(R.string.titleAlertNewProd)
         }
 
         view.buttonNewProductToHome.setOnClickListener (AndroidController)

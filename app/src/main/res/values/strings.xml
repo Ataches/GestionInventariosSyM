@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GestionInventariosSyM</string>
-    <string name="tittle">Gestion inventarios SyM</string>
+    <string name="title">Gestion inventarios SyM</string>
 
     <!-- Login -->
     <string name="textViewUser">Usuario:</string>
@@ -30,7 +30,7 @@
     <string name="titleAlertNewProd">Crear nuevo producto</string>
     <string name="messageAlertNewProd">¿Desea registrar el nuevo producto con los siguientes datos?:</string>
     <string name="createCustomer">Nuevo cliente</string>
-    <string name="selectImage">Seleccione la imagen para el producto (opcional)</string>
+    <string name="selectImage">Imagen (opcional)</string>
 
     <!-- Customer -->
     <string name="customer">Cliente</string>
@@ -101,5 +101,9 @@
     <string name="voidData">Campos vacios</string>
     <string name="productDescriptionHint">"Ejemplo: Pieza de repuesto para autos "</string>
     <string name="productQuantityHint">Ej: 20</string>
+    <string name="titleAlertDeleteProd">Eliminar producto</string>
+    <string name="messageAlertDeleteProd">¿Desea eliminar el siguiente producto?</string>
+    <string name="messageProductListRestAdded">Lista de productos REST añadida, los items con borde azul no estan en la BD, si los desea agregar en la BD o editar para su registro puede hacerlo</string>
+    <string name="titleProductListRestAdded">Listado de productos REST</string>
 
 </resources>

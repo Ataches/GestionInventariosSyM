@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.logic
 
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.data.dao.UserDao
 import com.example.stockmanagementsym.logic.business.User
 import kotlinx.coroutines.Dispatchers
@@ -79,9 +80,20 @@ class UserLogic(private val userDao: UserDao) {
         }
         return user != null
     }
+
+    suspend fun insertTest(userName: String, password: String, photoUri:String) {
+        withContext(Dispatchers.IO){
+            insertUser(User(userName, password,"admin",photoUri,-1.0,-1.0))
+        }
+    }
     
     suspend fun searchUser(textSearched: String): List<User> {
         return getUserList().filter { it.getName().toLowerCase().contains(textSearched.toLowerCase())}
+    }
+
+    fun getUserToString(user: User): String {
+        return  "Nombre: "+user.getName()+CONSTANTS.NEW_LINE_STRING+
+                "Direccion: "+user.getPrivilege()
     }
 
 }

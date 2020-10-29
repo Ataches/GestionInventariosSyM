@@ -15,23 +15,30 @@ Android studio 4.1
 ```
 ## Demo de la app ⚙️
 
-### Inicio de sesión
 Funcionalidades de la aplicación: 
 
 * Registro de usuarios
 * Registro de productos
 * Registro de clientes
 * Registro de ventas
+* Login con google accounts
+* Localización de usuario utilizando google maps
+* Utilización de servicio REST para actualizar listado de productos
 
 _Todos los registros realizados se almacenan en la base de datos de la aplicación_
 
-![](DemoApp.gif)
+### Inicio de sesión
+
+Para el inicio de sesión es necesaria una contraseña y usuario, el cual tiene un privilegio de admin (tiene la capacidad de borrar e ingresar nuevos usuarios)  u otro, el usuario tiene la opción de registrar su ubicación y colocar una foto que lo identifique.
+El inicio de sesión se puede realizar por medio de una cuenta de google o con usuario y contraseña.
+
+![](DemoGifs/DemoAppLogin.gif)
 
 _Para el registro de nuevos usuarios es necesario que un administrador lo registre, quien puede otorgar privilegios de admin u otro_
 
-### Registro de productos
+### Modúlo de productos
 
-Es posible el registro de productos por medio del acceso a la tienda de la aplicación, donde se registran los siguientes campos:
+Es posible el registro, borrado y actualización de productos por medio del acceso a la tienda de la aplicación, donde se registran los siguientes campos:
 
 * Nombre del producto
 * Precio del producto
@@ -39,11 +46,11 @@ Es posible el registro de productos por medio del acceso a la tienda de la aplic
 * Cantidad de unidades del producto
 * Imagen del producto (opcional)
 
-![](DemoGifs/DemoNewProduct.gif)
+![](DemoGifs/DemoUpdateProduct.gif)
 
 _El producto registrado queda almacenado en la base de datos para compras posteriores o edición del mismo_
 
-### Creación y eliminación de usuarios, edición de productos
+### Modúlo suarios, edición de productos
 
 Para crear o eliminar un usuario es necesario tener el privilegio de administrador el cual lo otorga otro administrador.
 
@@ -53,7 +60,7 @@ Campos para crear un nuevo usuario:
 * Contraseña de usuario
 * Privilegio de usuario
 
-![](DemoGifs/DemoUsersAndEditProduct.gif)
+![](DemoGifs/DemoUser_InsertAndDeleteProduct.gif)
 
 ### Registro de ventas en el aplicativo
 

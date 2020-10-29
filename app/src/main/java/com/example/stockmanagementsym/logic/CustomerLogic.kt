@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.logic
 
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.logic.business.Customer
 import kotlinx.coroutines.Dispatchers
@@ -64,10 +65,10 @@ class CustomerLogic(private val customerDao: CustomerDao) {
 
     //TypeConverter
     fun customerToString(customer: Customer):String{
-        return  "Nombre: "+customer.getName()+"\n"+
-                "Direccion: "+customer.getAddress()+"\n"+
-                "Telefono: "+customer.getPhone()+"\n"+
-                "Ciudad: "+customer.getCity()+"\n"
+        return  "Nombre: "+customer.getName()+CONSTANTS.NEW_LINE_STRING+
+                "Direccion: "+customer.getAddress()+CONSTANTS.NEW_LINE_STRING+
+                "Telefono: "+customer.getPhone()+CONSTANTS.NEW_LINE_STRING+
+                "Ciudad: "+customer.getCity()+CONSTANTS.NEW_LINE_STRING
     }
 
     fun stringToCustomer(string: String): Customer{

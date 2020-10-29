@@ -3,6 +3,7 @@ package com.example.stockmanagementsym
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stockmanagementsym.presentation.AndroidModel
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         context = this
         androidModel = AndroidModel()
+        Log.d("LLETA","LETA")
 
         buttonLogin.setOnClickListener  {
             showLoading(true)
@@ -33,11 +35,7 @@ class LoginActivity : AppCompatActivity() {
                 val userName = editTextUser.text.toString()
                 val password = editTextPass.text.toString()
                 if(userName.isEmpty()||password.isEmpty()){
-                    androidModel.showToastMessage(
-                        context, getString(R.string.loginFailure) + ". " + getString(
-                            R.string.voidData
-                        )
-                    )
+                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.voidData),context)
                     (context as LoginActivity).runOnUiThread {
                         showLoading(false)
                     }
@@ -71,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             }catch (e: Exception){
-                androidModel.showToastMessage(context, getString(R.string.loginFailure) + " " + e)
+                androidModel.showAlertMessage(getString(R.string.loginFailure),getString(R.string.loginFailure) + " " + e,context)
                 showLoading(false)
             }
         }

@@ -44,13 +44,26 @@
             android:layout_height="0dp"
             >
             <TextView
+                android:id="@+id/textViewTitleProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/editTextProductName"
+                />
+            <TextView
                 android:id="@+id/textViewProductName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
+                android:textSize="18sp"
                 android:text="@string/productName"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTitleProduct"
                 app:layout_constraintBottom_toTopOf="@id/editTextProductName"
                 />
 
@@ -69,6 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/productPrice"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/editTextProductName"
                 app:layout_constraintTop_toBottomOf="@+id/editTextProductName"
                 app:layout_constraintBottom_toTopOf="@id/editTextProductPrice"
@@ -90,6 +105,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/productDesc"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/editTextProductPrice"
                 app:layout_constraintTop_toBottomOf="@+id/editTextProductPrice"
                 app:layout_constraintBottom_toTopOf="@id/editTextProductDesc"
@@ -111,6 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/productQuantity"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/editTextProductDesc"
                 app:layout_constraintTop_toBottomOf="@+id/editTextProductDesc"
                 app:layout_constraintBottom_toTopOf="@id/editTextProductQuantity"
@@ -125,17 +144,17 @@
                 android:hint="@string/productQuantityHint"
                 app:layout_constraintStart_toStartOf="@+id/textViewProductQuantity"
                 app:layout_constraintTop_toBottomOf="@+id/textViewProductQuantity"
-                app:layout_constraintBottom_toTopOf="@id/textViewProductPhoto"
                 />
             <TextView
                 android:id="@+id/textViewProductPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/selectImage"
-                android:layout_marginBottom="20dp"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/editTextProductQuantity"
                 app:layout_constraintTop_toBottomOf="@+id/editTextProductQuantity"
-                app:layout_constraintBottom_toTopOf="@id/buttonNewProductToGallery"
+                app:layout_constraintBottom_toTopOf="@+id/buttonNewProductToGallery"
                 />
 
 

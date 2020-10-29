@@ -66,9 +66,9 @@ class CartListFragment : Fragment(), ListListener {
         }
     }
 
-    override fun addElementsToList(list: MutableList<Any>) {
+    override fun addElementsToList(mutableList: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.getCartList().addAll(list as MutableList<Product>)
+            adapter.getCartList().addAll(mutableList as MutableList<Product>)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

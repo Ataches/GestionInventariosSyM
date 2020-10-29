@@ -29,7 +29,6 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.android.synthetic.main.layout_navigation_header.*
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     
     private var androidLocation: AndroidLocation ?= null
     private var fusedLocation: FusedLocationProviderClient ?= null
-    private var obs:Boolean = false
+    private var locationObserver:Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,11 +84,11 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.location)+" "+userLatitude+" "+userLongitude
 
         headerView.buttonLocation.setOnClickListener {
-            obs = false
+            locationObserver = false
             checkPermission()
         }
         headerView.buttonLocationObs.setOnClickListener {
-            obs = true
+            locationObserver = true
             checkPermission()
         }
     }
@@ -164,7 +163,7 @@ class MainActivity : AppCompatActivity() {
             androidLocation = AndroidLocation(textViewUserLocationNavView, this)
         if(fusedLocation==null)
             fusedLocation = LocationServices.getFusedLocationProviderClient(this)
-        if(obs){
+        if(locationObserver){
             val locationRequest = LocationRequest()
             locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             locationRequest.interval = 10_000
@@ -181,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-class AndroidLocation(private val textView: TextView, val context: Context) :
+private class AndroidLocation(private val textView: TextView, val context: Context) :
     OnSuccessListener<Location>, OnFailureListener,LocationCallback(){
     override fun onSuccess(location: Location?) = if(location!=null){
         textView.text = """Localización: ${location.latitude} - ${location.longitude}"""
@@ -189,20 +188,17 @@ class AndroidLocation(private val textView: TextView, val context: Context) :
     }else{
         FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
     }
-
     override fun onLocationResult(location: LocationResult?) {
         super.onLocationResult(location)
         if(location != null){
-            textView.text = """Localización: ${location!!.lastLocation.latitude} - ${location.lastLocation.longitude}"""
+            textView.text = """Localización: ${location.lastLocation.latitude} - ${location.lastLocation.longitude}"""
             FragmentData.setUserLocation(location.lastLocation.latitude, location.lastLocation.longitude)
         }else{
             FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
         }
     }
-
     override fun onFailure(p0: Exception) {
         FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
     }
-
 }
 

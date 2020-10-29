@@ -2,6 +2,7 @@ package com.example.stockmanagementsym.presentation.view
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
@@ -15,58 +16,86 @@ import java.util.*
 
 object FragmentData {
 
-    private lateinit var customerToEdit: Customer
-    private lateinit var productToEdit: Product
-    private lateinit var productToCart: Product
+    private var customerToEdit: Customer ?= null
+    private var productToEdit: Product?= null
+    private var productToCart: Product?= null
     private var booleanUpdate: Boolean = false
 
-    private lateinit var cartListener: ListListener
-    private lateinit var productListListener: ListListener
-    private lateinit var customerListListener: ListListener
-    private lateinit var userListListener: ListListener
+    private var cartListener: ListListener?= null
+    private var productListListener: ListListener?= null
+    private var customerListListener: ListListener ?= null
+    private var userListListener: ListListener?= null
 
-    private lateinit var androidView: AndroidView
+    private var productListRESTLoaded = false
 
-    fun getController(): AndroidController{
-        return androidView.controller
-    }
-
-    fun getUserName(): String {
-        return androidView.getUserNae()
-    }
-    fun getUserPrivilege(): String {
-        return androidView.getUserPrivileges()
-    }
-    suspend fun deleteUser(user: User) {
-        androidView.deleteUser(user)
-    }
-
-    suspend fun getUserList(): MutableList<User> {
-        return androidView.getUserList()
-    }
-
-    fun getUserPhotoData(): String {
-        return androidView.getUserPhotoData()
-    }
+    private var androidView: AndroidView?= null
 
     fun setAndroidView(androidView: AndroidView){
         this.androidView = androidView
     }
+    private fun getAndroidView():AndroidView{
+        if(androidView==null)
+            Log.d("FAIL","Fallo inicio android view")
+        return androidView!!
+    }
+
+    fun finish(){
+         customerToEdit = null
+         productToEdit= null
+         productToCart  = null
+         booleanUpdate = false
+
+         cartListener = null
+         productListListener  = null
+         customerListListener = null
+         userListListener  = null
+
+         androidView  = null
+         productListRESTLoaded = false
+    }
+
+    fun getController(): AndroidController{
+        return getAndroidView().controller
+    }
+
+    fun setProductListRESTLoaded(productListRESTLoaded: Boolean){
+        this.productListRESTLoaded = productListRESTLoaded
+    }
+    fun getProductListRESTLoaded():Boolean{
+        return productListRESTLoaded
+    }
+    fun getUserName(): String {
+        return getAndroidView().getUserNae()
+    }
+    fun getUserPrivilege(): String {
+        return getAndroidView().getUserPrivileges()
+    }
+    suspend fun deleteUser(user: User) {
+        getAndroidView().deleteUser(user)
+    }
+
+    suspend fun getUserList(): MutableList<User> {
+        return getAndroidView().getUserList()
+    }
+
+    fun getUserPhotoData(): String {
+        return getAndroidView().getUserPhotoData()
+    }
 
     fun setUserLocation(latitude: Double, longitude: Double) {
-        androidView.setUserLocation(latitude,longitude)
+        getAndroidView().setUserLocation(latitude,longitude)
     }
 
     fun getUserLatitude(): Double {
-        return androidView.getUserLatitude()
+        return getAndroidView().getUserLatitude()
     }
 
     fun getUserLongitude(): Double {
-        return androidView.getUserLongitude()
+        return getAndroidView().getUserLongitude()
     }
 
     fun getBitMapFromString(stringBitMap: String): Bitmap {
-        return androidView.getBitMapFromString(stringBitMap)
+        return getAndroidView().getBitMapFromString(stringBitMap)
     }
 
     /*
@@ -92,19 +121,20 @@ object FragmentData {
         List listeners - reload list
      */
     fun reloadCustomerList(){
-        customerListListener.reloadList()
+        if(customerListListener!=null)
+            customerListListener!!.reloadList()
     }
 
     fun reloadProductList(){
-        productListListener.reloadList()
+        productListListener!!.reloadList()
     }
 
     fun reloadCartList() {
-        cartListener.reloadList()
+        cartListener!!.reloadList()
     }
 
     fun reloadUserList(){
-        userListListener.reloadList()
+        userListListener!!.reloadList()
     }
 
     /*
@@ -123,100 +153,105 @@ object FragmentData {
         return df.format(date.time)
     }
     fun showToastMessage(context: Context, message:String){
-        androidView.showToastMessage(context,message)
+        getAndroidView().showToastMessage(message,context)
     }
 
     fun setBitMap(bitMap: Bitmap) {
-        androidView.setBitMap(bitMap)
+        getAndroidView().setBitMap(bitMap)
     }
 
     suspend fun getCustomerList(): MutableList<Customer> {
-        return androidView.getCustomerList()
+        return getAndroidView().getCustomerList()
     }
 
     fun updateCustomer(customerToEdit: Customer, booleanUpdate: Boolean,view: View) {
         this.customerToEdit = customerToEdit
         this.booleanUpdate = booleanUpdate
-        androidView.updateCustomer(view)
+        getAndroidView().updateCustomer(view)
+
     }
 
     fun getCustomerToEdit(): Customer {
-        return customerToEdit
+        return customerToEdit!!
     }
 
-    suspend fun deleteCustomer(customer: Customer) {
-        androidView.deleteCustomer(customer)
+    fun deleteCustomer(customer: Customer, context: Context) {
+        getAndroidView().deleteCustomer(customer, context)
     }
 
     suspend fun getSaleList(): MutableList<Sale> {
-        return androidView.getSalesList()
+        return getAndroidView().getSalesList()
     }
 
     /*
         Product data
      */
     fun getProductToEdit(): Product {
-        return productToEdit
+        return productToEdit!!
     }
 
     fun getProductToCart(): Product {
-        return productToCart
+        return productToCart!!
     }
     fun setProductToCart(product: Product) {
         productToCart = product
     }
 
     suspend fun getProductList(): MutableList<Product> {
-        return androidView.getProductList()
+        return getAndroidView().getProductList()
     }
     fun updateProduct(product: Product, booleanUpdate: Boolean, view: View) {
         productToEdit = product
         this.booleanUpdate = booleanUpdate
-        androidView.goToNewProduct()
+        getAndroidView().goToNewProduct(view)
     }
 
-    suspend fun deleteProduct(item: Product) {
-        androidView.deleteProduct(item)
+    fun askDeleteProduct(item: Product, context: Context) {
+        getAndroidView().askDeleteProduct(item,context)
     }
 
     fun showProductListSaleToString(item: Sale, context: Context) {
-        return androidView.showProductListSaleToString(item,context)
+        return getAndroidView().showProductListSaleToString(item,context)
     }
 
     /*
         Cart data
      */
     fun addProductToCart(item: Product,view: View){
-        androidView.addProductToCart(item,view)
+        getAndroidView().addProductToCart(item,view)
     }
 
 
     fun removeElementCart(context: Context, item: Product) {
-        androidView.removeElementCart(item,context)
+        getAndroidView().removeElementCart(item,context)
     }
 
     fun getCartList(): MutableList<Product> {
-        return androidView.getCartList()
+        return getAndroidView().getCartList()
     }
 
     fun getTotalPriceCart(): String {
-        return androidView.getTotalPriceCart()
+        return getAndroidView().getTotalPriceCart()
     }
 
     fun askSaveLocation(context: Context) {
-        androidView.askSaveLocation(context)
+        getAndroidView().askSaveLocation(context)
     }
 
     fun loadProductListFromREST(view:View) {
-        androidView.loadProductListFromREST(view)
+        getAndroidView().loadProductListFromREST(view)
     }
 
     fun showAlertMessage(title: String, message: String, context: Context) {
-        androidView.showAlertMessage(title,message,context)
+        getAndroidView().showAlertMessage(title,message,context)
     }
 
     fun confirmNewProduct(product: Product,itemView: View) {
-        androidView.confirmNewProduct(product,itemView)
+        getAndroidView().confirmNewProduct(product,itemView)
+    }
+
+    fun addElementsToProductList(mutableList: MutableList<Product>) {
+        getAndroidView().addElementsToProductList(mutableList)
     }
 
 }

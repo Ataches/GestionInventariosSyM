@@ -119,7 +119,18 @@
                 android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toStartOf="@+id/textViewPrivilege"
                 app:layout_constraintTop_toBottomOf="@+id/textViewPrivilege"
-                app:layout_constraintBottom_toTopOf="@id/buttonNewUserToNewUser"
+                app:layout_constraintBottom_toTopOf="@id/textViewProductPhoto"
+                />
+
+            <TextView
+                android:id="@+id/textViewProductPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selectImage"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/editTextPrivilege"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPrivilege"
+                app:layout_constraintBottom_toTopOf="@+id/buttonNewUserToGallery"
                 />
 
             <Button
@@ -128,9 +139,9 @@
                 android:layout_height="50dp"
                 android:drawableStart="@drawable/ic_gallery"
                 android:text="@string/getPhotoFromGallery"
-                app:layout_constraintStart_toStartOf="@+id/editTextPrivilege"
+                app:layout_constraintStart_toStartOf="@+id/textViewProductPhoto"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewUserToCamera"
-                app:layout_constraintTop_toBottomOf="@+id/editTextPrivilege"
+                app:layout_constraintTop_toBottomOf="@+id/textViewProductPhoto"
                 app:layout_constraintBottom_toTopOf="@id/imageViewNewUser"
                 />
 

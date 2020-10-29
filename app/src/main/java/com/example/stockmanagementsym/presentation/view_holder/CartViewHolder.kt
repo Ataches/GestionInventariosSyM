@@ -51,7 +51,7 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
 
         itemView.textViewProdRealQuantity.text =
             "Disponibles: ${(product.getQuantity()-productCart.getQuantity())}" +
-                    "de total: ${product.getQuantity()}"
+                    " de total: ${product.getQuantity()}"
 
         itemView.buttonRemoveCart.setOnClickListener{
             FragmentData.removeElementCart(it.context,productCart)

@@ -3,18 +3,15 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
 import android.view.View
-import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.item_product.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,7 +20,8 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewName.text = product.getName()
         itemView.textViewDescription.text = product.getDescription()
         itemView.textViewPrice.text = df.format(product.getPrice())
-        itemView.textViewQuantity.text = "Cantidad: ${product.getQuantity()}"
+        itemView.textViewQuantity.text = """${product.getQuantity()}"""
+
         val userPhotoData = product.getStringBitMap()
         if(userPhotoData.isNotEmpty()){
             if(userPhotoData.length<400){
@@ -41,38 +39,24 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.imageViewProduct.setImageBitmap(null)
             itemView.imageViewProduct.setBackgroundResource(R.drawable.ic_image)
         }
+        Log.d("TAG TEST ID PROD REST", ""+product.idProduct)
+        if(product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT){
+            itemView.constraintLayoutCard.setBackgroundResource(R.color.buttonSecondary)
+        }
 
         itemView.buttonAddProductToCart.setOnClickListener{
-            val quantityString = itemView.editTextQuantity.text.toString()
-            if(quantityString.isDigitsOnly()&&quantityString.isNotEmpty()){
-                val quantity:Int = quantityString.toInt()
-                if(product.idProduct != 0L){
-                    if((product.getQuantity() >= quantity) && (quantity > 0)){
-                        val cartProduct = Product(
-                            name = product.getName(),
-                            description = product.getDescription(),
-                            price = product.getPrice(),
-                            stringBitMap = product.getStringBitMap(),
-                            quantity = quantity
-                        )
-                        cartProduct.idProduct = product.idProduct
-                        FragmentData.addProductToCart(cartProduct,it)
-                    }else
-                        FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
-                }else{
-                    FragmentData.showToastMessage(it.context,"Producto no registrado, redirigiendo")
-                    FragmentData.confirmNewProduct(product,itemView)
-                }
-            }else
-                FragmentData.showToastMessage(it.context, "Digite un numero correcto")
+            if(product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT){
+                FragmentData.addProductToCart(product,it)
+            }else{
+                FragmentData.showToastMessage(it.context,"Producto no registrado, redirigiendo")
+                FragmentData.confirmNewProduct(product,itemView)
+            }
         }
         itemView.buttonEditProduct.setOnClickListener {
             FragmentData.updateProduct(product,true, it)
         }
         itemView.buttonDeleteProduct.setOnClickListener{
-            GlobalScope.launch(Dispatchers.IO){
-                FragmentData.deleteProduct(product)
-            }
+            FragmentData.askDeleteProduct(product,itemView.context)
         }
     }
 

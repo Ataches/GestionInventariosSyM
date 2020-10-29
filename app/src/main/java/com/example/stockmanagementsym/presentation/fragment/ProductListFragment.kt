@@ -26,7 +26,12 @@ class ProductListFragment : Fragment(), ListListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_product_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_product_list, container, false)
+        if(!FragmentData.getProductListRESTLoaded()){
+            FragmentData.loadProductListFromREST(view)
+            FragmentData.setProductListRESTLoaded(true)
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +42,7 @@ class ProductListFragment : Fragment(), ListListener{
 
         FragmentData.setProductListListener(this)
         reloadList()
-        FragmentData.loadProductListFromREST(view)
+
         view.buttonProductListToSearch.setOnClickListener(AndroidController)
         view.buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
@@ -52,6 +57,7 @@ class ProductListFragment : Fragment(), ListListener{
     }
 
     override fun setList(list: MutableList<Any>) {
+        FragmentData.setProductListRESTLoaded(false)
         GlobalScope.launch(Dispatchers.IO){
             adapter.setProductList(list as MutableList<Product>)
             requireActivity().runOnUiThread {
@@ -62,7 +68,8 @@ class ProductListFragment : Fragment(), ListListener{
 
     override fun addElementsToList(mutableList: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.getProductList().addAll(mutableList as MutableList<Product>)
+            adapter.addElementsToProductList(mutableList as MutableList<Product>)
+            FragmentData.addElementsToProductList(mutableList)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

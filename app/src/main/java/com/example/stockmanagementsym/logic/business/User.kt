@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.stockmanagementsym.data.CONSTANTS
 
 @Entity
 class User(
@@ -16,7 +17,7 @@ class User(
 ){
     @PrimaryKey(autoGenerate = true)
     @NonNull @ColumnInfo(name = "id_user")
-    var idSale:Long = 0L
+    var idSale:Long = CONSTANTS.ID_PRODUCT_DEFAULT
 
     fun getName():String{
         return name

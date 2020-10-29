@@ -14,8 +14,6 @@ import com.example.stockmanagementsym.presentation.AndroidModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 
 class AndroidView(private val androidModel: AndroidModel) {
@@ -26,7 +24,7 @@ class AndroidView(private val androidModel: AndroidModel) {
     private lateinit var view:View
 
     init {
-        controller.setAdroidView(this)
+        controller.setAndroidView(this)
         getFragmentData().setAndroidView(this)
     }
 
@@ -69,20 +67,25 @@ class AndroidView(private val androidModel: AndroidModel) {
     /*
         Product
      */
-    fun goToNewProduct() {
-        controller.goNewProduct()
+    fun goToNewProduct(view:View) {
+        controller.goToNewProduct(view)
     }
 
     fun registerProduct(view: View, updateBoolean: Boolean) {
         getDialogView().dialogRegisterProduct(view, updateBoolean)
     }
 
-    suspend fun createProduct(product: Product): Boolean {
-        return androidModel.createProduct(product)
+    fun createProduct(product: Product,context: Context) {
+        androidModel.createProduct(product,context)
     }
-
-    suspend fun deleteProduct(product: Product): Boolean {
-        return androidModel.deleteProduct(product)
+    fun askDeleteProduct(product: Product,context: Context){
+        dialogConfirmRegister(product,context.getString(R.string.titleAlertDeleteProd),
+                                context.getString(R.string.messageAlertDeleteProd),context as Activity)
+    }
+    fun deleteProduct(product: Product,context:Context) {
+        GlobalScope.launch(Dispatchers.IO){
+            getDialogView().showResultTransaction(androidModel.deleteProduct(product),context)
+        }
     }
 
     suspend fun getProductList(): MutableList<Product> {
@@ -97,9 +100,9 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.updateProduct(product)
     }
 
-    fun goToProductList() {
+    fun goToProductList(view: View) {
         reloadProductList()
-        controller.goProductList()
+        controller.goToProductList(view)
     }
 
     fun getProductToString(product: Product): String {
@@ -140,16 +143,14 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
 
     fun newCustomer(view: View) {
-        doAsync {
-            getDialogView().dialogRegisterCustomer(view, false)
-            uiThread {
-                reloadCustomerList()
-            }
-        }
+        getDialogView().dialogRegisterCustomer(view, false)
     }
 
-    suspend fun deleteCustomer(customer: Customer): Boolean {
-        return androidModel.deleteCustomer(customer)
+    fun deleteCustomer(customer: Customer,context: Context){
+        GlobalScope.launch(Dispatchers.IO){
+            getDialogView().showResultTransaction(androidModel.deleteCustomer(customer),context)
+            reloadCustomerList()
+        }
     }
 
     fun setCustomerSelected(item: Int, view: View) {
@@ -230,9 +231,9 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun removeElementCart(item: Product, context: Context) {
         if (androidModel.removeElementCart(item))
-            showToastMessage(context, context.getString(R.string.elementAddedToCart))
+            showToastMessage(context.getString(R.string.elementAddedToCart),context)
         else
-            showToastMessage(context, context.getString(R.string.elementNotAddedToCart))
+            showToastMessage(context.getString(R.string.elementNotAddedToCart),context)
     }
 
     fun getCartList(): MutableList<Product> {
@@ -253,7 +254,7 @@ class AndroidView(private val androidModel: AndroidModel) {
     /*
         Messages
      */
-    fun showToastMessage(context: Context, message: String){
+    fun showToastMessage(message: String, context: Context){
         getDialogView().showToastMessage(message, context)
     }
 
@@ -298,9 +299,9 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.newUser(user)
     }
 
-    fun goNewUserToUserList() {
+    fun goNewUserToUserList(view: View) {
         reloadUserList()
-        controller.goNewUserToUserList()
+        controller.goNewUserToUserList(view)
     }
 
     fun getUserLatitude(): Double {
@@ -355,6 +356,14 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun loadProductListFromREST(view: View) {
         androidModel.loadProductListFromREST(view)
+    }
+
+    fun getUserToString(user: User): String {
+        return androidModel.getUserToString(user)
+    }
+
+    fun addElementsToProductList(mutableList: MutableList<Product>) {
+        androidModel.addElementsToProductList(mutableList)
     }
 
 
