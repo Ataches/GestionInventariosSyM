@@ -1,13 +1,14 @@
 package com.example.stockmanagementsym.logic
 
-import android.util.Log
 import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.logic.business.Product
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
 class ProductLogic(private var productDao: ProductDao) {
 
+    private var productListREST: MutableList<Product> = mutableListOf()
     private var productList: MutableList<Product> = mutableListOf()
 
     suspend fun updateProduct(productToUpdate: Product):Boolean {
@@ -63,12 +64,14 @@ class ProductLogic(private var productDao: ProductDao) {
         return productList
     }
     
-    fun addElementsToProductList(mutableList: MutableList<Product>) {
+    fun addProductListREST(mutableList: MutableList<Product>) {
+        productListREST = mutableList
         productList.addAll(mutableList)
     }
 
     private suspend fun updateProductList() {
         productList = productDao.selectProductList()
+        productList.addAll(productListREST)
     }
 
     //TypeConverter

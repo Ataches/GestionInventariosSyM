@@ -9,8 +9,19 @@ class CartData {
     fun addProduct(product: Product):String{
         if(cartList.any { it == product })
             return "El producto ya está en el carrito"
-        cartList.add(product)
+        cartList.add(createProductCart(product))
         return "Producto añadido al carrito"
+    }
+    private fun createProductCart(product: Product):Product{
+        val cartProduct = Product(
+                name = product.getName(),
+                description = product.getDescription(),
+                price = product.getPrice(),
+                stringBitMap = product.getStringBitMap(),
+                quantity = CONSTANTS.QUANTITY_DEFAULT_PROD_TO_CART
+        )
+        cartProduct.idProduct = product.idProduct
+        return cartProduct
     }
     fun clearCart():Boolean{
         return try{

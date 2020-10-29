@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_product_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ProductListFragment : Fragment(), ListListener{
@@ -26,12 +27,7 @@ class ProductListFragment : Fragment(), ListListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_product_list, container, false)
-        if(!FragmentData.getProductListRESTLoaded()){
-            FragmentData.loadProductListFromREST(view)
-            FragmentData.setProductListRESTLoaded(true)
-        }
-        return view
+        return inflater.inflate(R.layout.fragment_product_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,13 +39,20 @@ class ProductListFragment : Fragment(), ListListener{
         FragmentData.setProductListListener(this)
         reloadList()
 
+        if(!FragmentData.getProductListRESTLoaded()){
+            FragmentData.loadProductListFromREST(requireView())
+            FragmentData.setProductListRESTLoaded(true)
+        }
+
         view.buttonProductListToSearch.setOnClickListener(AndroidController)
         view.buttonProductListToNewProduct.setOnClickListener(AndroidController)
     }
 
     override fun reloadList() {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.setProductList(FragmentData.getProductList())
+            withContext(Dispatchers.IO){
+                adapter.setProductList(FragmentData.getProductList())
+            }
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }
@@ -69,7 +72,6 @@ class ProductListFragment : Fragment(), ListListener{
     override fun addElementsToList(mutableList: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
             adapter.addElementsToProductList(mutableList as MutableList<Product>)
-            FragmentData.addElementsToProductList(mutableList)
             requireActivity().runOnUiThread {
                 adapter.notifyDataSetChanged()
             }

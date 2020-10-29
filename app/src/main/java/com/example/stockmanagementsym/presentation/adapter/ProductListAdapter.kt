@@ -12,7 +12,7 @@ import com.example.stockmanagementsym.presentation.view_holder.ProductViewHolder
 class ProductListAdapter(private var productList: MutableList<Product>) : RecyclerView.Adapter<ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
         return ProductViewHolder(view)
     }
 

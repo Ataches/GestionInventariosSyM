@@ -36,7 +36,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class AndroidModel{
 
@@ -290,8 +289,8 @@ class AndroidModel{
         return try{
             withContext(Dispatchers.IO) {
                 getProductLogic().deleteProduct(product)
+                reloadProductList()
             }
-            reloadProductList()
             true
         }catch (e: Exception){
             false
@@ -337,11 +336,11 @@ class AndroidModel{
         stringBitmap = stringEncoded
         return stringEncoded
     }
-    fun addProductsToProductList(list:List<Product>, view:View){
+    fun addProductListREST(list:List<Product>, view:View){ //Called from rest
         GlobalScope.launch(Dispatchers.IO){
             val productListFragment:ProductListFragment = view.findFragment()
             productListFragment.addElementsToList(list.toMutableList())
-            getProductLogic().addElementsToProductList(list.toMutableList())
+            getProductLogic().addProductListREST(list.toMutableList())
         }
     }
     private fun reloadProductList() {
@@ -507,9 +506,4 @@ class AndroidModel{
     fun getUserToString(user:User): String {
         return getUserLogic().getUserToString(user)
     }
-
-    fun addElementsToProductList(mutableList: MutableList<Product>) {
-        getProductLogic().addElementsToProductList(mutableList)
-    }
-
 }

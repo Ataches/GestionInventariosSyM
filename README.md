@@ -59,6 +59,10 @@ Campos para crear un nuevo usuario:
 * Nombre de usuario
 * Contraseña de usuario
 * Privilegio de usuario
+* Imagen de perfil (opcional)
+
+El listado de productos obtiene información de nuevos productos por medio de la utilización de un servicio REST quien con el uso de una petición GET obtiene información de los productos.
+
 
 ![](DemoGifs/DemoUser_InsertAndDeleteProduct.gif)
 

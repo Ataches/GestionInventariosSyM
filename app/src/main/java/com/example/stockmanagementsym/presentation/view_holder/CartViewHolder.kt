@@ -44,7 +44,7 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                     FragmentData.showToastMessage(itemView.context, ""+e)
                 }
             }else{
-                itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
+                itemView.imageViewProduct.setImageBitmap(FragmentData.getBitMapFromString(product.getStringBitMap()))
                 itemView.imageViewProduct.background = null
             }
         }
@@ -71,7 +71,7 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
     private fun changeQuantity(quantityString: String, productCart: Product,stepAdd:Int,it:View) {
         if(quantityString.isDigitsOnly()&&quantityString.isNotEmpty()){
             val quantity:Int = quantityString.toInt()
-            if((product.getQuantity()>=quantity)&&(quantity > 0)){
+            if(((quantity+stepAdd > 0)&&(stepAdd<0))||((quantity+stepAdd <= product.getQuantity())&&(stepAdd>0))){ //If step add is negative means that you need to sum it to quantity to decrease quantity
                 if((quantity==productCart.getQuantity())&&((product.getQuantity()>quantity)||(stepAdd<0)))
                     productCart.setQuantity(quantity+stepAdd)
                 else
@@ -81,11 +81,6 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                 FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
         }else
             FragmentData.showToastMessage(it.context, "Digite un numero correcto")
-    }
-
-    private fun decoderStringToBitMap(string: String): Bitmap? {
-        val byteArrayFromString = Base64.decode(string, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
     }
 
     fun setProductOriginal(product: Product) {

@@ -249,9 +249,4 @@ object FragmentData {
     fun confirmNewProduct(product: Product,itemView: View) {
         getAndroidView().confirmNewProduct(product,itemView)
     }
-
-    fun addElementsToProductList(mutableList: MutableList<Product>) {
-        getAndroidView().addElementsToProductList(mutableList)
-    }
-
 }

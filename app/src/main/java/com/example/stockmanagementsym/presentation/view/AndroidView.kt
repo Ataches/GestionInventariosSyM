@@ -82,7 +82,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         dialogConfirmRegister(product,context.getString(R.string.titleAlertDeleteProd),
                                 context.getString(R.string.messageAlertDeleteProd),context as Activity)
     }
-    fun deleteProduct(product: Product,context:Context) {
+    fun deleteProduct(product: Product,context: Context) {
         GlobalScope.launch(Dispatchers.IO){
             getDialogView().showResultTransaction(androidModel.deleteProduct(product),context)
         }
@@ -361,10 +361,4 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun getUserToString(user: User): String {
         return androidModel.getUserToString(user)
     }
-
-    fun addElementsToProductList(mutableList: MutableList<Product>) {
-        androidModel.addElementsToProductList(mutableList)
-    }
-
-
 }

@@ -39,10 +39,11 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.imageViewProduct.setImageBitmap(null)
             itemView.imageViewProduct.setBackgroundResource(R.drawable.ic_image)
         }
-        Log.d("TAG TEST ID PROD REST", ""+product.idProduct)
-        if(product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT){
+
+        if(product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT)
             itemView.constraintLayoutCard.setBackgroundResource(R.color.buttonSecondary)
-        }
+        else
+            itemView.constraintLayoutCard.setBackgroundResource(R.color.cardBackground)
 
         itemView.buttonAddProductToCart.setOnClickListener{
             if(product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT){

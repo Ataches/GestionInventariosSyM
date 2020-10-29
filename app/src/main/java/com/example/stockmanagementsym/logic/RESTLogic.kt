@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.logic
 
-import android.content.Context
 import android.view.View
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.network.RetrofitInstance
@@ -23,7 +22,7 @@ class RESTLogic(private val androidModel: AndroidModel) {
             uiThread{
                 if(callRetrofit.isSuccessful){
                     val productList = callRetrofit.body()?.productList?: listOf()
-                    androidModel.addProductsToProductList(productList, view)
+                    androidModel.addProductListREST(productList, view)
                     androidModel.showAlertMessage(context.getString(R.string.titleProductListRestAdded),
                             context.getString(R.string.messageProductListRestAdded),context)
                 }else{
