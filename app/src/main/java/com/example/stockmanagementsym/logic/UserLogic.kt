@@ -81,9 +81,9 @@ class UserLogic(private val userDao: UserDao) {
         return user != null
     }
 
-    suspend fun insertTest(userName: String, password: String, photoUri:String) {
+    suspend fun insertUser(userName: String, password: String) {
         withContext(Dispatchers.IO){
-            insertUser(User(userName, password,"admin",photoUri,-1.0,-1.0))
+            insertUser(User(userName, password,"admin","",-1.0,-1.0))
         }
     }
     

@@ -105,5 +105,9 @@
     <string name="messageAlertDeleteProd">¿Desea eliminar el siguiente producto?</string>
     <string name="messageProductListRestAdded">Lista de productos REST añadida, los items con borde azul no estan en la BD, si los desea agregar en la BD o editar para su registro puede hacerlo</string>
     <string name="titleProductListRestAdded">Listado de productos REST</string>
+    <string name="buttonRegister">Registro</string>
+    <string name="messageUserRegistered">Usuario registrado, inicie sesión</string>
+    <string name="titleUserRegistered">Registro</string>
+    <string name="messageUserNotRegistered">Fallo registrando el usuario</string>
 
 </resources>

@@ -3,7 +3,6 @@ package com.example.stockmanagementsym
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stockmanagementsym.presentation.AndroidModel
@@ -15,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class LoginActivity : AppCompatActivity() {
@@ -27,7 +27,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         context = this
         androidModel = AndroidModel()
-        Log.d("LLETA","LETA")
 
         buttonLogin.setOnClickListener  {
             showLoading(true)
@@ -52,6 +51,23 @@ class LoginActivity : AppCompatActivity() {
             showLoading(true)
             val intent = googleSignInClient.signInIntent
             startActivityForResult(intent, 50)
+        }
+        buttonRegister.setOnClickListener {
+            showLoading(true)
+            GlobalScope.launch(Dispatchers.IO){
+                val userName = editTextUser.text.toString()
+                val password = editTextPass.text.toString()
+                if(userName.isEmpty()||password.isEmpty()){
+                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.voidData),context)
+                    (context as LoginActivity).runOnUiThread {
+                        showLoading(false)
+                    }
+                }else{
+                    androidModel.setGoogleAccount(null)
+                    androidModel.setGoogleSingInClient(null)
+                    register(userName, password)
+                }
+            }
         }
     }
 
@@ -79,6 +95,20 @@ class LoginActivity : AppCompatActivity() {
     private suspend fun login(user: String, password: String) {
         showLoading(false)
         androidModel.confirmLogin(this, user, password)
+    }
+
+    private suspend fun register(user: String, password: String) {
+        val login = this
+        withContext(Dispatchers.IO){
+            try{
+                androidModel.register(login, user, password)
+                showLoading(false)
+                androidModel.showAlertMessage(getString(R.string.titleUserRegistered),getString(R.string.messageUserRegistered),login)
+            }catch (e:Exception){
+                showLoading(false)
+                androidModel.showAlertMessage(getString(R.string.titleUserRegistered),getString(R.string.messageUserNotRegistered),login)
+            }
+        }
     }
 
     private fun configureGoogleClient(){

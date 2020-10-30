@@ -459,6 +459,11 @@ class AndroidModel{
             getAndroidView().showToastMessage("Usuario $userName no encontrado o contraseña incorrecta", login)
     }
 
+    suspend fun register(login: LoginActivity, userName: String, password: String) {
+        dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
+        getUserLogic().insertUser(userName,password)
+    }
+
     suspend fun askSaveLocation(context: Context){
         val location = context.getString(R.string.location)+" "+userLatitude+" - "+userLongitude
         val activity = context as Activity
