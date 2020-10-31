@@ -1,21 +1,18 @@
 package com.example.stockmanagementsym.presentation.fragment
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.AndroidController
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.view.*
 
+/*
+    Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+*/
 class NewProductFragment: Fragment(){
 
     private lateinit var viewElement:View
@@ -61,11 +58,11 @@ class NewProductFragment: Fragment(){
             view.textViewTitleProduct.text = getString(R.string.titleAlertNewProd)
         }
 
-        view.buttonNewProductToHome.setOnClickListener (AndroidController)
-        view.buttonNewProductToProductList.setOnClickListener (AndroidController)
-        view.buttonNewProduct.setOnClickListener (AndroidController)
-        view.buttonNewProductToGallery.setOnClickListener(AndroidController)
-        view.buttonNewProductToCamera.setOnClickListener(AndroidController)
+        view.buttonNewProductToHome.setOnClickListener (FragmentData.getController())
+        view.buttonNewProductToProductList.setOnClickListener (FragmentData.getController())
+        view.buttonNewProduct.setOnClickListener (FragmentData.getController())
+        view.buttonNewProductToGallery.setOnClickListener(FragmentData.getController())
+        view.buttonNewProductToCamera.setOnClickListener(FragmentData.getController())
     }
 
 }

@@ -1,15 +1,11 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.ListListener
-import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_cart.view.*
 import kotlinx.android.synthetic.main.item_cart.view.editTextQuantity
@@ -18,7 +14,6 @@ import kotlinx.android.synthetic.main.item_cart.view.textViewDescription
 import kotlinx.android.synthetic.main.item_cart.view.textViewName
 import kotlinx.android.synthetic.main.item_cart.view.textViewPrice
 import kotlinx.android.synthetic.main.item_cart.view.textViewQuantity
-import kotlinx.android.synthetic.main.item_product.view.*
 import java.text.DecimalFormat
 
 class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.ViewHolder(itemView) {

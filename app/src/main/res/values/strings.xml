@@ -48,8 +48,8 @@
     <string name="messageAlertNewSale">¿Desea reistrar una nueva venta con los siguientes productos?:</string>
     <string name="saleCustomerName">Seleccionar cliente</string>
     <string name="saleDate">Fecha de compra:</string>
-    <string name="elementAddedToCart">Elemento añadido al carrito</string>
-    <string name="elementNotAddedToCart">Elemento no añadido al carrito</string>
+    <string name="elementAddedToCart">Producto añadido al carrito</string>
+    <string name="elementNotAddedToCart">Producto no añadido al carrito</string>
 
     <!-- Dialogs -->
     <string name="modifyIfIsNecessary">Modifique los datos si es necesario</string>
@@ -109,5 +109,13 @@
     <string name="messageUserRegistered">Usuario registrado, inicie sesión</string>
     <string name="titleUserRegistered">Registro</string>
     <string name="messageUserNotRegistered">Fallo registrando el usuario</string>
+    <string name="userDeleteFail">Fallo al eliminar el cliente</string>
+    <string name="userInsertSuccess">Usuario registrado correctamente</string>
+    <string name="userDeleteSuccess">Usuario eliminado exitosamente</string>
+    <string name="elementRemovedFromCart">Producto eliminado del carrito</string>
+    <string name="elementNotRemovedFromCart">Producto no eliminado del carrito</string>
+    <string name="transactionSuccess">Se realizo la operación con exito</string>
+    <string name="transactionFailure">No se pudo realizar la operación</string>
+    <string name="productAlreadyInCart">El producto ya esta en el carrito</string>
 
 </resources>

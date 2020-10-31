@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.logic
 
-import android.view.View
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.network.RetrofitInstance
 import com.example.stockmanagementsym.data.network.apis.APIService
@@ -10,8 +9,7 @@ import org.jetbrains.anko.uiThread
 
 class RESTLogic(private val androidModel: AndroidModel) {
 
-    fun getProductList(view: View){
-        val context = view.context
+    fun getProductList(){
         doAsync{
             val callRetrofit =
                 RetrofitInstance()
@@ -22,11 +20,11 @@ class RESTLogic(private val androidModel: AndroidModel) {
             uiThread{
                 if(callRetrofit.isSuccessful){
                     val productList = callRetrofit.body()?.productList?: listOf()
-                    androidModel.addProductListREST(productList, view)
-                    androidModel.showAlertMessage(context.getString(R.string.titleProductListRestAdded),
-                            context.getString(R.string.messageProductListRestAdded),context)
+                    androidModel.addProductListREST(productList)
+                    androidModel.showAlertMessage(R.string.titleProductListRestAdded,
+                                                    R.string.messageProductListRestAdded)
                 }else{
-                    androidModel.showToastMessage(callRetrofit.message(),context)
+                    androidModel.showToastMessage(callRetrofit.message())
                 }
             }
         }

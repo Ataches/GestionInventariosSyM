@@ -9,9 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Sale
-import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.SaleListAdapter
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_sale_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,7 +38,7 @@ class SaleListFragment : Fragment(), ListListener {
 
         reloadList()
 
-        buttonSaleListToSearch.setOnClickListener(AndroidController)
+        buttonSaleListToSearch.setOnClickListener(FragmentData.getController())
     }
 
     override fun reloadList() {

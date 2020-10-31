@@ -22,7 +22,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if((userLatitude==-1.0)&&(userLongitude==-1.0))
+        if((userLatitude==CONSTANTS.DEFAULT_USER_LATITUDE)&&(userLongitude==CONSTANTS.DEFAULT_USER_LONGITUDE))
             headerView.textViewUserLocationNavView.text =
                 getString(R.string.locationFailure)
         else

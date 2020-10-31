@@ -6,11 +6,11 @@ import java.lang.Exception
 class CartData {
     private var cartList:MutableList<Product> = mutableListOf()
 
-    fun addProduct(product: Product):String{
-        if(cartList.any { it == product })
-            return "El producto ya está en el carrito"
+    fun addProductToCartList(product: Product):Boolean{
+        if(cartList.any { it.idProduct == product.idProduct })
+            return false
         cartList.add(createProductCart(product))
-        return "Producto añadido al carrito"
+        return true
     }
     private fun createProductCart(product: Product):Product{
         val cartProduct = Product(

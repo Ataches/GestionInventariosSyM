@@ -7,14 +7,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.AndroidController
-import kotlinx.android.synthetic.main.fragment_new_product.view.*
-import kotlinx.android.synthetic.main.fragment_new_product.view.buttonNewProductToCamera
 import kotlinx.android.synthetic.main.fragment_new_user.view.*
 
 class NewUserFragment: Fragment(){
-
-    private lateinit var viewElement:View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,15 +21,14 @@ class NewUserFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewElement = view
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.newUser)
 
-        view.buttonNewUserToUserList.setOnClickListener(AndroidController)
-        view.buttonNewUserToHome.setOnClickListener(AndroidController)
-        view.buttonNewUserToGallery.setOnClickListener (AndroidController)
-        view.buttonNewUserToCamera.setOnClickListener (AndroidController)
-        view.buttonNewUserToNewUser.setOnClickListener(AndroidController)
-        view.buttonNewUserCancel.setOnClickListener(AndroidController)
+        view.buttonNewUserToUserList.setOnClickListener(FragmentData.getController())
+        view.buttonNewUserToHome.setOnClickListener(FragmentData.getController())
+        view.buttonNewUserToGallery.setOnClickListener (FragmentData.getController())
+        view.buttonNewUserToCamera.setOnClickListener (FragmentData.getController())
+        view.buttonNewUserToNewUser.setOnClickListener(FragmentData.getController())
+        view.buttonNewUserCancel.setOnClickListener(FragmentData.getController())
     }
 
 }

@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.ProductListAdapter
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_product_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,12 +38,12 @@ class ProductListFragment : Fragment(), ListListener{
         reloadList()
 
         if(!FragmentData.getProductListRESTLoaded()){
-            FragmentData.loadProductListFromREST(requireView())
+            FragmentData.loadProductListFromREST()
             FragmentData.setProductListRESTLoaded(true)
         }
 
-        view.buttonProductListToSearch.setOnClickListener(AndroidController)
-        view.buttonProductListToNewProduct.setOnClickListener(AndroidController)
+        view.buttonProductListToSearch.setOnClickListener(FragmentData.getController())
+        view.buttonProductListToNewProduct.setOnClickListener(FragmentData.getController())
     }
 
     override fun reloadList() {

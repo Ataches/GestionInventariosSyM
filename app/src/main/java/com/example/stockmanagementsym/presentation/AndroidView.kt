@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.presentation.view
+package com.example.stockmanagementsym.presentation
 
 import android.app.Activity
 import android.content.Context
@@ -9,23 +9,43 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.AndroidController
-import com.example.stockmanagementsym.presentation.AndroidModel
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.ListListener
+import com.example.stockmanagementsym.presentation.view.DialogView
+import com.example.stockmanagementsym.presentation.view.Notifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
+/*
+    Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+*/
 class AndroidView(private val androidModel: AndroidModel) {
 
+    private var androidController: AndroidController ?= null
+    private var productListRESTLoaded: Boolean = false
+    private var cartListener: ListListener?= null
+    private var productListListener: ListListener?= null
+    private var customerListListener: ListListener ?= null
+    private var userListListener: ListListener?= null
+
+    private var customerToEdit: Customer ?= null
+    private var productToEdit: Product?= null
+    private var booleanUpdate: Boolean = false
+
+    private var notifier: Notifier? = null
     private var dialogView: DialogView? = null
-    var controller: AndroidController = AndroidController
     private var fragmentData: FragmentData? = null
     private lateinit var view:View
 
     init {
-        controller.setAndroidView(this)
         getFragmentData().setAndroidView(this)
+    }
+
+    fun getAndroidController():AndroidController{
+        if(androidController==null)
+            androidController = AndroidController(this)
+        return androidController!!
     }
 
     private fun getFragmentData(): FragmentData {
@@ -48,6 +68,63 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun getCamera(view: View) {
         androidModel.getPhotoCamera(view.context as Activity, view.context)
     }
+
+    /*
+        List listeners
+     */
+    fun setProductListListener(productListListener: ListListener) {
+        this.productListListener = productListListener
+    }
+
+    fun setCartListener(cartListener: ListListener) {
+        this.cartListener = cartListener
+    }
+
+    fun setCustomerListListener(customerListListener: ListListener){
+        this.customerListListener = customerListListener
+    }
+
+    fun setUserListListener(userListListener: ListListener){
+        this.userListListener = userListListener
+    }
+
+    fun getProductListListener(): ListListener {
+        return productListListener!!
+    }
+
+    fun getCartListener(): ListListener {
+        return cartListener!!
+    }
+
+    fun getCustomerListListener(): ListListener {
+        return customerListListener!!
+    }
+
+    fun getUserListListener(): ListListener{
+        return userListListener!!
+    }
+
+
+    /*
+        List listeners - reload list
+     */
+    fun reloadCustomerList(){
+        if(customerListListener !=null)
+            customerListListener!!.reloadList()
+    }
+
+    fun reloadProductList(){
+        productListListener!!.reloadList()
+    }
+
+    fun reloadCartList() {
+        cartListener!!.reloadList()
+    }
+
+    fun reloadUserList(){
+        userListListener!!.reloadList()
+    }
+
     /*
         User
      */
@@ -67,9 +144,6 @@ class AndroidView(private val androidModel: AndroidModel) {
     /*
         Product
      */
-    fun goToNewProduct(view:View) {
-        controller.goToNewProduct(view)
-    }
 
     fun registerProduct(view: View, updateBoolean: Boolean) {
         getDialogView().dialogRegisterProduct(view, updateBoolean)
@@ -84,7 +158,7 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
     fun deleteProduct(product: Product,context: Context) {
         GlobalScope.launch(Dispatchers.IO){
-            getDialogView().showResultTransaction(androidModel.deleteProduct(product),context)
+            getNotifier().showResultTransaction(androidModel.deleteProduct(product))
         }
     }
 
@@ -102,19 +176,47 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun goToProductList(view: View) {
         reloadProductList()
-        controller.goToProductList(view)
+        getAndroidController().goToProductList(view)
     }
 
     fun getProductToString(product: Product): String {
         return androidModel.getProductToString(product)
     }
 
-    fun reloadProductList() {
-        getFragmentData().reloadProductList()
+    fun getProductToEdit(): Product {
+        return productToEdit!!
     }
 
-    fun getProductToEdit(): Product {
-        return getFragmentData().getProductToEdit()
+    fun updateProduct(product: Product, booleanUpdate: Boolean, view: View) {
+        productToEdit = product
+        this.booleanUpdate = booleanUpdate
+        goToNewProduct(view)
+    }
+
+    private fun goToNewProduct(view:View) {
+        getAndroidController().goToNewProduct(view)
+    }
+    fun addProductListToProductFragment(list: List<Product>) {
+        getProductListListener().addElementsToList(list.toMutableList())
+    }
+    /*
+        Update boolean
+     */
+    fun setBooleanUpdate(confirmUpdate: Boolean) {
+        this.booleanUpdate = confirmUpdate
+    }
+    fun getBooleanUpdate():Boolean{
+        return booleanUpdate
+    }
+
+    /*
+        Product list REST boolean
+     */
+    fun setProductListRESTLoaded(productListRESTLoaded: Boolean){
+        this.productListRESTLoaded = productListRESTLoaded
+    }
+    fun getProductListRESTLoaded():Boolean{
+        return productListRESTLoaded
     }
 
     fun confirmNewProduct(product: Product,view: View) {
@@ -138,8 +240,14 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.updateCustomer(customer)
     }
 
-    fun updateCustomer(view: View) {
+    fun updateCustomer(customerToEdit: Customer, booleanUpdate: Boolean,view: View) {
+        this.customerToEdit = customerToEdit
+        this.booleanUpdate = booleanUpdate
         getDialogView().dialogRegisterCustomer(view, true)
+    }
+
+    fun getCustomerToEdit(): Customer {
+        return customerToEdit!!
     }
 
     fun newCustomer(view: View) {
@@ -148,7 +256,7 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun deleteCustomer(customer: Customer,context: Context){
         GlobalScope.launch(Dispatchers.IO){
-            getDialogView().showResultTransaction(androidModel.deleteCustomer(customer),context)
+            getNotifier().showResultTransaction(androidModel.deleteCustomer(customer))
             reloadCustomerList()
         }
     }
@@ -166,16 +274,8 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getCustomerList()
     }
 
-    fun getCustomerToEdit(): Customer {
-        return getFragmentData().getCustomerToEdit()
-    }
-
     fun getCustomerToString(customer: Customer): String {
         return androidModel.getCustomerToString(customer)
-    }
-
-    fun reloadCustomerList() {
-        getFragmentData().reloadCustomerList()
     }
 
     /*
@@ -210,11 +310,10 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getSaleToString(sale)
     }
 
-    fun showProductListSaleToString(item: Sale, context: Context) {
-        showAlertMessage(
-            context.getString(R.string.saleList),
-            androidModel.getSaleToString(item),
-            context
+    fun showProductListSaleToString(item: Sale) {
+        getNotifier().showAlertMessage(
+            R.string.saleList,
+            androidModel.getSaleToString(item)
         )
     }
 
@@ -230,40 +329,41 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
 
     fun removeElementCart(item: Product, context: Context) {
-        if (androidModel.removeElementCart(item))
-            showToastMessage(context.getString(R.string.elementAddedToCart),context)
-        else
-            showToastMessage(context.getString(R.string.elementNotAddedToCart),context)
+        showResultTransaction(androidModel.removeElementCart(item))
     }
 
     fun getCartList(): MutableList<Product> {
         return androidModel.getCartList()
     }
 
-    fun reloadCartList() {
-        getFragmentData().reloadCartList()
-    }
-
     fun getTotalPriceCart(): String {
         return androidModel.getTotalPriceCart()
     }
-    fun addProductToCart(item: Product, view: View) {
-        androidModel.addProductToCart(item,view)
+    fun addProductToCart(item: Product) {
+        androidModel.addProductToCart(item)
     }
 
     /*
         Messages
      */
     fun showToastMessage(message: String, context: Context){
-        getDialogView().showToastMessage(message, context)
+        getNotifier().setNotifierContext(context)
+        getNotifier().showToastMessage(message)
+    }
+    fun showToastMessage(message: String){
+        getNotifier().showToastMessage(message)
     }
 
-    fun showAlertMessage(title: String, message: String, context: Context){
-        getDialogView().showAlertMessage(title, message, context)
+    fun showAlertMessage(title: Int, message: Int){
+        getNotifier().showAlertMessage(title, message)
+    }
+    fun showAlertMessage(title: String, message: String,context: Context){
+        getNotifier().setNotifierContext(context)
+        getNotifier().showAlertMessage(title, message)
     }
 
-    fun showResultTransaction(updateUser: Boolean, context: Context) {
-        getDialogView().showResultTransaction(updateUser, context)
+    fun showResultTransaction(updateUser: Boolean) {
+        getNotifier().showResultTransaction(updateUser)
     }
 
     fun dialogConfirmRegister(data: Any, title: String, message: String, activity: Activity) {
@@ -283,16 +383,18 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getUserPrivileges()
     }
 
-    fun reloadUserList() {
-        getFragmentData().reloadUserList()
-    }
-
     fun newUser(view: View) {
         getDialogView().dialogRegisterUser(view)
     }
 
-    suspend fun deleteUser(user: User): Boolean {
-        return androidModel.deleteUser(user)
+    suspend fun deleteUser(user: User) {
+        androidModel.deleteUser(user)
+    }
+
+    fun getNotifier(): Notifier {
+        if(notifier == null)
+            notifier = Notifier()
+        return notifier!!
     }
 
     suspend fun newUser(user: User): Boolean {
@@ -301,7 +403,7 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun goNewUserToUserList(view: View) {
         reloadUserList()
-        controller.goNewUserToUserList(view)
+        getAndroidController().goNewUserToUserList(view)
     }
 
     fun getUserLatitude(): Double {
@@ -354,8 +456,8 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getBitMapFromstring(string)
     }
 
-    fun loadProductListFromREST(view: View) {
-        androidModel.loadProductListFromREST(view)
+    fun loadProductListFromREST() {
+        androidModel.loadProductListFromREST()
     }
 
     fun getUserToString(user: User): String {

@@ -15,9 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.UserListAdapter
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_new_user.view.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.coroutines.Dispatchers
@@ -55,8 +53,8 @@ class UserListFragment : Fragment(), ListListener {
         view.recyclerViewUserList.adapter = adapter
         view.recyclerViewUserList.layoutManager = GridLayoutManager(view.context, 2)
 
-        view.buttonUserListToCreateUser.setOnClickListener(AndroidController)
-        view.buttonUserListToSearch.setOnClickListener(AndroidController)
+        view.buttonUserListToCreateUser.setOnClickListener(FragmentData.getController())
+        view.buttonUserListToSearch.setOnClickListener(FragmentData.getController())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

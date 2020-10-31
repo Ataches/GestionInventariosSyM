@@ -62,21 +62,4 @@ class CustomerLogic(private val customerDao: CustomerDao) {
     private suspend fun updateCustomerList(){
         customerList = customerDao.selectCustomerList()
     }
-
-    //TypeConverter
-    fun customerToString(customer: Customer):String{
-        return  "Nombre: "+customer.getName()+CONSTANTS.NEW_LINE_STRING+
-                "Direccion: "+customer.getAddress()+CONSTANTS.NEW_LINE_STRING+
-                "Telefono: "+customer.getPhone()+CONSTANTS.NEW_LINE_STRING+
-                "Ciudad: "+customer.getCity()+CONSTANTS.NEW_LINE_STRING
-    }
-
-    fun stringToCustomer(string: String): Customer{
-        var listString = string.split("\n")
-        listString = listString.map { it.removePrefix("Nombre: ") }
-        listString = listString.map { it.removePrefix("Direccion: ") }
-        listString = listString.map { it.removePrefix("Telefono: ") }
-        listString = listString.map { it.removePrefix("Ciudad: ") }
-        return Customer(listString[0],listString[1],listString[2],listString[3])
-    }
 }

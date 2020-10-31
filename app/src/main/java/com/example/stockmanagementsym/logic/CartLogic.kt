@@ -26,8 +26,8 @@ class CartLogic {
         return df.format(totalPrice)
     }
 
-    fun addProduct(item: Product):String{
-        return getCartData().addProduct(item)
+    fun addProductToCartList(item: Product):Boolean{
+        return getCartData().addProductToCartList(item)
     }
 
     fun removeElementCart(item: Product) : Boolean{

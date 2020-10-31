@@ -4,16 +4,16 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.findFragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
+import com.example.stockmanagementsym.presentation.AndroidView
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.NewUserFragment
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.util.*
 
 
@@ -172,7 +170,7 @@ class DialogView(private var androidView: AndroidView) {
                             newProductFragment.editTextProductQuantity.text.toString().toInt()
                     )
                 }catch (e: Exception){
-                    showToastMessage(view.context.getString(R.string.voidData), view.context)
+                    androidView.showToastMessage(view.context.getString(R.string.voidData), view.context)
                 }
         if (updateBoolean) {
             dialogConfirmRegister(
@@ -209,7 +207,7 @@ class DialogView(private var androidView: AndroidView) {
 
                 viewElement.context.getString(R.string.titleAlertUpdateProd) -> {
                     GlobalScope.launch(Dispatchers.IO) {
-                        showResultTransaction(androidView.goToNewProduct(data as Product), view.context)
+                        androidView.showResultTransaction(androidView.goToNewProduct(data as Product))
                     }
                     androidView.goToProductList(view)
                 }
@@ -219,16 +217,15 @@ class DialogView(private var androidView: AndroidView) {
 
                 viewElement.context.getString(R.string.titleAlertNewSaleBd) -> {
                     GlobalScope.launch(Dispatchers.IO) {
-                        showResultTransaction(androidView.createSale(), view.context)
+                        androidView.showResultTransaction(androidView.createSale())
                     }
                 }
 
                 viewElement.context.getString(R.string.titleAlertNewCustomer) -> {
                     val customer = data as Customer
                     GlobalScope.launch(Dispatchers.IO) {
-                        showResultTransaction(androidView.createCustomer(customer, view), view.context)
+                        androidView.showResultTransaction(androidView.createCustomer(customer, view))
                         loadCustomerList()
-                        FragmentData.reloadCustomerList()
                     }
                     androidView.getCustomerToString(customer)
                     showCustomerSelected(androidView.getCustomerToString(customer))
@@ -236,13 +233,12 @@ class DialogView(private var androidView: AndroidView) {
 
                 viewElement.context.getString(R.string.titleAlertUpdateCustomer) -> {
                     GlobalScope.launch(Dispatchers.IO) {
-                        showResultTransaction(androidView.updateCustomer(data as Customer), view.context)
-                        FragmentData.reloadCustomerList()
+                        androidView.showResultTransaction(androidView.updateCustomer(data as Customer))
                     }
                 }
                 viewElement.context.getString(R.string.titleAlertNewUser) -> {
                     GlobalScope.launch(Dispatchers.IO) {
-                        showResultTransaction(androidView.newUser(data as User), view.context)
+                        androidView.showResultTransaction(androidView.newUser(data as User))
                     }
                     androidView.goNewUserToUserList(view)
                 }
@@ -263,7 +259,7 @@ class DialogView(private var androidView: AndroidView) {
                 }
                 else -> {
                     GlobalScope.launch(Dispatchers.IO) {
-                        showToastMessage(viewElement.context.getString(R.string.modifyIfIsNecessary), viewElement.context)
+                        androidView.showToastMessage(viewElement.context.getString(R.string.modifyIfIsNecessary), viewElement.context)
                     }
                 }
             }
@@ -327,31 +323,5 @@ class DialogView(private var androidView: AndroidView) {
     // Show messages
     fun showCustomerSelected(customerNewSale: String) {
         view.textViewSaleCustomerNameSelected?.text = customerNewSale
-    }
-
-    fun showResultTransaction(resultTransaction: Boolean, context: Context) {
-        if (resultTransaction)
-            showToastMessage("Se realizo la operación con exito", context)
-        else
-            showToastMessage("No se pudo realizar la operación", context)
-    }
-    fun showToastMessage(message: String, context: Context) {
-        doAsync {
-            uiThread {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-    fun showAlertMessage(title: String, message: String, context: Context) {
-        doAsync {
-            uiThread {
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle(title)
-                builder.setMessage(message)
-                builder.setNeutralButton("Cerrar"){ _, _->}
-                builder.create()
-                builder.show()
-            }
-        }
     }
 }

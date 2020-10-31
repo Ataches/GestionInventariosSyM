@@ -15,16 +15,13 @@ import com.example.stockmanagementsym.logic.adapter.bit_map.BitMapConcreteAdapte
 import com.example.stockmanagementsym.logic.adapter.bit_map.IBitMapAdapter
 import com.example.stockmanagementsym.logic.adapter.photo.IPhotoAdapter
 import com.example.stockmanagementsym.logic.adapter.photo.PhotoConcreteAdapter
+import com.example.stockmanagementsym.logic.adapter.type_converter.ITypeConverterAdapter
+import com.example.stockmanagementsym.logic.adapter.type_converter.TypeConverterConcrete
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.fragment.CustomerListFragment
-import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
-import com.example.stockmanagementsym.presentation.fragment.SaleListFragment
-import com.example.stockmanagementsym.presentation.fragment.UserListFragment
-import com.example.stockmanagementsym.presentation.view.AndroidView
-import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.android.synthetic.main.fragment_customer_list.*
@@ -43,7 +40,7 @@ class AndroidModel{
     private var userLongitude: Double = -1.0
     private lateinit var dataBaseLogic: DataBaseLogic
 
-    private var androidView:AndroidView ?= null
+    private var androidView: AndroidView?= null
 
     private var customerLogic: CustomerLogic ?= null
     private var productLogic: ProductLogic ?= null
@@ -63,11 +60,12 @@ class AndroidModel{
     //adapters
     private var photoConcreteAdapter: IPhotoAdapter ?= null
     private var bitMapConcreteAdapter: IBitMapAdapter ?= null
+    private var typeConverterConcrete: ITypeConverterAdapter?= null
 
     //bitmap
     private var stringBitmap: String = ""
-    private var bitMap: Bitmap ?= null
 
+    private var bitMap: Bitmap ?= null
     //User
     fun getUser():User{
         if(user==null)
@@ -89,17 +87,16 @@ class AndroidModel{
         }
     }
 
-    suspend fun deleteUser(user: User): Boolean {
-        return try{
-            if(getUserPrivileges()!="admin")
-                return false
-            withContext(Dispatchers.IO) {
-                getUserLogic().deleteUser(user)
+    suspend fun deleteUser(user: User){
+        try{
+            if(getUserPrivileges()=="admin"){
+                withContext(Dispatchers.IO) {
+                    getUserLogic().deleteUser(user)
+                }
+                getUserLogic().setListListener(getAndroidView().getUserListListener())
             }
-            getAndroidView().reloadUserList()
-            true
         }catch (e:Exception){
-            false
+            getAndroidView().showResultTransaction(false)
         }
     }
 
@@ -195,11 +192,10 @@ class AndroidModel{
         this.dateSale = dateSale
     }
 
-    fun addProductToCart(item: Product, view: View){
-        doAsync{
-            getAndroidView().showAlertMessage(view.context.getString(R.string.cart),getSaleLogic().addProductToCart(item),view.context)
-            getAndroidView().reloadCartList()
-        }
+    fun addProductToCart(item: Product){
+        getSaleLogic().setListListener(getAndroidView().getCartListener())
+        getSaleLogic().addProductToCart(item)
+
     }
 
     fun removeElementCart(item: Product): Boolean {
@@ -207,9 +203,10 @@ class AndroidModel{
     }
 
     fun getSaleToString(sale: Sale): String {
+        getTypeConverterAdapter().setBooleanStringToUser(true)
         return "Fecha: "+sale.getDate()+"\n\n"+
                "Cliente: \n\n"+getCustomerToString(sale.getCustomer()) +"\n\n"+
-               "Listado de productos: \n\n"+ getProductLogic().productListToString(sale.getProductList(),false)
+               "Listado de productos: \n\n"+ getTypeConverterAdapter().productListToString(sale.getProductList())
     }
 
     //Cart
@@ -222,14 +219,18 @@ class AndroidModel{
     }
 
     fun getCartListToString(mutableList: MutableList<Product>): String {
-        return getProductLogic().productListToString(mutableList,false)
+        getTypeConverterAdapter().setBooleanStringToUser(true)
+        return getTypeConverterAdapter().productListToString(mutableList)
     }
 
     //Customer
     suspend fun updateCustomer(customerToUpdate: Customer): Boolean {
         val customerToEdit = getAndroidView().getCustomerToEdit()
         customerToUpdate.idCustomer = customerToEdit.idCustomer
-        return getCustomerLogic().updateCustomer(customerToUpdate)
+        val resultTransaction = getCustomerLogic().updateCustomer(customerToUpdate)
+        if(resultTransaction)
+            getAndroidView().reloadCustomerList()
+        return resultTransaction
     }
 
     suspend fun getCustomerList(): MutableList<Customer> {
@@ -245,6 +246,8 @@ class AndroidModel{
     suspend fun createCustomer(customer: Customer): Boolean {
         val resultTransaction = getCustomerLogic().createCustomer(customer)
         customerNewSale = customer //If it is a new customer register from new sale fragment
+        if(resultTransaction)
+            getAndroidView().reloadCustomerList()
         return resultTransaction
     }
 
@@ -255,7 +258,7 @@ class AndroidModel{
     }
 
     fun getCustomerToString(customer: Customer): String {
-        return getCustomerLogic().customerToString(customer)
+        return getTypeConverterAdapter().customerToString(customer)
     }
 
     //Product
@@ -298,17 +301,17 @@ class AndroidModel{
     }
 
     fun getProductToString(product: Product): String {
-        return getProductLogic().productToString(product,false)
+        return getTypeConverterAdapter().productToString(product)
     }
 
-    fun loadProductListFromREST(view: View){
-        getRESTLogic().getProductList(view)
+    fun loadProductListFromREST(){
+        getRESTLogic().getProductList()
     }
 
     //   New product creation
     fun createProduct(product: Product,context: Context) {
         GlobalScope.launch(Dispatchers.IO){
-            getAndroidView().showResultTransaction(getProductLogic().createProduct(product),context)
+            getAndroidView().showResultTransaction(getProductLogic().createProduct(product))
             reloadProductList()
         }
     }
@@ -336,10 +339,9 @@ class AndroidModel{
         stringBitmap = stringEncoded
         return stringEncoded
     }
-    fun addProductListREST(list:List<Product>, view:View){ //Called from rest
-        GlobalScope.launch(Dispatchers.IO){
-            val productListFragment:ProductListFragment = view.findFragment()
-            productListFragment.addElementsToList(list.toMutableList())
+    fun addProductListREST(list:List<Product>){ //Called from rest
+        doAsync{
+            getAndroidView().addProductListToProductFragment(list)
             getProductLogic().addProductListREST(list.toMutableList())
         }
     }
@@ -390,7 +392,7 @@ class AndroidModel{
     //Logic classes
     private fun getUserLogic(): UserLogic {
         if(userLogic==null)
-            userLogic = UserLogic(dataBaseLogic.getUserDao())
+            userLogic = UserLogic(dataBaseLogic.getUserDao(),getAndroidView().getNotifier())
         return userLogic!!
     }
 
@@ -402,7 +404,7 @@ class AndroidModel{
 
     private fun getSaleLogic(): SaleLogic {
         if(saleLogic==null)
-            saleLogic = SaleLogic(dataBaseLogic.getSaleDao())
+            saleLogic = SaleLogic(dataBaseLogic.getSaleDao(),getAndroidView().getNotifier())
         return saleLogic!!
     }
 
@@ -435,6 +437,11 @@ class AndroidModel{
         if(bitMapConcreteAdapter==null)
             bitMapConcreteAdapter = BitMapConcreteAdapter()
         return bitMapConcreteAdapter!!
+    }
+    private fun getTypeConverterAdapter():ITypeConverterAdapter{
+        if(typeConverterConcrete==null)
+            typeConverterConcrete = TypeConverterConcrete()
+        return typeConverterConcrete!!
     }
 
     suspend fun confirmLogin(login: LoginActivity, userName: String, password: String) {
@@ -482,9 +489,8 @@ class AndroidModel{
     suspend fun saveUserLocation(context: Context){
         user!!.setLatitude(userLatitude)
         user!!.setLongitude(userLongitude)
-
         withContext(Dispatchers.IO) {
-            getAndroidView().showResultTransaction(getUserLogic().updateUser(user!!), context)
+            getAndroidView().showResultTransaction(getUserLogic().updateUser(user!!))
         }
     }
 
@@ -494,12 +500,14 @@ class AndroidModel{
         if(googleSingInClient!=null)
             googleSingInClient!!.signOut()
         FragmentData.finish()
-        AndroidController.finish()
 
         val intent = Intent(context, LoginActivity::class.java)
         context.startActivity(intent)
     }
 
+    fun showToastMessage(message:String){
+        getAndroidView().showToastMessage(message)
+    }
     fun showToastMessage(message:String, context: Context){
         getAndroidView().showToastMessage(message,context)
     }
@@ -507,8 +515,11 @@ class AndroidModel{
     fun showAlertMessage(title:String,message: String, context: Context) {
         getAndroidView().showAlertMessage(title,message,context)
     }
+    fun showAlertMessage(title:Int,message: Int) {
+        getAndroidView().showAlertMessage(title,message)
+    }
 
     fun getUserToString(user:User): String {
-        return getUserLogic().getUserToString(user)
+        return getTypeConverterAdapter().getUserToString(user)
     }
 }

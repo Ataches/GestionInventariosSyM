@@ -3,13 +3,12 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 import java.text.DecimalFormat
@@ -47,7 +46,7 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.buttonAddProductToCart.setOnClickListener{
             if(product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT){
-                FragmentData.addProductToCart(product,it)
+                FragmentData.addProductToCart(product)
             }else{
                 FragmentData.showToastMessage(it.context,"Producto no registrado, redirigiendo")
                 FragmentData.confirmNewProduct(product,itemView)

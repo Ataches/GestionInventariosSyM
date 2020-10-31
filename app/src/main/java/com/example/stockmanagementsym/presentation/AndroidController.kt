@@ -4,18 +4,12 @@ import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.view.AndroidView
-import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
 
 
-object AndroidController: View.OnClickListener {
+class AndroidController(private val androidView: AndroidView): View.OnClickListener {
 
     private var navController: NavController ?= null
-    private var androidView: AndroidView ?= null
-
-    fun setAndroidView(androidView: AndroidView){
-        this.androidView = androidView
-    }
 
     override fun onClick(view: View) {
         when(view.id){
@@ -77,10 +71,5 @@ object AndroidController: View.OnClickListener {
         if(navController==null)
             navController = Navigation.findNavController(view)
         return navController!!
-    }
-
-    fun finish(){
-        navController = null
-        androidView = null
     }
 }

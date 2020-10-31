@@ -3,7 +3,7 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.logic.business.User
-import com.example.stockmanagementsym.presentation.view.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_user.view.*
 import kotlinx.coroutines.Dispatchers

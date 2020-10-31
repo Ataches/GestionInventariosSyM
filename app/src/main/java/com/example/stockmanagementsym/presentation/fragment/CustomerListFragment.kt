@@ -9,9 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Customer
-import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_customer_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -46,8 +44,8 @@ class CustomerListFragment : Fragment(), ListListener {
 
         FragmentData.setCustomerListListener(this)
 
-        view.buttonCustomerToSearch.setOnClickListener(AndroidController)
-        view.buttonCustomerListToCreateCustomer.setOnClickListener(AndroidController)
+        view.buttonCustomerToSearch.setOnClickListener(FragmentData.getController())
+        view.buttonCustomerListToCreateCustomer.setOnClickListener(FragmentData.getController())
     }
 
     override fun onResume() {
@@ -56,18 +54,19 @@ class CustomerListFragment : Fragment(), ListListener {
     }
 
     override fun reloadList() {
-        GlobalScope.launch(Dispatchers.IO){
-            adapter.setCustomerList(FragmentData.getCustomerList())
-            requireActivity().runOnUiThread {
-                adapter.notifyDataSetChanged()
+        if(isAdded)  //It's possible that this view is called from other current view. So if it happens this call doesn't allow the adapter refresh
+            GlobalScope.launch(Dispatchers.IO){
+                adapter.setCustomerList(FragmentData.getCustomerList())
+                requireActivity().runOnUiThread {
+                    adapter.notifyDataSetChanged()
+                }
             }
-        }
     }
 
     override fun setList(list: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO){
-            adapter.setCustomerList(list as MutableList<Customer>)
             requireActivity().runOnUiThread {
+                adapter.setCustomerList(list as MutableList<Customer>)
                 adapter.notifyDataSetChanged()
             }
         }

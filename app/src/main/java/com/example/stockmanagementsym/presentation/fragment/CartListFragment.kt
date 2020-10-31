@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.adapter.CartAdapter
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import kotlinx.android.synthetic.main.fragment_cart.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,7 +38,7 @@ class CartListFragment : Fragment(), ListListener {
 
         FragmentData.setCartListener(this)
 
-        buttonCartToNewSale.setOnClickListener(AndroidController)
+        buttonCartToNewSale.setOnClickListener(FragmentData.getController())
     }
 
     override fun onResume() {

@@ -1,14 +1,21 @@
 package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.data.dao.UserDao
 import com.example.stockmanagementsym.logic.business.User
+import com.example.stockmanagementsym.presentation.fragment.ListListener
+import com.example.stockmanagementsym.presentation.view.Notifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.anko.doAsync
 
 
-class UserLogic(private val userDao: UserDao) {
+class UserLogic(private val userDao: UserDao, private var notifier: Notifier) {
 
+    private lateinit var listListener: ListListener
+    private var listManager: ListManager ?= null
+    private lateinit var userListListener: ListListener
     private var userList: MutableList<User> = mutableListOf()
     private var user: User ?= null
 
@@ -16,23 +23,16 @@ class UserLogic(private val userDao: UserDao) {
         return user!!
     }
 
-    private suspend fun selectUserList(): List<User> {
-        withContext(Dispatchers.IO) {
-            userList = userDao.selectUserList()
-        }
-        updateUserList()
-        return userList
-    }
-
-    suspend fun deleteUser(user: User): Boolean {
-        return try{
-            withContext(Dispatchers.IO) {
+    fun deleteUser(user: User){
+        try{
+            doAsync {
                 userDao.delete(user)
+                updateUserList()
+                getListManager().showToastMessage(MESSAGES.USER_DELETE_SUCCESS)
+                userListListener.reloadList()
             }
-            updateUserList()
-            true
         }catch (e:Exception){
-            false
+            getListManager().showToastMessage(MESSAGES.USER_DELETE_FAILURE)
         }
     }
 
@@ -60,8 +60,8 @@ class UserLogic(private val userDao: UserDao) {
         }
     }
 
-    private suspend fun updateUserList() {
-        withContext(Dispatchers.IO) {
+    private fun updateUserList() {
+        doAsync {
             userList = userDao.selectUserList()
         }
     }
@@ -83,17 +83,21 @@ class UserLogic(private val userDao: UserDao) {
 
     suspend fun insertUser(userName: String, password: String) {
         withContext(Dispatchers.IO){
-            insertUser(User(userName, password,"admin","",-1.0,-1.0))
+            insertUser(User(userName, password,"admin","",CONSTANTS.DEFAULT_USER_LATITUDE,CONSTANTS.DEFAULT_USER_LONGITUDE))
         }
     }
-    
+
     suspend fun searchUser(textSearched: String): List<User> {
         return getUserList().filter { it.getName().toLowerCase().contains(textSearched.toLowerCase())}
     }
 
-    fun getUserToString(user: User): String {
-        return  "Nombre: "+user.getName()+CONSTANTS.NEW_LINE_STRING+
-                "Direccion: "+user.getPrivilege()
+    fun setListListener(listListener: ListListener){
+        this.listListener = listListener
     }
 
+    private fun getListManager():ListManager{
+        if(listManager==null)
+            listManager = ListManager(notifier,listListener)
+        return listManager!!
+    }
 }

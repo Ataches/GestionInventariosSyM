@@ -2,7 +2,6 @@ package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
 import com.example.stockmanagementsym.R
-import com.example.stockmanagementsym.presentation.view.FragmentData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

@@ -1,4 +1,4 @@
-package com.gorillazuniversity.clase8_1
+package com.example.stockmanagementsym.presentation.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
