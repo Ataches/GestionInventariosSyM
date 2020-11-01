@@ -25,10 +25,17 @@ class NewUserFragment: Fragment(){
 
         view.buttonNewUserToUserList.setOnClickListener(FragmentData.getController())
         view.buttonNewUserToHome.setOnClickListener(FragmentData.getController())
-        view.buttonNewUserToGallery.setOnClickListener (FragmentData.getController())
-        view.buttonNewUserToCamera.setOnClickListener (FragmentData.getController())
+        view.buttonNewUserToGallery.setOnClickListener {
+            FragmentData.setNewUserFragmentView(requireView())
+            FragmentData.setControllerOnClickListener(it)
+        }
+        view.buttonNewUserToCamera.setOnClickListener {
+            FragmentData.setNewUserFragmentView(requireView())
+            FragmentData.setControllerOnClickListener(it)
+        }
         view.buttonNewUserToNewUser.setOnClickListener(FragmentData.getController())
         view.buttonNewUserCancel.setOnClickListener(FragmentData.getController())
+
     }
 
 }

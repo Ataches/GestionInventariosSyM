@@ -36,7 +36,7 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                     Picasso.get().load(userPhotoData).into(itemView.imageViewProduct)
                     itemView.imageViewProduct.background = null
                 }catch (e:Exception){
-                    FragmentData.showToastMessage(itemView.context, ""+e)
+                    FragmentData.showToastMessage(""+e)
                 }
             }else{
                 itemView.imageViewProduct.setImageBitmap(FragmentData.getBitMapFromString(product.getStringBitMap()))
@@ -49,21 +49,21 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                     " de total: ${product.getQuantity()}"
 
         itemView.buttonRemoveCart.setOnClickListener{
-            FragmentData.removeElementCart(it.context,productCart)
+            FragmentData.removeElementCart(productCart)
             listener.reloadList()
         }
 
         itemView.buttonRemoveQuantityProdCart.setOnClickListener{
             val quantityString = itemView.editTextQuantity.text.toString()
-            changeQuantity(quantityString,productCart,-1,it)
+            changeQuantity(quantityString,productCart,-1)
         }
         itemView.buttonAddQuantityProdCart.setOnClickListener{
             val quantityString = itemView.editTextQuantity.text.toString()
-            changeQuantity(quantityString,productCart,1,it)
+            changeQuantity(quantityString,productCart,1)
         }
     }
 
-    private fun changeQuantity(quantityString: String, productCart: Product,stepAdd:Int,it:View) {
+    private fun changeQuantity(quantityString: String, productCart: Product,stepAdd:Int) {
         if(quantityString.isDigitsOnly()&&quantityString.isNotEmpty()){
             val quantity:Int = quantityString.toInt()
             if(((quantity+stepAdd > 0)&&(stepAdd<0))||((quantity+stepAdd <= product.getQuantity())&&(stepAdd>0))){ //If step add is negative means that you need to sum it to quantity to decrease quantity
@@ -73,9 +73,9 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                     productCart.setQuantity(quantity)
                 listener.reloadList()
             }else
-                FragmentData.showToastMessage(it.context, "Digite un numero correcto de acuerdo a la cantidad disponible")
+                FragmentData.showToastMessage("Digite un numero correcto de acuerdo a la cantidad disponible")
         }else
-            FragmentData.showToastMessage(it.context, "Digite un numero correcto")
+            FragmentData.showToastMessage("Digite un numero correcto")
     }
 
     fun setProductOriginal(product: Product) {

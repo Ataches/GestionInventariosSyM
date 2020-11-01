@@ -46,7 +46,7 @@ class NewProductFragment: Fragment(){
                         Picasso.get().load(userPhotoData).into(view.imageViewNewProduct)
                         view.imageViewNewProduct.background = null
                     }catch (e:Exception){
-                        FragmentData.showToastMessage(view.context, ""+e)
+                        FragmentData.showToastMessage(""+e)
                     }
                 }else{
                     view.imageViewNewProduct.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
@@ -61,8 +61,15 @@ class NewProductFragment: Fragment(){
         view.buttonNewProductToHome.setOnClickListener (FragmentData.getController())
         view.buttonNewProductToProductList.setOnClickListener (FragmentData.getController())
         view.buttonNewProduct.setOnClickListener (FragmentData.getController())
-        view.buttonNewProductToGallery.setOnClickListener(FragmentData.getController())
-        view.buttonNewProductToCamera.setOnClickListener(FragmentData.getController())
+        view.buttonNewProductToGallery.setOnClickListener{
+            FragmentData.setNewProductFragmentView(requireView())
+            FragmentData.setControllerOnClickListener(it)
+        }
+        view.buttonNewProductToCamera.setOnClickListener{
+            FragmentData.setNewProductFragmentView(requireView())
+            FragmentData.setControllerOnClickListener(it)
+        }
+
     }
 
 }

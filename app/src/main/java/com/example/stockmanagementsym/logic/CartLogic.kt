@@ -1,10 +1,11 @@
 package com.example.stockmanagementsym.logic
 
 import com.example.stockmanagementsym.data.CartData
+import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.logic.business.Product
 import java.text.DecimalFormat
 
-class CartLogic {
+class CartLogic(private var listManager: ListManager) {
 
     private var cartData:CartData ?= null
 
@@ -12,6 +13,21 @@ class CartLogic {
         if(cartData==null)
             cartData = CartData()
         return cartData!!
+    }
+    fun setListManager(listManager: ListManager) {
+        this.listManager = listManager
+    }
+
+    fun addProductToCart(item: Product){
+        try {
+            if (addProductToCartList(item))
+                listManager.showAlertMessage(MESSAGES.CART_TITLE, MESSAGES.PRODUCT_ADDED_TO_CART)
+            else
+                listManager.showAlertMessage(MESSAGES.CART_TITLE, MESSAGES.PRODUCT_ALREADY_IN_CART)
+            listManager.reloadList()
+        }catch (e:Exception){
+            listManager.showAlertMessage(MESSAGES.CART_TITLE, MESSAGES.PRODUCT_NOT_ADDED_TO_CART)
+        }
     }
 
     fun getCartList():MutableList<Product>{

@@ -7,6 +7,7 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,6 @@ class UserListFragment : Fragment(), ListListener {
 
     private var userList: MutableList<User> = mutableListOf()
     private var adapter: UserListAdapter = UserListAdapter(userList)
-    private lateinit var viewElement:View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +43,6 @@ class UserListFragment : Fragment(), ListListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewElement = view
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.userList)
 
@@ -62,14 +61,14 @@ class UserListFragment : Fragment(), ListListener {
         if(requestCode == 10 && resultCode == Activity.RESULT_OK){
             val bitMap = data?.extras?.get("data") as Bitmap
 
-            viewElement.imageViewNewUser.setImageBitmap(bitMap)
+            requireView().imageViewNewUser.setImageBitmap(bitMap)
 
             FragmentData.setBitMap(bitMap)
         }
         if(requestCode == 101 && resultCode == Activity.RESULT_OK){
             val imageUri = data!!.data!!
 
-            viewElement.imageViewNewUser.setImageURI(imageUri)
+            requireView().imageViewNewUser.setImageURI(imageUri)
 
             val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver, imageUri))

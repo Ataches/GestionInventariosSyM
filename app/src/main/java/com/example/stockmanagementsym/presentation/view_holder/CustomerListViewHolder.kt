@@ -13,10 +13,10 @@ class CustomerListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         itemView.textViewPrivilege.text = "Telefono: ${item.getPhone()}"
         itemView.textViewCity.text = "Ciudad: ${item.getCity()}"
         itemView.buttonEditCustomer.setOnClickListener{
-            FragmentData.updateCustomer(item,true,it)
+            FragmentData.updateCustomer(item,true)
         }
         itemView.buttonDeleteCustomer.setOnClickListener{
-            FragmentData.deleteCustomer(item,itemView.context)
+            FragmentData.deleteCustomer(item)
         }
     }
 }

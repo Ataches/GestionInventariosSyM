@@ -6,10 +6,10 @@ import android.content.Intent
 import android.provider.MediaStore
 
 class CameraAdaptee {
-    fun startCamera(activity: Activity,context:Context) {
+    fun startCamera(context:Context) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if(intent.resolveActivity(context.packageManager) != null){
-            activity.startActivityForResult(intent,10)
+            (context as Activity).startActivityForResult(intent,10)
         }
     }
 }

@@ -6,9 +6,6 @@ import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_user.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(user: User) {
@@ -25,7 +22,7 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     Picasso.get().load(userPhotoData).into(itemView.imageViewUserItem)
                     itemView.imageViewUserItem.background = null
                 }catch (e:Exception){
-                    FragmentData.showToastMessage(itemView.context, ""+e)
+                    FragmentData.showToastMessage(""+e)
                 }
             }else{
                 itemView.imageViewUserItem.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
@@ -34,9 +31,7 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         itemView.textViewPrivilege.text = user.getPrivilege()
         itemView.buttonDeleteUser.setOnClickListener {
-            GlobalScope.launch (Dispatchers.IO){
-                FragmentData.deleteUser(user)
-            }
+            FragmentData.deleteUser(user)
         }
     }
 }

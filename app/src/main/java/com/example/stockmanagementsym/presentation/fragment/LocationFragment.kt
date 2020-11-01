@@ -38,8 +38,8 @@ class LocationFragment : SupportMapFragment(), OnMapReadyCallback, GoogleMap.OnM
             map.addMarker(MarkerOptions().position(location).title(getString(R.string.location)))
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location,120f))
             map.setOnMapClickListener(this)
-            FragmentData.showToastMessage(this.requireContext(), getString(R.string.pressToReloadMap))
+            FragmentData.showToastMessage(getString(R.string.pressToReloadMap))
         }else
-            FragmentData.showToastMessage(this.requireContext(),getString(R.string.locationFailure)+" "+getString(R.string.pressToReloadMap))
+            FragmentData.showToastMessage(getString(R.string.locationFailure)+" "+getString(R.string.pressToReloadMap))
     }
 }

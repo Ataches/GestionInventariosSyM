@@ -20,6 +20,10 @@ class SaleListFragment : Fragment(), ListListener {
     private var saleList: MutableList<Sale> = mutableListOf()
     private var adapter:SaleListAdapter = SaleListAdapter(saleList)
 
+    init {
+        FragmentData.setSaleListListener(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

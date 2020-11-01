@@ -85,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             }catch (e: Exception){
-                androidModel.showAlertMessage(getString(R.string.loginFailure),getString(R.string.loginFailure) + " " + e,context)
+                androidModel.showAlertMessage(R.string.loginFailure,R.string.loginFailure,context)
                 showLoading(false)
             }
         }
@@ -103,10 +103,10 @@ class LoginActivity : AppCompatActivity() {
             try{
                 androidModel.register(login, user, password)
                 showLoading(false)
-                androidModel.showAlertMessage(getString(R.string.titleUserRegistered),getString(R.string.messageUserRegistered),login)
+                androidModel.showAlertMessage(R.string.titleUserRegistered,R.string.messageUserRegistered,login)
             }catch (e:Exception){
                 showLoading(false)
-                androidModel.showAlertMessage(getString(R.string.titleUserRegistered),getString(R.string.messageUserNotRegistered),login)
+                androidModel.showAlertMessage(R.string.titleUserRegistered,R.string.messageUserNotRegistered,login)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.stockmanagementsym.logic.adapter.type_converter
 
+import android.util.Log
 import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.Product
 import java.text.DecimalFormat
@@ -27,6 +28,7 @@ class ProductConverterAdaptee(private var stringToUser: Boolean) {
         val productList: MutableList<Product> = mutableListOf()
         if(dataProducts.isNotEmpty())
             for(dataProduct in dataProducts){
+                Log.d("TEST DATA PROD LIST","PROD DATA STRING "+dataProduct)
                 val data = dataProduct.split(CONSTANTS.STRING_ITEM_LIMITER)
                 val product = Product(
                         name = data[0],

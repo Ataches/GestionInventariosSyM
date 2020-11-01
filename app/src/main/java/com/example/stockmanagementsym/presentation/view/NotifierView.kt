@@ -2,13 +2,14 @@ package com.example.stockmanagementsym.presentation.view
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.example.stockmanagementsym.data.MESSAGES
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.uiThread
 
-class Notifier {
+class NotifierView {
 
     private lateinit var context: Context
 
@@ -56,6 +57,7 @@ class Notifier {
     }
 
     fun showAlertMessage(tittle: Int, message: Int) {
+        Log.d("TEST NOTIFIER", "CONT: "+context+" MESS "+context.getString(message))
         context.runOnUiThread {
             val builder = AlertDialog.Builder(context)
             builder.setTitle(context.getString(tittle))

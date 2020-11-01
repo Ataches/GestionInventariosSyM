@@ -9,7 +9,4 @@ object MESSAGES {
     const val PRODUCT_NOT_ADDED_TO_CART = R.string.elementNotAddedToCart
     const val TRANSACTION_SUCCESS = R.string.transactionSuccess
     const val TRANSACTION_FAILURE = R.string.transactionFailure
-    const val USER_INSERT_SUCCESS = R.string.userInsertSuccess
-    const val USER_DELETE_SUCCESS = R.string.userDeleteSuccess
-    const val USER_DELETE_FAILURE = R.string.userDeleteFail
 }

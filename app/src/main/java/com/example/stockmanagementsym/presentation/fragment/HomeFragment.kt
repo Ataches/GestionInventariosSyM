@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
                     Picasso.get().load(userPhotoData).into(view.imageViewUserHome)
                     view.imageViewUserHome.background = null
                 }catch (e:Exception){
-                    FragmentData.showToastMessage(view.context, ""+e)
+                    FragmentData.showToastMessage(""+e)
                 }
             }else{
                 view.imageViewUserHome.setImageBitmap(FragmentData.getBitMapFromString(FragmentData.getUserPhotoData()))

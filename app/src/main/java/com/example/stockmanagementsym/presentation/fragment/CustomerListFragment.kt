@@ -44,7 +44,10 @@ class CustomerListFragment : Fragment(), ListListener {
 
         FragmentData.setCustomerListListener(this)
 
-        view.buttonCustomerToSearch.setOnClickListener(FragmentData.getController())
+        view.buttonCustomerToSearch.setOnClickListener{
+            FragmentData.setTextSearched(view.editTextSearchCustomerList.text.toString())
+            FragmentData.setControllerOnClickListener(it)
+        }
         view.buttonCustomerListToCreateCustomer.setOnClickListener(FragmentData.getController())
     }
 

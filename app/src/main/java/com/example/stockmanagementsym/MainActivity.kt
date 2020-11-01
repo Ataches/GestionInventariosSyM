@@ -2,6 +2,7 @@ package com.example.stockmanagementsym
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,8 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Layout
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -23,17 +26,22 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.presentation.AndroidModel
+import com.example.stockmanagementsym.presentation.AndroidView
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
+import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
+import com.example.stockmanagementsym.presentation.fragment.NewUserFragment
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_new_product.*
-import kotlinx.android.synthetic.main.fragment_new_user.*
+import kotlinx.android.synthetic.main.fragment_new_product.view.*
+import kotlinx.android.synthetic.main.fragment_new_user.view.*
 import kotlinx.android.synthetic.main.layout_navigation_header.*
 import kotlinx.android.synthetic.main.layout_navigation_header.view.*
+import org.jetbrains.anko.find
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +52,9 @@ class MainActivity : AppCompatActivity() {
     private var fusedLocation: FusedLocationProviderClient ?= null
     private var locationObserver:Boolean = false
 
+    init {
+        FragmentData.setContext(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -69,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     Picasso.get().load(userPhotoData).into(headerView.imageViewUserNavHeader)
                     headerView.imageViewUserNavHeader.background = null
                 }catch (e:Exception){
-                    FragmentData.showToastMessage(headerView.context, ""+e)
+                    FragmentData.showToastMessage(""+e)
                 }
             }else{
                 headerView.imageViewUserNavHeader.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
@@ -80,9 +91,9 @@ class MainActivity : AppCompatActivity() {
         if((userLatitude==CONSTANTS.DEFAULT_USER_LATITUDE)&&(userLongitude==CONSTANTS.DEFAULT_USER_LONGITUDE))
             headerView.textViewUserLocationNavView.text =
                 getString(R.string.locationFailure)
-        else
-            headerView.textViewUserLocationNavView.text =
-                getString(R.string.location)+" "+userLatitude+" "+userLongitude
+        else {
+            headerView.textViewUserLocationNavView.text = getString(R.string.location)+" "+userLatitude+" "+userLongitude
+        }
 
         headerView.buttonLocation.setOnClickListener {
             locationObserver = false
@@ -96,23 +107,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        val newUserView:View? = FragmentData.getNewUserFragmentView()
+        val newProductView:View? = FragmentData.getNewProductFragmentView()
+
+        Log.d("TAG ACTIVITY", "user vi "+newUserView+" prod view "+newProductView)
+
         if(requestCode == 10 && resultCode == RESULT_OK){
             val bitMap = data?.extras?.get("data") as Bitmap
 
-            imageViewNewProduct?.setImageBitmap(bitMap)
-            imageViewNewProduct?.visibility = View.VISIBLE
-            imageViewNewUser?.setImageBitmap(bitMap)
-            imageViewNewUser?.visibility = View.VISIBLE
+
+            newProductView?.imageViewNewProduct?.setImageBitmap(bitMap)
+            newProductView?.imageViewNewProduct?.visibility = View.VISIBLE
+            newUserView?.imageViewNewUser?.setImageBitmap(bitMap)
+            newUserView?.imageViewNewUser?.visibility = View.VISIBLE
 
             FragmentData.setBitMap(bitMap)
         }
         if(requestCode == 101 && resultCode == RESULT_OK){
             val imageUri = data!!.data!!
 
-            imageViewNewProduct?.setImageURI(imageUri)
-            imageViewNewProduct?.visibility = View.VISIBLE
-            imageViewNewUser?.setImageURI(imageUri)
-            imageViewNewUser?.visibility = View.VISIBLE
+            newProductView?.imageViewNewProduct?.setImageURI(imageUri)
+            newProductView?.imageViewNewProduct?.visibility = View.VISIBLE
+            newUserView?.imageViewNewUser?.setImageURI(imageUri)
+            newUserView?.imageViewNewUser?.visibility = View.VISIBLE
 
 
             val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -171,12 +189,12 @@ class MainActivity : AppCompatActivity() {
 
             fusedLocation!!.requestLocationUpdates(locationRequest,androidLocation,null)
         }else{
-            fusedLocation!!.lastLocation.addOnSuccessListener(androidLocation!!)?.addOnFailureListener(androidLocation!!)
+            fusedLocation!!.lastLocation.addOnSuccessListener(androidLocation!!).addOnFailureListener(androidLocation!!)
         }
     }
 
     fun askSaveLocation(item: MenuItem) {
-        FragmentData.askSaveLocation(this)
+        FragmentData.askSaveLocation()
     }
 
 }
@@ -187,7 +205,7 @@ private class AndroidLocation(private val textView: TextView, val context: Conte
         textView.text = """Localización: ${location.latitude} - ${location.longitude}"""
         FragmentData.setUserLocation(location.latitude, location.longitude)
     }else{
-        FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
+        FragmentData.showToastMessage(textView.context.getString(R.string.locationFailure))
     }
     override fun onLocationResult(location: LocationResult?) {
         super.onLocationResult(location)
@@ -195,11 +213,11 @@ private class AndroidLocation(private val textView: TextView, val context: Conte
             textView.text = """Localización: ${location.lastLocation.latitude} - ${location.lastLocation.longitude}"""
             FragmentData.setUserLocation(location.lastLocation.latitude, location.lastLocation.longitude)
         }else{
-            FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
+            FragmentData.showToastMessage(textView.context.getString(R.string.locationFailure))
         }
     }
     override fun onFailure(p0: Exception) {
-        FragmentData.showToastMessage(context, textView.context.getString(R.string.locationFailure))
+        FragmentData.showToastMessage(textView.context.getString(R.string.locationFailure))
     }
 }
 

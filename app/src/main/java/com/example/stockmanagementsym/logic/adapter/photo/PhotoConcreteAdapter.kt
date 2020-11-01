@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.logic.adapter.photo
 
-import android.app.Activity
 import android.content.Context
 
 class PhotoConcreteAdapter : IPhotoAdapter {
@@ -8,12 +7,12 @@ class PhotoConcreteAdapter : IPhotoAdapter {
     private var galleryAdaptee: GalleryAdaptee ?= null
     private var cameraAdaptee: CameraAdaptee ?= null
 
-    override fun startCamera(activity: Activity,context:Context) {
-        getCameraAdaptee().startCamera(activity,context)
+    override fun startCamera(context:Context) {
+        getCameraAdaptee().startCamera(context)
     }
 
-    override fun startGallery(activity: Activity, context:Context){
-        getGalleryAdaptee().startGallery(activity,context)
+    override fun startGallery(context:Context){
+        getGalleryAdaptee().startGallery(context)
     }
 
     private fun getCameraAdaptee():CameraAdaptee{

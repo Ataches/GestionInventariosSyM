@@ -36,6 +36,10 @@ object FragmentData {
         return getAndroidView().getAndroidController()
     }
 
+    fun setControllerOnClickListener(view: View) {
+        getAndroidView().setControllerOnClickListener(view)
+    }
+
     /*
         User data
      */
@@ -49,7 +53,7 @@ object FragmentData {
         return getAndroidView().getUserList()
     }
 
-    suspend fun deleteUser(user: User) {
+    fun deleteUser(user: User) {
         getAndroidView().deleteUser(user)
     }
 
@@ -88,6 +92,9 @@ object FragmentData {
         getAndroidView().setUserListListener(userListListener)
     }
 
+    fun setSaleListListener(saleListListener: ListListener) {
+        getAndroidView().setSaleListListener(saleListListener)
+    }
     /*
         Sale data
      */
@@ -117,12 +124,12 @@ object FragmentData {
         return getAndroidView().getCustomerList()
     }
 
-    fun updateCustomer(customerToEdit: Customer, booleanUpdate: Boolean,view: View) {
-        getAndroidView().updateCustomer(customerToEdit,booleanUpdate,view)
+    fun updateCustomer(customerToEdit: Customer, booleanUpdate: Boolean) {
+        getAndroidView().updateCustomer(customerToEdit,booleanUpdate)
     }
 
-    fun deleteCustomer(customer: Customer, context: Context) {
-        getAndroidView().deleteCustomer(customer, context)
+    fun deleteCustomer(customer: Customer) {
+        getAndroidView().deleteCustomer(customer)
     }
 
     /*
@@ -136,14 +143,14 @@ object FragmentData {
         return getAndroidView().getProductList()
     }
 
-    fun confirmNewProduct(product: Product,itemView: View) {
-        getAndroidView().confirmNewProduct(product,itemView)
+    fun confirmNewProduct(product: Product) {
+        getAndroidView().confirmNewProduct(product)
     }
-    fun updateProduct(product: Product, booleanUpdate: Boolean, view: View) {
-        getAndroidView().updateProduct(product, booleanUpdate, view)
+    fun updateProduct(product: Product, booleanUpdate: Boolean) {
+        getAndroidView().updateProduct(product, booleanUpdate)
     }
-    fun askDeleteProduct(item: Product, context: Context) {
-        getAndroidView().askDeleteProduct(item,context)
+    fun askDeleteProduct(item: Product) {
+        getAndroidView().askDeleteProduct(item)
     }
 
     fun showProductListSaleToString(item: Sale) {
@@ -180,8 +187,8 @@ object FragmentData {
         getAndroidView().addProductToCart(item)
     }
 
-    fun removeElementCart(context: Context, item: Product) {
-        getAndroidView().removeElementCart(item,context)
+    fun removeElementCart(item: Product) {
+        getAndroidView().removeElementCart(item)
     }
 
     fun getCartList(): MutableList<Product> {
@@ -195,18 +202,40 @@ object FragmentData {
     /*
         Logout
      */
-    fun askSaveLocation(context: Context) {
-        getAndroidView().askSaveLocation(context)
+    fun askSaveLocation() {
+        getAndroidView().askSaveLocation()
     }
 
     /*
         Messages
      */
-    fun showToastMessage(context: Context, message:String){
-        getAndroidView().showToastMessage(message,context)
+    fun showToastMessage(message:String){
+        getAndroidView().showToastMessage(message)
     }
 
     fun finish(){
         androidView  = null
+    }
+
+    fun setContext(context: Context) {
+        getAndroidView().setContext(context)
+    }
+
+    fun setTextSearched(textSearched: String) {
+        getAndroidView().setTextSearched(textSearched)
+    }
+
+    fun getNewProductFragmentView(): View? {
+        return getAndroidView().getNewProductFragmentView()
+    }
+    fun setNewProductFragmentView(view: View) {
+        getAndroidView().setNewProductFragmentView(view)
+    }
+
+    fun getNewUserFragmentView(): View? {
+        return getAndroidView().getNewUserFragmentView()
+    }
+    fun setNewUserFragmentView(view: View) {
+        getAndroidView().setNewUserFragmentView(view)
     }
 }

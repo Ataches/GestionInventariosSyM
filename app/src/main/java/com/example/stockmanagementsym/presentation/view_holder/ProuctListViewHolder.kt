@@ -3,6 +3,7 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
@@ -28,7 +29,7 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     Picasso.get().load(userPhotoData).into(itemView.imageViewProduct)
                     itemView.imageViewProduct.background = null
                 }catch (e:Exception){
-                    FragmentData.showToastMessage(itemView.context, ""+e)
+                    FragmentData.showToastMessage(""+e)
                 }
             }else{
                 itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
@@ -48,15 +49,15 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             if(product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT){
                 FragmentData.addProductToCart(product)
             }else{
-                FragmentData.showToastMessage(it.context,"Producto no registrado, redirigiendo")
-                FragmentData.confirmNewProduct(product,itemView)
+                FragmentData.showToastMessage("Producto no registrado, redirigiendo")
+                FragmentData.confirmNewProduct(product)
             }
         }
         itemView.buttonEditProduct.setOnClickListener {
-            FragmentData.updateProduct(product,true, it)
+            FragmentData.updateProduct(product,true)
         }
         itemView.buttonDeleteProduct.setOnClickListener{
-            FragmentData.askDeleteProduct(product,itemView.context)
+            FragmentData.askDeleteProduct(product)
         }
     }
 

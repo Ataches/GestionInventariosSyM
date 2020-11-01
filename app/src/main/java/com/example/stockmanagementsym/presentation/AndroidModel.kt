@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.presentation
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.*
 import com.example.stockmanagementsym.logic.adapter.bit_map.BitMapConcreteAdapter
 import com.example.stockmanagementsym.logic.adapter.bit_map.IBitMapAdapter
@@ -24,7 +24,6 @@ import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import kotlinx.android.synthetic.main.fragment_customer_list.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import kotlinx.android.synthetic.main.fragment_sale_list.*
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -32,7 +31,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.doAsync
 
 class AndroidModel{
 
@@ -48,6 +46,7 @@ class AndroidModel{
     private var userLogic:UserLogic ?= null
     private var saleLogic: SaleLogic ?= null
     private var restLogic: RESTLogic ?= null
+    private var cartLogic: CartLogic ?= null
 
     private var googleSingInClient: GoogleSignInClient ?= null
     private var googleAccount: GoogleSignInAccount ?= null
@@ -67,37 +66,20 @@ class AndroidModel{
 
     private var bitMap: Bitmap ?= null
     //User
-    fun getUser():User{
+    private fun getUser():User{
         if(user==null)
             user = getUserLogic().getUser()
         return user!!
     }
 
-    suspend fun newUser(user: User): Boolean {
-        return try{
-            if(getUserPrivileges()!="admin")
-                return false
-            withContext(Dispatchers.IO) {
-                getUserLogic().insertUser(user)
-            }
-            getAndroidView().reloadUserList()
-            true
-        }catch (e:Exception){
-            false
-        }
+    fun setUserListManager() {
+        val userLogicListManager = ListManager(getAndroidView().getUserListListener(),getAndroidView().getNotifierView())
+        getUserLogic().setListManager(userLogicListManager)
     }
 
-    suspend fun deleteUser(user: User){
-        try{
-            if(getUserPrivileges()=="admin"){
-                withContext(Dispatchers.IO) {
-                    getUserLogic().deleteUser(user)
-                }
-                getUserLogic().setListListener(getAndroidView().getUserListListener())
-            }
-        }catch (e:Exception){
-            getAndroidView().showResultTransaction(false)
-        }
+    fun createUser(user: User){
+        if(getUserPrivileges()=="admin")
+            getUserLogic().createUser(user)
     }
 
     suspend fun updateUser(user: User): Boolean {
@@ -111,6 +93,12 @@ class AndroidModel{
             true
         }catch (e:Exception){
             false
+        }
+    }
+
+    fun deleteUser(user: User){
+        if(getUserPrivileges()=="admin"){
+            getUserLogic().deleteUser(user)
         }
     }
 
@@ -180,7 +168,7 @@ class AndroidModel{
 
     fun getNewSale(): Sale {
         if(newSale==null)
-            newSale = Sale(customerNewSale, dateSale, getSaleLogic().getCartList())
+            newSale = Sale(customerNewSale, dateSale, getCartLogic().getCartList())
         return newSale!!
     }
 
@@ -193,13 +181,11 @@ class AndroidModel{
     }
 
     fun addProductToCart(item: Product){
-        getSaleLogic().setListListener(getAndroidView().getCartListener())
-        getSaleLogic().addProductToCart(item)
-
+        getCartLogic().addProductToCart(item)
     }
 
     fun removeElementCart(item: Product): Boolean {
-        return getSaleLogic().removeElementCart(item)
+        return getCartLogic().removeElementCart(item)
     }
 
     fun getSaleToString(sale: Sale): String {
@@ -211,11 +197,24 @@ class AndroidModel{
 
     //Cart
     fun getCartList(): MutableList<Product> {
-        return getSaleLogic().getCartList()
+        return getCartLogic().getCartList()
     }
 
     fun getTotalPriceCart(): String {
-        return getSaleLogic().getTotalPriceCart()
+        return getCartLogic().getTotalPrice()
+    }
+
+    private fun getCartLogic(): CartLogic {
+        if(cartLogic==null){
+            val cartLogicListManager = ListManager(getAndroidView().getCartListener(),getAndroidView().getNotifierView())
+            cartLogic = CartLogic(cartLogicListManager)
+        }
+        return cartLogic!!
+    }
+
+    fun setCartListManager() {
+        val userLogicListManager = ListManager(getAndroidView().getCartListener(),getAndroidView().getNotifierView())
+        getCartLogic().setListManager(userLogicListManager)
     }
 
     fun getCartListToString(mutableList: MutableList<Product>): String {
@@ -309,41 +308,35 @@ class AndroidModel{
     }
 
     //   New product creation
-    fun createProduct(product: Product,context: Context) {
+    fun createProduct(product: Product) {
         GlobalScope.launch(Dispatchers.IO){
             getAndroidView().showResultTransaction(getProductLogic().createProduct(product))
             reloadProductList()
         }
     }
 
-    fun getPhotoCamera(activity: Activity, context: Context) {
-        getPhotoAdapter().startCamera(activity,context)
+    fun getPhotoCamera(context: Context) {
+        getPhotoAdapter().startCamera(context)
     }
 
-    fun getPhotoGallery(activity: Activity, context: Context) {
-        getPhotoAdapter().startGallery(activity,context)
+    fun getPhotoGallery(context: Context) {
+        getPhotoAdapter().startGallery(context)
     }
     //BitMap generation
-    fun setBitMap(bitMap: Bitmap) {
+    fun setBitMap(bitMap: Bitmap?) {
         this.bitMap = bitMap
     }
 
-    fun getBitMapFromstring(string: String): Bitmap {
+    fun getBitMapFromString(string: String): Bitmap {
         return getBitMapAdapter().decoderStringToBitMap(string)
     }
 
-    fun getStringFromBitMap():String{ //This function only is called when you do a register or update, so if you call that you wont need string bitmap again
+    fun getStringFromBitMap():String{
         if(bitMap == null)
             return ""
         val stringEncoded = getBitMapAdapter().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
         return stringEncoded
-    }
-    fun addProductListREST(list:List<Product>){ //Called from rest
-        doAsync{
-            getAndroidView().addProductListToProductFragment(list)
-            getProductLogic().addProductListREST(list.toMutableList())
-        }
     }
     private fun reloadProductList() {
         getAndroidView().reloadProductList()
@@ -360,12 +353,11 @@ class AndroidModel{
         }
     }
 
-    fun searchCustomer(viewElement: View) {
+    fun searchCustomer() {
         GlobalScope.launch(Dispatchers.IO){
-            val view = viewElement.findFragment<CustomerListFragment>()
-            view.setList(
-                getCustomerLogic().searchCustomer(view.editTextSearchCustomerList.text.toString())
-                    .toMutableList()
+            getAndroidView().setListSearched(
+                getCustomerLogic().searchCustomer(getAndroidView().getTextSearched()).toMutableList(),
+                    R.id.customerListFragment
             )
         }
     }
@@ -391,8 +383,10 @@ class AndroidModel{
     }
     //Logic classes
     private fun getUserLogic(): UserLogic {
-        if(userLogic==null)
-            userLogic = UserLogic(dataBaseLogic.getUserDao(),getAndroidView().getNotifier())
+        if(userLogic==null){
+            val userLogicListManager = ListManager(null,getAndroidView().getNotifierView()) // When the user login to application user list don't exist
+            userLogic = UserLogic(dataBaseLogic.getUserDao(),userLogicListManager)
+        }
         return userLogic!!
     }
 
@@ -403,8 +397,10 @@ class AndroidModel{
     }
 
     private fun getSaleLogic(): SaleLogic {
-        if(saleLogic==null)
-            saleLogic = SaleLogic(dataBaseLogic.getSaleDao(),getAndroidView().getNotifier())
+        if(saleLogic==null){
+            val saleLogicListManager = ListManager(getAndroidView().getSaleListListener(),getAndroidView().getNotifierView())
+            saleLogic = SaleLogic(dataBaseLogic.getSaleDao(),getCartLogic(),saleLogicListManager)
+        }
         return saleLogic!!
     }
 
@@ -423,7 +419,7 @@ class AndroidModel{
     //REST
     private fun getRESTLogic(): RESTLogic {
         if(restLogic==null)
-            restLogic = RESTLogic(this)
+            restLogic = RESTLogic(getAndroidView().getProductListListener(),getAndroidView().getNotifierView())
         return restLogic!!
     }
 
@@ -448,8 +444,6 @@ class AndroidModel{
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
         //getUserLogic().insertTest(userName,password,googleAccount?.photoUrl.toString())
         if(getUserLogic().confirmLogin(userName, password)){
-            getAndroidView().showToastMessage(login.getString(R.string.welcome)+" "+getUser().getName(),login)
-
             userLatitude = getUser().getLatitude()
             userLongitude = getUser().getLongitude()
 
@@ -461,48 +455,45 @@ class AndroidModel{
 
             val intent = Intent(login, MainActivity::class.java)
             login.startActivity(intent)
+            getAndroidView().showToastMessage(login.getString(R.string.welcome)+" "+getUser().getName(),login)
         }
         else
             getAndroidView().showToastMessage("Usuario $userName no encontrado o contraseña incorrecta", login)
     }
 
-    suspend fun register(login: LoginActivity, userName: String, password: String) {
+    fun register(login: LoginActivity, userName: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
-        getUserLogic().insertUser(userName,password)
+        getUserLogic().createUser(User(userName, password,"admin","", CONSTANTS.DEFAULT_USER_LATITUDE, CONSTANTS.DEFAULT_USER_LONGITUDE))
     }
 
-    suspend fun askSaveLocation(context: Context){
-        val location = context.getString(R.string.location)+" "+userLatitude+" - "+userLongitude
-        val activity = context as Activity
+    suspend fun askSaveLocation(){
+        val location = getAndroidView().getString(R.string.location)+" "+userLatitude+" - "+userLongitude
         withContext(Dispatchers.IO) {
-            getAndroidView().dialogConfirmRegister(location,context.getString(R.string.location), context.getString(R.string.saveLocation),activity)
+            getAndroidView().dialogConfirmRegister(location,R.string.location, R.string.saveLocation)
         }
     }
 
-    suspend fun askLogOut(context: Context){
-        val activity = context as Activity
+    suspend fun askLogOut(){
         withContext(Dispatchers.IO) {
-            getAndroidView().dialogConfirmRegister(getUser().getName(),context.getString(R.string.logOut), context.getString(R.string.messageLogOut),activity)
+            getAndroidView().dialogConfirmRegister(getUser().getName(),R.string.logOut, R.string.messageLogOut)
         }
     }
 
-    suspend fun saveUserLocation(context: Context){
-        user!!.setLatitude(userLatitude)
-        user!!.setLongitude(userLongitude)
-        withContext(Dispatchers.IO) {
-            getAndroidView().showResultTransaction(getUserLogic().updateUser(user!!))
-        }
+    fun saveUserLocation(){
+        getUser().setLatitude(userLatitude)
+        getUser().setLongitude(userLongitude)
+        getUserLogic().updateUser(getUser())
     }
 
-    fun logOut(context: Context){
+    fun logOut(){
         user = null
         googleAccount = null
         if(googleSingInClient!=null)
             googleSingInClient!!.signOut()
         FragmentData.finish()
 
-        val intent = Intent(context, LoginActivity::class.java)
-        context.startActivity(intent)
+        val intent = Intent(getAndroidView().getContext(), LoginActivity::class.java)
+        getAndroidView().getContext().startActivity(intent)
     }
 
     fun showToastMessage(message:String){
@@ -512,11 +503,8 @@ class AndroidModel{
         getAndroidView().showToastMessage(message,context)
     }
 
-    fun showAlertMessage(title:String,message: String, context: Context) {
-        getAndroidView().showAlertMessage(title,message,context)
-    }
-    fun showAlertMessage(title:Int,message: Int) {
-        getAndroidView().showAlertMessage(title,message)
+    fun showAlertMessage(titleID:Int, messageID: Int, context: Context) {
+        getAndroidView().showAlertMessage(titleID,messageID,context)
     }
 
     fun getUserToString(user:User): String {
