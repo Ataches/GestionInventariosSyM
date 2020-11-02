@@ -4,7 +4,7 @@ import androidx.room.*
 import com.example.stockmanagementsym.logic.business.Product
 
 @Dao
-interface ProductDao {
+interface ProductDao{
 
     @Insert
     fun insert(product: Product)

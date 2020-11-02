@@ -8,7 +8,7 @@ import com.example.stockmanagementsym.logic.list_manager.IListManager
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class ProductRESTLogic(private val listener: IListManager) {
+class ProductRESTLogic(private val listener: IListManager?) {
     private lateinit var productList: List<Product>
     fun searchProductList() {
         doAsync {
@@ -21,15 +21,19 @@ class ProductRESTLogic(private val listener: IListManager) {
             uiThread {
                 if (callRetrofit.isSuccessful) {
                     productList = callRetrofit.body()?.productList?: listOf()
-                    listener.addElementsToList(productList.toMutableList())
-                    listener.showAlertMessage(R.string.titleProductListRestAdded,
+                    listener?.addElementsToList(productList.toMutableList())
+                    listener?.showAlertMessage(R.string.titleProductListRestAdded,
                             R.string.messageProductListRestAdded)
                 }else{
-                    listener.showToastMessage(R.string.productListRestFailure)
+                    listener?.showToastMessage(R.string.productListRestFailure)
                 }
             }
         }
     }
+
+    // If you call this method is possible that the data didn't already charged.
+    // You must call it two times if the data is empty or call it in a
+    // coroutine that uses the context to wait before data loads.
     fun getProductList():List<Product>{
         return productList
     }

@@ -41,7 +41,10 @@ class UserListFragment : Fragment(), IListListener {
         FragmentData.notifyUserLogic(this)
 
         view.buttonUserListToCreateUser.setOnClickListener(FragmentData.getController())
-        view.buttonUserListToSearch.setOnClickListener(FragmentData.getController())
+        view.buttonUserListToSearch.setOnClickListener{
+            FragmentData.setTextSearched(view.editTextSearchUserList.toString())
+            FragmentData.getController()
+        }
     }
 
     override fun reloadList(mutableList: MutableList<Any>) {

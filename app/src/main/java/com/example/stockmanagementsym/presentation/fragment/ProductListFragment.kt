@@ -9,9 +9,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.adapter.ProductListAdapter
+import kotlinx.android.synthetic.main.fragment_customer_list.view.*
 import kotlinx.android.synthetic.main.fragment_product_list.view.*
 
 
+/**
+ * Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+ */
 class ProductListFragment : Fragment(), IListListener {
 
     private var productList: MutableList<Product> = mutableListOf()
@@ -32,7 +36,10 @@ class ProductListFragment : Fragment(), IListListener {
 
         FragmentData.notifyProductLogic(this)
 
-        view.buttonProductListToSearch.setOnClickListener(FragmentData.getController())
+        view.buttonProductListToSearch.setOnClickListener{
+            FragmentData.setTextSearched(view.editTextSearchProductList.text.toString())
+            FragmentData.setControllerOnClickListener(it)
+        }
         view.buttonProductListToNewProduct.setOnClickListener(FragmentData.getController())
     }
 

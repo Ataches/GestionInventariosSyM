@@ -12,7 +12,7 @@ import com.example.stockmanagementsym.presentation.adapter.CartAdapter
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 interface ICart {
-    fun setProductList(mutableList: MutableList<Product>)
+    fun setProductList(mutableList: MutableList<Any>)
 }
 
 class CartListFragment : Fragment(), IListListener, ICart {
@@ -40,12 +40,12 @@ class CartListFragment : Fragment(), IListListener, ICart {
         buttonCartToNewSale.setOnClickListener(FragmentData.getController())
     }
 
-    override fun setProductList(mutableList: MutableList<Product>) {
-        adapter.setProductList(mutableList)
+    override fun setProductList(mutableList: MutableList<Any>) {
+        adapter.setProductList(mutableList as MutableList<Product>)
     }
 
     override fun reloadList(mutableList: MutableList<Any>) {
-        adapter.setProductList(FragmentData.getProductList())
+        adapter.setProductList(FragmentData.getProductList() as MutableList<Product>)
         adapter.setCartList(FragmentData.getCartList())
         requireActivity().runOnUiThread {
             textViewTotal.text = "Total: ${FragmentData.getTotalPriceCart()}"

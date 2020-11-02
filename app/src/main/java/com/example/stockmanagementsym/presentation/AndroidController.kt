@@ -22,7 +22,7 @@ class AndroidController(private val androidView: AndroidView): View.OnClickListe
             R.id.buttonHomeToUserList -> getNavController().navigate(R.id.action_home_to_userFragment)
 
             //Product list
-            R.id.buttonProductListToSearch -> androidView.searchProduct(view)
+            R.id.buttonProductListToSearch -> androidView.searchProduct()
             R.id.buttonProductListToNewProduct -> getNavController().navigate(R.id.action_shopFragment_to_newProductFragment)
 
             //Cart
@@ -40,11 +40,11 @@ class AndroidController(private val androidView: AndroidView): View.OnClickListe
             R.id.buttonNewProduct -> androidView.registerProduct(view)
 
             //Sale list
-            R.id.buttonSaleListToSearch -> androidView.searchSale(view)
+            R.id.buttonSaleListToSearch -> androidView.searchSale()
 
             //User fragment
             R.id.buttonUserListToCreateUser -> getNavController().navigate(R.id.action_userFragment_to_newUserFragment)
-            R.id.buttonUserListToSearch -> androidView.searchUser(view)
+            R.id.buttonUserListToSearch -> androidView.searchUser()
             //User fragment - new user
             R.id.buttonNewUserToUserList-> getNavController().navigate(R.id.action_newUserFragment_to_userFragment)
             R.id.buttonNewUserToHome -> getNavController().navigate(R.id.action_newUserFragment_to_home)

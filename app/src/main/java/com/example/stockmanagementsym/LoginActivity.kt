@@ -11,10 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.jetbrains.anko.doAsync
 
 
 class LoginActivity : AppCompatActivity() {
@@ -27,18 +24,26 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         context = this
         androidModel = AndroidModel()
-
+        /**
+         * Normal login.
+         * Obtains user data, name and password, sets the google data in null in model class (isn't used)
+         * and ask to model if the user exits
+         */
         buttonLogin.setOnClickListener  {
             showLoading(true)
-            GlobalScope.launch(Dispatchers.IO){
+            doAsync {
                 val userName = editTextUser.text.toString()
                 val password = editTextPass.text.toString()
-                if(userName.isEmpty()||password.isEmpty()){
-                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.emptyData),context)
+                if (userName.isEmpty() || password.isEmpty()) {
+                    androidModel.showToastMessage(
+                        getString(R.string.loginFailure) + ". " + getString(
+                            R.string.emptyData
+                        ), context
+                    )
                     (context as LoginActivity).runOnUiThread {
                         showLoading(false)
                     }
-                }else{
+                } else {
                     androidModel.setGoogleAccount(null)
                     androidModel.setGoogleSingInClient(null)
                     login(userName, password)
@@ -54,15 +59,19 @@ class LoginActivity : AppCompatActivity() {
         }
         buttonRegister.setOnClickListener {
             showLoading(true)
-            GlobalScope.launch(Dispatchers.IO){
+            doAsync {
                 val userName = editTextUser.text.toString()
                 val password = editTextPass.text.toString()
-                if(userName.isEmpty()||password.isEmpty()){
-                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.emptyData),context)
+                if (userName.isEmpty() || password.isEmpty()) {
+                    androidModel.showToastMessage(
+                        getString(R.string.loginFailure) + ". " + getString(
+                            R.string.emptyData
+                        ), context
+                    )
                     (context as LoginActivity).runOnUiThread {
                         showLoading(false)
                     }
-                }else{
+                } else {
                     androidModel.setGoogleAccount(null)
                     androidModel.setGoogleSingInClient(null)
                     register(userName, password)
@@ -79,11 +88,7 @@ class LoginActivity : AppCompatActivity() {
                 account = task.result
                 androidModel.setGoogleAccount(account)
                 androidModel.setGoogleSingInClient(googleSignInClient)
-
-                GlobalScope.launch(Dispatchers.IO){
-                    login(account!!.displayName.toString(), account!!.id.toString())
-                }
-
+                login(account!!.displayName.toString(), account!!.id.toString())
             }catch (e: Exception){
                 androidModel.showAlertMessage(R.string.loginFailure,R.string.loginFailure,context)
                 showLoading(false)
@@ -92,21 +97,29 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private suspend fun login(user: String, password: String) {
+    private fun login(user: String, password: String) {
         showLoading(false)
         androidModel.confirmLogin(this, user, password)
     }
 
-    private suspend fun register(user: String, password: String) {
+    private fun register(user: String, password: String) {
         val login = this
-        withContext(Dispatchers.IO){
-            try{
+        doAsync {
+            try {
                 androidModel.register(login, user, password)
                 showLoading(false)
-                androidModel.showAlertMessage(R.string.titleUserRegistered,R.string.messageUserRegistered,login)
-            }catch (e:Exception){
+                androidModel.showAlertMessage(
+                    R.string.titleUserRegistered,
+                    R.string.messageUserRegistered,
+                    login
+                )
+            } catch (e: Exception) {
                 showLoading(false)
-                androidModel.showAlertMessage(R.string.titleUserRegistered,R.string.messageUserNotRegistered,login)
+                androidModel.showAlertMessage(
+                    R.string.titleUserRegistered,
+                    R.string.messageUserNotRegistered,
+                    login
+                )
             }
         }
     }

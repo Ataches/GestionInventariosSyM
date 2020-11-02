@@ -21,7 +21,8 @@ class CartAdapter(private var cartList: MutableList<Product>) :
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val productCart = cartList[position]
-        holder.setProductOriginal(productList.filter { it.idProduct == productCart.idProduct }[0])
+        if(productList.isNotEmpty())
+            holder.setProductOriginal(productList.filter { it.idProduct == productCart.idProduct }[0])
         holder.bind(productCart)
     }
 

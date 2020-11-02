@@ -1,6 +1,7 @@
 package com.example.stockmanagementsym.data
 
 object CONSTANTS {
+    const val STRING_VOID_ELEMENT: String = "VOID ELEMENT"
     const val URL_MAX_LENGTH: Int = 400
 
     const val DEFAULT_USER_LATITUDE = -1.0

@@ -18,9 +18,9 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-/*
-    Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
-    Intermediate object between fragments and android view
+/**
+ *  Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+ *  Intermediate object between fragments and android view
 */
 object FragmentData {
 
@@ -111,7 +111,7 @@ object FragmentData {
         return getAndroidView().getProductToEdit()
     }
 
-    fun getProductList(): MutableList<Product> {
+    fun getProductList(): MutableList<Any> {
         return getAndroidView().getProductList()
     }
 
@@ -225,23 +225,24 @@ object FragmentData {
         getAndroidView().showAlertMessage(titleID, messageID, null)
     }
 
-    /*
+    /**
         Method to paint an image in a image view, depends on data length.
         Type photo: - Photo from a url (if string length is less than a constant)
                     - Bitmap in a string
+        If the photo data is empty or equals to a constant the photo can be changed by a drawable element
         The background in the image view can be changed by a drawable, is necessary the drawable ID
      */
-    fun paintPhoto(userPhotoData: String, imageView: ImageView, drawableID: Int) {
-        if (userPhotoData.isNotEmpty()) {
-            if (userPhotoData.length < CONSTANTS.URL_MAX_LENGTH) {
+    fun paintPhoto(photoData: String, imageView: ImageView, drawableID: Int) {
+        if ((photoData.isNotEmpty())&&(photoData != CONSTANTS.STRING_VOID_ELEMENT)) {
+            if (photoData.length < CONSTANTS.URL_MAX_LENGTH) {
                 try {
-                    Picasso.get().load(userPhotoData).into(imageView)
+                    Picasso.get().load(photoData).into(imageView)
                     imageView.background = null
                 } catch (e: Exception) {
                     showToastMessage(R.string.imageLoadFailure)
                 }
             } else {
-                imageView.setImageBitmap(getBitMapFromString(userPhotoData))
+                imageView.setImageBitmap(getBitMapFromString(photoData))
                 imageView.background = null
             }
         } else {

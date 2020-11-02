@@ -13,6 +13,9 @@ import com.example.stockmanagementsym.presentation.adapter.CustomerListAdapter
 import kotlinx.android.synthetic.main.fragment_customer_list.view.*
 
 
+/**
+ * Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+ */
 class CustomerListFragment : Fragment(), IListListener {
 
     private lateinit var adapter: CustomerListAdapter

@@ -21,13 +21,13 @@ import kotlinx.android.synthetic.main.dialog_new_customer.view.*
 import kotlinx.android.synthetic.main.dialog_new_sale.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import kotlinx.android.synthetic.main.fragment_new_user.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.util.*
 
 
+/**
+ * Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+ */
 class DialogView(private var androidView: AndroidView) {
 
     private var newSaleCustomerBoolean: Boolean = false
@@ -76,8 +76,8 @@ class DialogView(private var androidView: AndroidView) {
         view.buttonSelectCustomerName.setOnClickListener{
             loadCustomerList()
             dialogSelectList(
-                data = customerList,
-                R.string.selectCustomer
+                    data = customerList,
+                    R.string.selectCustomer
             )
         }
 
@@ -89,9 +89,9 @@ class DialogView(private var androidView: AndroidView) {
             val newSale = androidView.getNewSale()
             if (newSale != null)
                 dialogConfirmRegister(
-                    data = newSale,
-                    title = R.string.titleAlertNewSaleBd,
-                    message = R.string.messageAlertNewSale
+                        data = newSale,
+                        title = R.string.titleAlertNewSaleBd,
+                        message = R.string.messageAlertNewSale
                 )
             dialog.dismiss()
         }
@@ -103,7 +103,7 @@ class DialogView(private var androidView: AndroidView) {
     // Method used to load de customer list data to the new sale fragment
     private fun loadCustomerList() {
         doAsync {
-            customerList = androidView.getCustomerList().map {
+            customerList = (androidView.getCustomerList() as MutableList<Customer>).map {
                 "Nombre: " + it.getName() + CONSTANTS.STRING_ITEM_LIMITER +
                         "Direccion: " + it.getAddress() + CONSTANTS.STRING_ITEM_LIMITER +
                         "Telefono: " + it.getPhone() + CONSTANTS.STRING_ITEM_LIMITER +
@@ -115,7 +115,7 @@ class DialogView(private var androidView: AndroidView) {
     //Customer
     fun dialogRegisterCustomer(updateBoolean: Boolean) {
         layoutInflater = androidView.getContext()
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = layoutInflater.inflate(R.layout.dialog_new_customer, null, false)
         val dialog = Dialog(androidView.getContext())
 
@@ -125,25 +125,25 @@ class DialogView(private var androidView: AndroidView) {
         if (updateBoolean) {
             val customerToEdit = androidView.getCustomerToEdit()
             view.textViewCustomerTitle.text =
-                view.context.getString(R.string.titleAlertUpdateCustomer)
+                    view.context.getString(R.string.titleAlertUpdateCustomer)
             view.editTextCustomerName.setText(customerToEdit.getName())
             view.editTextCustomerAddress.setText(customerToEdit.getAddress())
             view.editTextPhone.setText(customerToEdit.getPhone())
             view.editTextCity.setText(customerToEdit.getCity())
             view.buttonNewCustomerToNewCustomer.text =
-                view.context.getString(R.string.titleAlertUpdateCustomer)
+                    view.context.getString(R.string.titleAlertUpdateCustomer)
         } else
             view.textViewCustomerTitle.text = view.context.getString(R.string.titleAlertNewCustomer)
 
 
         view.buttonNewCustomerToNewCustomer.setOnClickListener {
             val customer =
-                Customer(
-                    view.editTextCustomerName.text.toString(),
-                    view.editTextCustomerAddress.text.toString(),
-                    view.editTextPhone.text.toString(),
-                    view.editTextCity.text.toString()
-                )
+                    Customer(
+                            view.editTextCustomerName.text.toString(),
+                            view.editTextCustomerAddress.text.toString(),
+                            view.editTextPhone.text.toString(),
+                            view.editTextCity.text.toString()
+                    )
 
 
             if (updateBoolean){
@@ -153,8 +153,7 @@ class DialogView(private var androidView: AndroidView) {
                         R.string.messageAlertUpdateCustomer
                 )
                 FragmentData.setBooleanUpdate(false)
-            }
-            else
+            } else
                 dialogConfirmRegister(
                         customer,
                         R.string.titleAlertNewCustomer,
@@ -188,8 +187,8 @@ class DialogView(private var androidView: AndroidView) {
         if (updateBoolean) {
             dialogConfirmRegister(
                     product,
-                    (R.string.titleAlertUpdateProd),
-                    (R.string.messageAlertUpdateProd)
+                    R.string.titleAlertUpdateProd,
+                    R.string.messageAlertUpdateProd
             )
             androidView.goToProductList()
             FragmentData.setBooleanUpdate(false)
@@ -218,9 +217,9 @@ class DialogView(private var androidView: AndroidView) {
                 }
 
                 (R.string.titleAlertUpdateProd) -> {
-                    GlobalScope.launch(Dispatchers.IO) {
+                    doAsync {
                         androidView.goToProductList()
-                        androidView.showResultTransaction(androidView.goToNewProduct(data as Product))
+                        androidView.updateProduct(data as Product)
                     }
                 }
                 (R.string.titleAlertDeleteProd) -> androidView.deleteProduct(data as Product)
@@ -233,9 +232,7 @@ class DialogView(private var androidView: AndroidView) {
                 }
 
                 (R.string.titleAlertNewSaleBd) -> {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        androidView.createSale()
-                    }
+                    androidView.createSale()
                 }
 
                 (R.string.titleAlertNewCustomer) -> {
@@ -272,9 +269,7 @@ class DialogView(private var androidView: AndroidView) {
                     androidView.askLogOut()
                 }
                 else -> {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        androidView.showToastMessage(androidView.getString(R.string.modifyIfIsNecessary))
-                    }
+                    androidView.showToastMessage(androidView.getString(R.string.modifyIfIsNecessary))
                 }
             }
         }

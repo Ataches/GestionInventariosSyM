@@ -18,9 +18,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-/*
-    Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
-*/
+/**
+ * Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+ */
 class AndroidView(private val androidModel: AndroidModel) {
 
     private var viewNewUserFragment: View? = null
@@ -101,25 +101,24 @@ class AndroidView(private val androidModel: AndroidModel) {
         androidModel.createProduct(product)
     }
     fun askDeleteProduct(product: Product){
-        dialogConfirmRegister(product,R.string.titleAlertDeleteProd,
-                                R.string.messageAlertDeleteProd)
-    }
-    fun deleteProduct(product: Product) {
-        GlobalScope.launch(Dispatchers.IO){
-            getNotifierView().showResultTransaction(androidModel.deleteProduct(product))
-        }
+        dialogConfirmRegister(product, R.string.titleAlertDeleteProd,
+                R.string.messageAlertDeleteProd)
     }
 
-    fun getProductList(): MutableList<Product> {
+    fun deleteProduct(product: Product) {
+        androidModel.deleteProduct(product)
+    }
+
+    fun getProductList(): MutableList<Any> {
         return androidModel.getProductList()
     }
 
-    fun searchProduct(view: View) {
-        androidModel.searchProduct(view)
+    fun searchProduct() {
+        androidModel.searchProduct()
     }
 
-    suspend fun goToNewProduct(product: Product): Boolean {
-        return androidModel.updateProduct(product)
+    fun updateProduct(product: Product){
+        androidModel.updateProduct(product)
     }
 
     fun goToProductList() {
@@ -137,10 +136,10 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun updateProduct(product: Product, booleanUpdate: Boolean) {
         productToEdit = product
         this.booleanUpdate = booleanUpdate
-        goToNewProduct()
+        updateProduct()
     }
 
-    private fun goToNewProduct() {
+    private fun updateProduct() {
         getAndroidController().goToNewProduct()
     }
     /*
@@ -204,7 +203,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         androidModel.searchCustomer()
     }
 
-    fun getCustomerList(): MutableList<Customer> {
+    fun getCustomerList(): MutableList<Any> {
         return androidModel.getCustomerList()
     }
 
@@ -235,8 +234,8 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.setDateSale(date)
     }
 
-    fun searchSale(view: View) {
-        androidModel.searchSale(view)
+    fun searchSale() {
+        androidModel.searchSale()
     }
 
     fun getSaleToString(sale: Sale): String {
@@ -245,8 +244,8 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun showProductListSaleToString(item: Sale) {
         getNotifierView().showAlertMessage(
-            R.string.saleList,
-            androidModel.getSaleToString(item)
+                R.string.saleList,
+                androidModel.getSaleToString(item)
         )
     }
 
@@ -349,26 +348,20 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getUserPhotoData()
     }
 
-    fun searchUser(view: View) {
-        androidModel.searchUser(view)
+    fun searchUser() {
+        androidModel.searchUser()
     }
 
     fun askLogOut() {
-        GlobalScope.launch(Dispatchers.IO){
-            androidModel.askLogOut()
-        }
+        dialogConfirmRegister(androidModel.getUserName(), R.string.logOut, R.string.messageLogOut)
     }
 
     fun askSaveLocation() {
-        GlobalScope.launch(Dispatchers.IO){
-            androidModel.askSaveLocation()
-        }
+        androidModel.askSaveLocation()
     }
 
     fun saveUserLocation() {
-        GlobalScope.launch(Dispatchers.IO){
-            androidModel.saveUserLocation()
-        }
+        androidModel.saveUserLocation()
     }
 
     fun logOut() {
