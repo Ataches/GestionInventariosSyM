@@ -1,65 +1,87 @@
 package com.example.stockmanagementsym.logic
 
-import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.data.dao.CustomerDao
 import com.example.stockmanagementsym.logic.business.Customer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.stockmanagementsym.logic.list_manager.IListManager
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.doAsyncResult
+import org.jetbrains.anko.uiThread
 
-class CustomerLogic(private val customerDao: CustomerDao) {
+class CustomerLogic(private val customerDao: CustomerDao, private val listManager: IListManager) {
 
     private var customerList: MutableList<Customer> = mutableListOf()
 
-    suspend fun updateCustomer(customer: Customer):Boolean {
-        return try{
-            withContext(Dispatchers.IO) {
+    fun loadData() {
+        doAsyncResult {
+            if(customerList.isEmpty())
+                customerList = customerDao.selectCustomerList()
+            uiThread {
+                listManager.reloadList(customerList.toMutableList())
+            }
+        }
+    }
+
+    fun updateCustomer(customer: Customer) {
+        doAsync {
+            try {
                 customerDao.update(customer)
                 updateCustomerList()
+                uiThread {
+                    notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                listManager.showResultTransaction(false)
             }
-            true
-        }catch (e:Exception){
-            false
         }
     }
 
-    suspend fun createCustomer(newCustomer: Customer): Boolean {
-        return try{
-            withContext(Dispatchers.IO) {
+    fun createCustomer(newCustomer: Customer) {
+        doAsync {
+            try {
                 customerDao.insert(newCustomer)
                 updateCustomerList()
+                uiThread {
+                    notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                listManager.showResultTransaction(false)
             }
-            true
-        }catch (e: Exception){
-            false
         }
     }
 
-    suspend fun deleteCustomer(customer: Customer):Boolean{
-        return try{
-            withContext(Dispatchers.IO) {
+    fun deleteCustomer(customer: Customer) {
+        doAsync {
+            try {
                 customerDao.delete(customer)
                 updateCustomerList()
+                uiThread {
+                    notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                listManager.showResultTransaction(false)
             }
-            true
-        }catch (e:Exception){
-            false
         }
     }
 
-    suspend fun searchCustomer(searchText: String): List<Customer> {
-        return getCustomerList().filter{ item -> item.getName().toLowerCase().contains(searchText.toLowerCase())}
+    fun searchCustomer(searchText: String) {
+        val listSearched = customerList.filter { item ->
+            item.getName().toLowerCase().contains(searchText.toLowerCase())
+        }
+        listManager.reloadList(listSearched.toMutableList())
     }
 
-    suspend fun getCustomerList(): MutableList<Customer> {
-        if(customerList.isEmpty()){
-            withContext(Dispatchers.IO) {
-                customerList = customerDao.selectCustomerList()
-            }
-        }
+    fun getCustomerList(): MutableList<Customer> {
+        if(customerList.isEmpty())
+            loadData()
         return customerList
     }
 
-    private suspend fun updateCustomerList(){
+    private fun updateCustomerList() {
         customerList = customerDao.selectCustomerList()
+    }
+
+    private fun notifyUserTransactionSuccess() {
+        listManager.reloadList(customerList.toMutableList())
+        listManager.showResultTransaction(true)
     }
 }

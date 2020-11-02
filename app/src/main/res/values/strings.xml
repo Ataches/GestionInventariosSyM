@@ -82,7 +82,7 @@
     <string name="titleAlertNewUser">Nuevo usuario</string>
     <string name="userPrivilegeHint">Ej: user</string>
     <string name="userPrivilege">Privilegio:</string>
-    <string name="cart">Carrito</string>
+    <string name="cartList">Carrito</string>
     <string name="userName">Usuario:</string>
     <string name="newUser">Nuevo usuario</string>
     <string name="saveLastLocation">Guardar localización</string>
@@ -98,7 +98,7 @@
     <string name="logOut">Cerrar sesión</string>
     <string name="messageLogOut">¿Desea cerrar la sesión?</string>
     <string name="loginFailure">Fallo en inicio de sesión</string>
-    <string name="voidData">Campos vacios</string>
+    <string name="emptyData">Campos vacios</string>
     <string name="productDescriptionHint">"Ejemplo: Pieza de repuesto para autos "</string>
     <string name="productQuantityHint">Ej: 20</string>
     <string name="titleAlertDeleteProd">Eliminar producto</string>
@@ -109,7 +109,7 @@
     <string name="messageUserRegistered">Usuario registrado, inicie sesión</string>
     <string name="titleUserRegistered">Registro</string>
     <string name="messageUserNotRegistered">Fallo registrando el usuario</string>
-    <string name="userDeleteFail">Fallo al eliminar el cliente</string>
+    <string name="userDeleteFailure">Fallo al eliminar el cliente</string>
     <string name="userInsertSuccess">Usuario registrado correctamente</string>
     <string name="userDeleteSuccess">Usuario eliminado exitosamente</string>
     <string name="elementRemovedFromCart">Producto eliminado del carrito</string>
@@ -117,5 +117,12 @@
     <string name="transactionSuccess">Se realizo la operación con exito</string>
     <string name="transactionFailure">No se pudo realizar la operación</string>
     <string name="productAlreadyInCart">El producto ya esta en el carrito</string>
+    <string name="productListUpdateFailure">Falla al actualizar la cantidad del listado de productos</string>
+    <string name="productListUpdateSuccess">Cantidades del listado de productos actualizada</string>
+    <string name="productListRestFailure">"Fallo al cargar listado de productos REST "</string>
+    <string name="imageLoadFailure">Fallo al cargar la URL de la imagen</string>
+    <string name="productNotRegisted">Producto no registrado, redirigiendo</string>
+    <string name="wrongQuantityNumber">Digite un numero correcto de acuerdo a la cantidad disponible</string>
+    <string name="wrongNumber">Digite un numero correcto</string>
 
 </resources>

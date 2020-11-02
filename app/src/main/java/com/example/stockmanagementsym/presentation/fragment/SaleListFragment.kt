@@ -11,18 +11,11 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.adapter.SaleListAdapter
 import kotlinx.android.synthetic.main.fragment_sale_list.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-class SaleListFragment : Fragment(), ListListener {
+class SaleListFragment : Fragment(), IListListener {
 
     private var saleList: MutableList<Sale> = mutableListOf()
-    private var adapter:SaleListAdapter = SaleListAdapter(saleList)
-
-    init {
-        FragmentData.setSaleListListener(this)
-    }
+    private var adapter: SaleListAdapter = SaleListAdapter(saleList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,40 +28,27 @@ class SaleListFragment : Fragment(), ListListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.saleList)
-        adapter
 
         recyclerViewSaleList.adapter = adapter
-        recyclerViewSaleList.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        recyclerViewSaleList.layoutManager =
+            LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
-        reloadList()
+        FragmentData.notifySaleLogic(this)
 
         buttonSaleListToSearch.setOnClickListener(FragmentData.getController())
     }
 
-    override fun reloadList() {
-        GlobalScope.launch(Dispatchers.IO){
-            adapter.setSaleList(FragmentData.getSaleList())
-            requireActivity().runOnUiThread {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun setList(list: MutableList<Any>) {
-        GlobalScope.launch(Dispatchers.IO){
-            adapter.setSaleList(list as MutableList<Sale>)
-            requireActivity().runOnUiThread {
-                adapter.notifyDataSetChanged()
-            }
+    override fun reloadList(mutableList: MutableList<Any>) {
+        adapter.setSaleList(mutableList as MutableList<Sale>)
+        requireActivity().runOnUiThread {
+            adapter.notifyDataSetChanged()
         }
     }
 
     override fun addElementsToList(mutableList: MutableList<Any>) {
-        GlobalScope.launch(Dispatchers.IO){
-            adapter.getSaleList().addAll(mutableList as MutableList<Sale>)
-            requireActivity().runOnUiThread {
-                adapter.notifyDataSetChanged()
-            }
+        adapter.getSaleList().addAll(mutableList as MutableList<Sale>)
+        requireActivity().runOnUiThread {
+            adapter.notifyDataSetChanged()
         }
     }
 

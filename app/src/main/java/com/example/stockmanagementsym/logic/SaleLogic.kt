@@ -1,23 +1,31 @@
 package com.example.stockmanagementsym.logic
 
-import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.data.dao.SaleDao
-import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.stockmanagementsym.logic.list_manager.IListManager
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.doAsyncResult
+import org.jetbrains.anko.uiThread
 
-class SaleLogic(private val saleDao: SaleDao, private val cartLogic: CartLogic,private val listManager: ListManager) {
+class SaleLogic(private val saleDao: SaleDao, private val listManager: IListManager) {
 
     private var saleList: MutableList<Sale> = mutableListOf()
+
+    fun loadData() {
+        doAsyncResult {
+            if(saleList.isEmpty())
+                saleList = saleDao.selectSaleList()
+            uiThread {
+                listManager.reloadList(saleList.toMutableList())
+            }
+        }
+    }
 
     fun createSale(sale: Sale) {
         doAsync {
             try {
-                cartLogic.clearCart()
-                updateSaleList()
                 saleDao.insert(sale)
+                updateSaleList()
                 notifyUserTransactionSuccess()
             } catch (e: Exception) {
                 listManager.showResultTransaction(false)
@@ -25,25 +33,22 @@ class SaleLogic(private val saleDao: SaleDao, private val cartLogic: CartLogic,p
         }
     }
 
-    suspend fun getSaleList(): MutableList<Sale> {
-        withContext(Dispatchers.IO) {
-            saleList = saleDao.selectSaleList()
-        }
+    fun getSaleList(): MutableList<Sale> {
+        if(saleList.isEmpty())
+            loadData()
         return saleList
     }
 
     private fun updateSaleList() {
-        doAsync {
-            saleList = saleDao.selectSaleList()
-        }
+        saleList = saleDao.selectSaleList()
     }
 
-    suspend fun searchSales(searchText: String): List<Sale> {
+    fun searchSales(searchText: String): List<Sale> {
         return getSaleList().filter { sale -> sale.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase()) }
     }
 
     private fun notifyUserTransactionSuccess() {
-        listManager.reloadList()
+        listManager.reloadList(saleList.toMutableList())
         listManager.showResultTransaction(true)
     }
 }

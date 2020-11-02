@@ -2,6 +2,7 @@ package com.example.stockmanagementsym.presentation.fragment
 
 import android.os.Bundle
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -33,13 +34,13 @@ class LocationFragment : SupportMapFragment(), OnMapReadyCallback, GoogleMap.OnM
     private fun loadUserLocation(){
         userLatitude = FragmentData.getUserLatitude()
         userLongitude = FragmentData.getUserLongitude()
-        if((userLatitude != -1.0) && (userLongitude != -1.0)){
+        if((userLatitude != CONSTANTS.DEFAULT_USER_LATITUDE) && (userLongitude != CONSTANTS.DEFAULT_USER_LONGITUDE)){
             val location = LatLng(userLatitude,userLongitude)
             map.addMarker(MarkerOptions().position(location).title(getString(R.string.location)))
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location,120f))
             map.setOnMapClickListener(this)
-            FragmentData.showToastMessage(getString(R.string.pressToReloadMap))
+            FragmentData.showToastMessage(R.string.pressToReloadMap)
         }else
-            FragmentData.showToastMessage(getString(R.string.locationFailure)+" "+getString(R.string.pressToReloadMap))
+            FragmentData.showAlertMessage(R.string.locationFailure, R.string.pressToReloadMap)
     }
 }

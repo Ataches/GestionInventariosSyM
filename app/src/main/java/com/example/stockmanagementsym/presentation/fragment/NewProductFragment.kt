@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_new_product.view.*
 
 /*
@@ -38,22 +37,12 @@ class NewProductFragment: Fragment(){
             view.editTextProductDesc.setText(product.getDescription())
             view.editTextProductQuantity.setText(product.getQuantity().toString())
 
-            val userPhotoData = product.getStringBitMap()
-
-            if(userPhotoData!=""){
-                if(userPhotoData.length<400){
-                    try {
-                        Picasso.get().load(userPhotoData).into(view.imageViewNewProduct)
-                        view.imageViewNewProduct.background = null
-                    }catch (e:Exception){
-                        FragmentData.showToastMessage(""+e)
-                    }
-                }else{
-                    view.imageViewNewProduct.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
-                    view.imageViewNewProduct.visibility = View.VISIBLE
-                    view.imageViewNewProduct.background = null
-                }
-            }
+            FragmentData.paintPhoto(
+                product.getStringBitMap(),
+                view.imageViewNewProduct,
+                0
+            )
+            view.imageViewNewProduct.visibility = View.VISIBLE
         }else{
             view.textViewTitleProduct.text = getString(R.string.titleAlertNewProd)
         }

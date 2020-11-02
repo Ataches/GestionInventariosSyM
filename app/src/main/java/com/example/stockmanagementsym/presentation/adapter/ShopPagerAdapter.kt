@@ -9,8 +9,8 @@ import com.example.stockmanagementsym.presentation.fragment.ProductListFragment
 class ShopPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when(position) {
+            1 -> CartListFragment() // It's necessary that cart list loads before product list to send cart listener to product list
             0 -> ProductListFragment()
-            1 -> CartListFragment()
             else -> ProductListFragment()
         }
     }
@@ -21,8 +21,8 @@ class ShopPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence {
         return when(position) {
-            0 -> "Productos"
             1 -> "Carrito"
+            0 -> "Productos"
             else -> "Productos"
         }
     }

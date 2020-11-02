@@ -3,28 +3,27 @@ package com.example.stockmanagementsym.logic
 import com.example.stockmanagementsym.data.CartData
 import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.logic.business.Product
+import com.example.stockmanagementsym.logic.list_manager.IListManager
 import java.text.DecimalFormat
 
-class CartLogic(private var listManager: ListManager) {
+class CartLogic(private var listManager: IListManager) {
 
-    private var cartData:CartData ?= null
+    private var cartData: CartData? = null
 
-    private fun getCartData():CartData{
-        if(cartData==null)
+
+    private fun getCartData(): CartData {
+        if (cartData == null)
             cartData = CartData()
         return cartData!!
     }
-    fun setListManager(listManager: ListManager) {
-        this.listManager = listManager
-    }
 
-    fun addProductToCart(item: Product){
+    fun addProductToCart(item: Product) {
         try {
-            if (addProductToCartList(item))
+            if (getCartData().addProductToCartList(item))
                 listManager.showAlertMessage(MESSAGES.CART_TITLE, MESSAGES.PRODUCT_ADDED_TO_CART)
             else
                 listManager.showAlertMessage(MESSAGES.CART_TITLE, MESSAGES.PRODUCT_ALREADY_IN_CART)
-            listManager.reloadList()
+            listManager.reloadList(getCartData().getCartList().toMutableList())
         }catch (e:Exception){
             listManager.showAlertMessage(MESSAGES.CART_TITLE, MESSAGES.PRODUCT_NOT_ADDED_TO_CART)
         }
@@ -42,16 +41,19 @@ class CartLogic(private var listManager: ListManager) {
         return df.format(totalPrice)
     }
 
-    fun addProductToCartList(item: Product):Boolean{
-        return getCartData().addProductToCartList(item)
-    }
-
-    fun removeElementCart(item: Product) : Boolean{
-        return getCartData().removeElementList(item)
+    fun removeElementCart(item: Product){
+        try{
+            getCartData().removeElementList(item)
+            listManager.showResultTransaction(true)
+        }catch (e:Exception){
+            listManager.showResultTransaction(false)
+        }
     }
 
     fun clearCart() {
-        getCartData().clearCart()
+        if(getCartData().clearCart())
+            listManager.reloadList(mutableListOf()) //Data cart is empty
+        else
+            listManager.showResultTransaction(false)
     }
-
 }

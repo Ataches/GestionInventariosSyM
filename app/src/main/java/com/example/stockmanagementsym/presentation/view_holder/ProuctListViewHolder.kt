@@ -1,16 +1,11 @@
 package com.example.stockmanagementsym.presentation.view_holder
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 import java.text.DecimalFormat
 
@@ -22,47 +17,30 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textViewPrice.text = df.format(product.getPrice())
         itemView.textViewQuantity.text = """${product.getQuantity()}"""
 
-        val userPhotoData = product.getStringBitMap()
-        if(userPhotoData.isNotEmpty()){
-            if(userPhotoData.length<400){
-                try {
-                    Picasso.get().load(userPhotoData).into(itemView.imageViewProduct)
-                    itemView.imageViewProduct.background = null
-                }catch (e:Exception){
-                    FragmentData.showToastMessage(""+e)
-                }
-            }else{
-                itemView.imageViewProduct.setImageBitmap(decoderStringToBitMap(product.getStringBitMap()))
-                itemView.imageViewProduct.background = null
-            }
-        }else{
-            itemView.imageViewProduct.setImageBitmap(null)
-            itemView.imageViewProduct.setBackgroundResource(R.drawable.ic_image)
-        }
+        FragmentData.paintPhoto(
+            product.getStringBitMap(),
+            itemView.imageViewProduct,
+            R.drawable.ic_image
+        )
 
-        if(product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT)
-            itemView.constraintLayoutCard.setBackgroundResource(R.color.buttonSecondary)
+        if (product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT)  //If the id product has a default ID means that comes from REST search
+            itemView.constraintLayoutCard.setBackgroundResource(R.color.buttonSecondary) // The product frame changes the color to show to the user the product from REST search
         else
             itemView.constraintLayoutCard.setBackgroundResource(R.color.cardBackground)
 
-        itemView.buttonAddProductToCart.setOnClickListener{
-            if(product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT){
+        itemView.buttonAddProductToCart.setOnClickListener {
+            if (product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT) {   //If the id product has a default ID means that comes from REST search
                 FragmentData.addProductToCart(product)
-            }else{
-                FragmentData.showToastMessage("Producto no registrado, redirigiendo")
+            } else {
+                FragmentData.showToastMessage(R.string.productNotRegisted)
                 FragmentData.confirmNewProduct(product)
             }
         }
         itemView.buttonEditProduct.setOnClickListener {
-            FragmentData.updateProduct(product,true)
+            FragmentData.updateProduct(product, true)
         }
-        itemView.buttonDeleteProduct.setOnClickListener{
+        itemView.buttonDeleteProduct.setOnClickListener {
             FragmentData.askDeleteProduct(product)
         }
-    }
-
-    private fun decoderStringToBitMap(string: String): Bitmap? {
-        val byteArrayFromString = Base64.decode(string, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(byteArrayFromString,0,byteArrayFromString.size)
     }
 }

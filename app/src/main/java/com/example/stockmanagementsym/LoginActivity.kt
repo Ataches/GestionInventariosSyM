@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
                 val userName = editTextUser.text.toString()
                 val password = editTextPass.text.toString()
                 if(userName.isEmpty()||password.isEmpty()){
-                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.voidData),context)
+                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.emptyData),context)
                     (context as LoginActivity).runOnUiThread {
                         showLoading(false)
                     }
@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                 val userName = editTextUser.text.toString()
                 val password = editTextPass.text.toString()
                 if(userName.isEmpty()||password.isEmpty()){
-                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.voidData),context)
+                    androidModel.showToastMessage(getString(R.string.loginFailure) + ". " + getString(R.string.emptyData),context)
                     (context as LoginActivity).runOnUiThread {
                         showLoading(false)
                     }

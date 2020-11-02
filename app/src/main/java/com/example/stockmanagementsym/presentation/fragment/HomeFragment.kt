@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
@@ -32,20 +31,10 @@ class HomeFragment : Fragment() {
         view.buttonHomeToCustomersList.setOnClickListener(FragmentData.getController())
         view.buttonHomeToUserList.setOnClickListener(FragmentData.getController())
 
-        val userPhotoData = FragmentData.getUserPhotoData()
-
-        if(userPhotoData!=""){
-            if(userPhotoData.length<400){
-                try {
-                    Picasso.get().load(userPhotoData).into(view.imageViewUserHome)
-                    view.imageViewUserHome.background = null
-                }catch (e:Exception){
-                    FragmentData.showToastMessage(""+e)
-                }
-            }else{
-                view.imageViewUserHome.setImageBitmap(FragmentData.getBitMapFromString(FragmentData.getUserPhotoData()))
-                view.imageViewUserHome.background = null
-            }
-        }
+        FragmentData.paintPhoto(
+            FragmentData.getUserPhotoData(),
+            view.imageViewUserHome,
+            0
+        )
     }
 }

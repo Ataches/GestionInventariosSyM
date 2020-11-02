@@ -10,11 +10,12 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.adapter.CartAdapter
 import kotlinx.android.synthetic.main.fragment_cart.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-class CartListFragment : Fragment(), ListListener {
+interface ICart {
+    fun setProductList(mutableList: MutableList<Product>)
+}
+
+class CartListFragment : Fragment(), IListListener, ICart {
 
     private lateinit var adapter: CartAdapter
 
@@ -28,48 +29,35 @@ class CartListFragment : Fragment(), ListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CartAdapter(FragmentData.getCartList(), this)
+        adapter = CartAdapter(FragmentData.getCartList())
 
         recyclerViewCart.adapter = adapter
         recyclerViewCart.layoutManager =
-        LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
-        reloadList()
-
-        FragmentData.setCartListener(this)
+        FragmentData.notifyCartLogic(this, this)
 
         buttonCartToNewSale.setOnClickListener(FragmentData.getController())
     }
 
-    override fun onResume() {
-        super.onResume()
-        reloadList()
+    override fun setProductList(mutableList: MutableList<Product>) {
+        adapter.setProductList(mutableList)
     }
 
-    override fun reloadList() {
-        GlobalScope.launch(Dispatchers.IO){
-            adapter.setProductList(FragmentData.getProductList())
-            adapter.setCartList(FragmentData.getCartList())
-            requireActivity().runOnUiThread {
-                textViewTotal.text = "Total: ${FragmentData.getTotalPriceCart()}"
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun setList(list: MutableList<Any>) {
-        adapter.setCartList(list as MutableList<Product>)
+    override fun reloadList(mutableList: MutableList<Any>) {
+        adapter.setProductList(FragmentData.getProductList())
+        adapter.setCartList(FragmentData.getCartList())
         requireActivity().runOnUiThread {
+            textViewTotal.text = "Total: ${FragmentData.getTotalPriceCart()}"
             adapter.notifyDataSetChanged()
         }
     }
 
     override fun addElementsToList(mutableList: MutableList<Any>) {
-        GlobalScope.launch(Dispatchers.IO){
-            adapter.getCartList().addAll(mutableList as MutableList<Product>)
-            requireActivity().runOnUiThread {
-                adapter.notifyDataSetChanged()
-            }
+        adapter.getCartList().addAll(mutableList as MutableList<Product>)
+        requireActivity().runOnUiThread {
+            adapter.notifyDataSetChanged()
         }
     }
 }
+

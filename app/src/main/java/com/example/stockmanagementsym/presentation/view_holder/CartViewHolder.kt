@@ -3,22 +3,17 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.fragment.ListListener
+import com.example.stockmanagementsym.presentation.adapter.CartAdapter
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_cart.view.*
-import kotlinx.android.synthetic.main.item_cart.view.editTextQuantity
-import kotlinx.android.synthetic.main.item_cart.view.imageViewProduct
-import kotlinx.android.synthetic.main.item_cart.view.textViewDescription
-import kotlinx.android.synthetic.main.item_cart.view.textViewName
-import kotlinx.android.synthetic.main.item_cart.view.textViewPrice
-import kotlinx.android.synthetic.main.item_cart.view.textViewQuantity
 import java.text.DecimalFormat
 
-class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.ViewHolder(itemView) {
+class CartViewHolder(itemView: View, private var adapter: CartAdapter) :
+RecyclerView.ViewHolder(itemView) {
 
-    private var product = Product("",0.0,"","",1)
+    private var product = Product("", 0.0, "", "", 1)
 
     fun bind(productCart: Product) {
         val df = DecimalFormat("$###,###,###")
@@ -28,38 +23,28 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
         itemView.textViewQuantity.text = "Cantidad: ${productCart.getQuantity()}"
         itemView.editTextQuantity.setText("""${productCart.getQuantity()}""")
 
-
-        val userPhotoData = product.getStringBitMap()
-        if(userPhotoData.isNotEmpty()){
-            if(userPhotoData.length<400){
-                try {
-                    Picasso.get().load(userPhotoData).into(itemView.imageViewProduct)
-                    itemView.imageViewProduct.background = null
-                }catch (e:Exception){
-                    FragmentData.showToastMessage(""+e)
-                }
-            }else{
-                itemView.imageViewProduct.setImageBitmap(FragmentData.getBitMapFromString(product.getStringBitMap()))
-                itemView.imageViewProduct.background = null
-            }
-        }
+        FragmentData.paintPhoto(
+            product.getStringBitMap(),
+            itemView.imageViewProduct,
+            0
+        )
 
         itemView.textViewProdRealQuantity.text =
-            "Disponibles: ${(product.getQuantity()-productCart.getQuantity())}" +
+            "Disponibles: ${(product.getQuantity() - productCart.getQuantity())}" +
                     " de total: ${product.getQuantity()}"
 
-        itemView.buttonRemoveCart.setOnClickListener{
+        itemView.buttonRemoveCart.setOnClickListener {
             FragmentData.removeElementCart(productCart)
-            listener.reloadList()
+            adapter.notifyDataSetChanged()
         }
 
-        itemView.buttonRemoveQuantityProdCart.setOnClickListener{
+        itemView.buttonRemoveQuantityProdCart.setOnClickListener {
             val quantityString = itemView.editTextQuantity.text.toString()
-            changeQuantity(quantityString,productCart,-1)
+            changeQuantity(quantityString, productCart, -1)
         }
-        itemView.buttonAddQuantityProdCart.setOnClickListener{
+        itemView.buttonAddQuantityProdCart.setOnClickListener {
             val quantityString = itemView.editTextQuantity.text.toString()
-            changeQuantity(quantityString,productCart,1)
+            changeQuantity(quantityString, productCart, 1)
         }
     }
 
@@ -71,11 +56,11 @@ class CartViewHolder(itemView: View, var listener: ListListener) : RecyclerView.
                     productCart.setQuantity(quantity+stepAdd)
                 else
                     productCart.setQuantity(quantity)
-                listener.reloadList()
+                adapter.notifyDataSetChanged()
             }else
-                FragmentData.showToastMessage("Digite un numero correcto de acuerdo a la cantidad disponible")
+                FragmentData.showToastMessage(R.string.wrongQuantityNumber)
         }else
-            FragmentData.showToastMessage("Digite un numero correcto")
+            FragmentData.showToastMessage(R.string.wrongNumber)
     }
 
     fun setProductOriginal(product: Product) {

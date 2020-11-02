@@ -6,19 +6,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.presentation.fragment.ListListener
 import com.example.stockmanagementsym.presentation.view_holder.CartViewHolder
 
-class CartAdapter (
-    private var cartList: MutableList<Product>,
-    private var listener: ListListener
-): RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter(private var cartList: MutableList<Product>) :
+    RecyclerView.Adapter<CartViewHolder>() {
 
     private var productList: List<Product> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
-        return CartViewHolder(view,listener)
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
+        return CartViewHolder(view,this)
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {

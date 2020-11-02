@@ -2,6 +2,7 @@ package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.squareup.picasso.Picasso
@@ -15,20 +16,12 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.buttonDeleteUser.isEnabled = false
             itemView.buttonDeleteUser.isClickable = false
         }
-        val userPhotoData = user.getPhotoData()
-        if(userPhotoData!=""){
-            if(userPhotoData.length<400){
-                try {
-                    Picasso.get().load(userPhotoData).into(itemView.imageViewUserItem)
-                    itemView.imageViewUserItem.background = null
-                }catch (e:Exception){
-                    FragmentData.showToastMessage(""+e)
-                }
-            }else{
-                itemView.imageViewUserItem.setImageBitmap(FragmentData.getBitMapFromString(userPhotoData))
-                itemView.imageViewUserItem.background = null
-            }
-        }
+        FragmentData.paintPhoto(
+            user.getPhotoData(),
+            itemView.imageViewUserItem,
+            0
+        )
+
         itemView.textViewPrivilege.text = user.getPrivilege()
         itemView.buttonDeleteUser.setOnClickListener {
             FragmentData.deleteUser(user)

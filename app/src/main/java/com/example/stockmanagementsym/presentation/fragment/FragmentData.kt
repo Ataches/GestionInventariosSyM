@@ -4,12 +4,16 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
 import com.example.stockmanagementsym.presentation.AndroidView
+import com.squareup.picasso.Picasso
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,9 +53,6 @@ object FragmentData {
     fun getUserPrivilege(): String {
         return getAndroidView().getUserPrivileges()
     }
-    suspend fun getUserList(): MutableList<User> {
-        return getAndroidView().getUserList()
-    }
 
     fun deleteUser(user: User) {
         getAndroidView().deleteUser(user)
@@ -74,33 +75,8 @@ object FragmentData {
     }
 
     /*
-        List listeners
-     */
-    fun setProductListListener(productListFragment: ListListener) {
-        getAndroidView().setProductListListener(productListFragment)
-    }
-
-    fun setCartListener(cartFragment: ListListener) {
-        getAndroidView().setCartListener(cartFragment)
-    }
-
-    fun setCustomerListListener(customerListFragment: ListListener){
-        getAndroidView().setCustomerListListener(customerListFragment)
-    }
-
-    fun setUserListListener(userListListener: ListListener){
-        getAndroidView().setUserListListener(userListListener)
-    }
-
-    fun setSaleListListener(saleListListener: ListListener) {
-        getAndroidView().setSaleListListener(saleListListener)
-    }
-    /*
         Sale data
      */
-    suspend fun getSaleList(): MutableList<Sale> {
-        return getAndroidView().getSalesList()
-    }
     fun getDate(date: Calendar): String {
         val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
         return df.format(date.time)
@@ -120,10 +96,6 @@ object FragmentData {
     /*
         Customer data
      */
-    suspend fun getCustomerList(): MutableList<Customer> {
-        return getAndroidView().getCustomerList()
-    }
-
     fun updateCustomer(customerToEdit: Customer, booleanUpdate: Boolean) {
         getAndroidView().updateCustomer(customerToEdit,booleanUpdate)
     }
@@ -139,7 +111,7 @@ object FragmentData {
         return getAndroidView().getProductToEdit()
     }
 
-    suspend fun getProductList(): MutableList<Product> {
+    fun getProductList(): MutableList<Product> {
         return getAndroidView().getProductList()
     }
 
@@ -157,18 +129,6 @@ object FragmentData {
         return getAndroidView().showProductListSaleToString(item)
     }
 
-    /*
-        Product list REST
-     */
-    fun loadProductListFromREST() {
-        getAndroidView().loadProductListFromREST()
-    }
-    fun setProductListRESTLoaded(productListRESTLoaded: Boolean){
-        getAndroidView().setProductListRESTLoaded(productListRESTLoaded)
-    }
-    fun getProductListRESTLoaded():Boolean{
-        return getAndroidView().getProductListRESTLoaded()
-    }
     /*
         Update boolean
      */
@@ -209,7 +169,7 @@ object FragmentData {
     /*
         Messages
      */
-    fun showToastMessage(message:String){
+    fun showToastMessage(message: Int) {
         getAndroidView().showToastMessage(message)
     }
 
@@ -228,6 +188,7 @@ object FragmentData {
     fun getNewProductFragmentView(): View? {
         return getAndroidView().getNewProductFragmentView()
     }
+
     fun setNewProductFragmentView(view: View) {
         getAndroidView().setNewProductFragmentView(view)
     }
@@ -235,7 +196,59 @@ object FragmentData {
     fun getNewUserFragmentView(): View? {
         return getAndroidView().getNewUserFragmentView()
     }
+
     fun setNewUserFragmentView(view: View) {
         getAndroidView().setNewUserFragmentView(view)
+    }
+
+    fun notifyProductLogic(listListener: IListListener) {
+        getAndroidView().notifyProductLogic(listListener)
+    }
+
+    fun notifyCartLogic(listListener: IListListener, iCart: ICart) {
+        getAndroidView().notifyCartLogic(listListener, iCart)
+    }
+
+    fun notifySaleLogic(listListener: IListListener) {
+        getAndroidView().notifySaleLogic(listListener)
+    }
+
+    fun notifyUserLogic(listListener: IListListener) {
+        getAndroidView().notifyUserLogic(listListener)
+    }
+
+    fun notifyCustomerLogic(listListener: IListListener) {
+        getAndroidView().notifyCustomerLogic(listListener)
+    }
+
+    fun showAlertMessage(titleID: Int, messageID: Int) {
+        getAndroidView().showAlertMessage(titleID, messageID, null)
+    }
+
+    /*
+        Method to paint an image in a image view, depends on data length.
+        Type photo: - Photo from a url (if string length is less than a constant)
+                    - Bitmap in a string
+        The background in the image view can be changed by a drawable, is necessary the drawable ID
+     */
+    fun paintPhoto(userPhotoData: String, imageView: ImageView, drawableID: Int) {
+        if (userPhotoData.isNotEmpty()) {
+            if (userPhotoData.length < CONSTANTS.URL_MAX_LENGTH) {
+                try {
+                    Picasso.get().load(userPhotoData).into(imageView)
+                    imageView.background = null
+                } catch (e: Exception) {
+                    showToastMessage(R.string.imageLoadFailure)
+                }
+            } else {
+                imageView.setImageBitmap(getBitMapFromString(userPhotoData))
+                imageView.background = null
+            }
+        } else {
+            if (drawableID != 0) {
+                imageView.setImageBitmap(null)
+                imageView.setBackgroundResource(drawableID)
+            }
+        }
     }
 }

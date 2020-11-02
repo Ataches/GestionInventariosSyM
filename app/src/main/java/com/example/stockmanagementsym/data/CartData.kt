@@ -32,8 +32,8 @@ class CartData {
         }
     }
 
-    fun removeElementList(item:Product):Boolean{
-        return cartList.remove(item)
+    fun removeElementList(item:Product){
+        cartList.remove(item)
     }
 
     fun getCartList():MutableList<Product>{

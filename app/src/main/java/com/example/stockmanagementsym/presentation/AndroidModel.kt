@@ -21,6 +21,9 @@ import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
+import com.example.stockmanagementsym.logic.list_manager.ConcreteCreatorListManager
+import com.example.stockmanagementsym.logic.list_manager.CreatorListManager
+import com.example.stockmanagementsym.logic.list_manager.IListManager
 import com.example.stockmanagementsym.presentation.fragment.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -31,35 +34,41 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.anko.doAsync
 
-class AndroidModel{
+class AndroidModel {
+
+    private var userListManager: IListManager? = null
+    private var productListManager: IListManager? = null
+    private var cartListManager: IListManager? = null
+    private var saleListManager: IListManager? = null
+    private var customerListManager: IListManager? = null
 
     private var userLatitude: Double = -1.0
     private var userLongitude: Double = -1.0
     private lateinit var dataBaseLogic: DataBaseLogic
 
-    private var androidView: AndroidView?= null
+    private var androidView: AndroidView? = null
 
-    private var customerLogic: CustomerLogic ?= null
-    private var productLogic: ProductLogic ?= null
+    private var customerLogic: CustomerLogic? = null
+    private var productLogic: ProductLogic? = null
     private var user: User? = null
-    private var userLogic:UserLogic ?= null
-    private var saleLogic: SaleLogic ?= null
-    private var restLogic: RESTLogic ?= null
-    private var cartLogic: CartLogic ?= null
+    private var userLogic: UserLogic? = null
+    private var saleLogic: SaleLogic? = null
+    private var cartLogic: CartLogic? = null
 
-    private var googleSingInClient: GoogleSignInClient ?= null
-    private var googleAccount: GoogleSignInAccount ?= null
+    private var googleSingInClient: GoogleSignInClient? = null
+    private var googleAccount: GoogleSignInAccount? = null
     private lateinit var userPhotoData: String
-    private lateinit var dateSale: String
 
-    private lateinit var customerNewSale: Customer
-    private var newSale: Sale ?= null
+    private var newSaleDate: String? = null
+    private var newSaleCustomer: Customer? = null
+    private var newSale: Sale? = null
 
     //adapters
-    private var photoConcreteAdapter: IPhotoAdapter ?= null
-    private var bitMapConcreteAdapter: IBitMapAdapter ?= null
-    private var typeConverterConcrete: ITypeConverterAdapter?= null
+    private var photoConcreteAdapter: IPhotoAdapter? = null
+    private var bitMapConcreteAdapter: IBitMapAdapter? = null
+    private var typeConverterConcrete: ITypeConverterAdapter? = null
 
     //bitmap
     private var stringBitmap: String = ""
@@ -72,28 +81,9 @@ class AndroidModel{
         return user!!
     }
 
-    fun setUserListManager() {
-        val userLogicListManager = ListManager(getAndroidView().getUserListListener(),getAndroidView().getNotifierView())
-        getUserLogic().setListManager(userLogicListManager)
-    }
-
     fun createUser(user: User){
         if(getUserPrivileges()=="admin")
             getUserLogic().createUser(user)
-    }
-
-    suspend fun updateUser(user: User): Boolean {
-        return try{
-            if(getUserPrivileges()!="admin")
-                return false
-            withContext(Dispatchers.IO) {
-                getUserLogic().updateUser(user)
-            }
-            getAndroidView().reloadUserList()
-            true
-        }catch (e:Exception){
-            false
-        }
     }
 
     fun deleteUser(user: User){
@@ -108,14 +98,6 @@ class AndroidModel{
 
     fun getUserPrivileges(): String {
         return getUser().getPrivilege()
-    }
-
-    suspend fun getUserList(): MutableList<User> {
-        var list:MutableList<User> = mutableListOf()
-        withContext(Dispatchers.IO) {
-            list = getUserLogic().getUserList()
-        }
-        return list
     }
 
     fun setUserLocation(latitude: Double, longitude: Double) {
@@ -139,7 +121,7 @@ class AndroidModel{
         this.googleSingInClient = googleSingInClient
     }
 
-    fun setUserPhotoData(userPhotoData: String) {
+    private fun setUserPhotoData(userPhotoData: String) {
         this.userPhotoData = userPhotoData
     }
 
@@ -148,51 +130,54 @@ class AndroidModel{
     }
 
     //Sale
-    suspend fun createSale(): Boolean {
-        return try{
-            withContext(Dispatchers.IO) {
-                getNewSale().getProductList().forEach {
-                        val product  = getProductLogic().searchProducts(it.idProduct)
-                        product.setQuantity(product.getQuantity() - it.getQuantity())
-                        getProductLogic().updateProduct(product)
-                    }
-                getSaleLogic().createSale(getNewSale())
-                getAndroidView().reloadCartList()
+    fun createSale() {
+        val saleNew = getNewSale()
+        if (saleNew == null) {
+            showToastMessage(getAndroidView().getString(R.string.emptyData))
+            return
+        } else {
+            doAsync {
+                getProductLogic().decreaseProductListQuantity(saleNew.getProductList())
+                getSaleLogic().createSale(saleNew)
+                getCartLogic().clearCart()
+                newSale = null
+                newSaleDate = null
+                newSaleCustomer = null
             }
-            this.newSale = null
-            true
-        }catch(e:Exception){
-            false
         }
     }
 
-    fun getNewSale(): Sale {
-        if(newSale==null)
-            newSale = Sale(customerNewSale, dateSale, getCartLogic().getCartList())
+    fun getNewSale(): Sale? {
+        if ((newSaleDate == null) || (newSaleCustomer == null)) {
+            showToastMessage(getAndroidView().getString(R.string.emptyData))
+            return null
+        }
+        if (newSale == null)
+            newSale = Sale(newSaleCustomer!!, newSaleDate!!, getCartLogic().getCartList())
         return newSale!!
     }
 
-    suspend fun getSalesList(): MutableList<Sale> {
+    fun getSalesList(): MutableList<Sale> {
         return getSaleLogic().getSaleList()
     }
 
     fun setDateSale(dateSale: String) {
-        this.dateSale = dateSale
+        this.newSaleDate = dateSale
     }
 
-    fun addProductToCart(item: Product){
+    fun addProductToCart(item: Product) {
         getCartLogic().addProductToCart(item)
     }
 
-    fun removeElementCart(item: Product): Boolean {
-        return getCartLogic().removeElementCart(item)
+    fun removeElementCart(item: Product) {
+        getCartLogic().removeElementCart(item)
     }
 
     fun getSaleToString(sale: Sale): String {
         getTypeConverterAdapter().setBooleanStringToUser(true)
-        return "Fecha: "+sale.getDate()+"\n\n"+
-               "Cliente: \n\n"+getCustomerToString(sale.getCustomer()) +"\n\n"+
-               "Listado de productos: \n\n"+ getTypeConverterAdapter().productListToString(sale.getProductList())
+        return "Fecha: " + sale.getDate() + "\n\n" +
+                "Cliente: \n\n" + getCustomerToString(sale.getCustomer()) + "\n\n" +
+                "Listado de productos: \n\n" + getTypeConverterAdapter().productListToString(sale.getProductList())
     }
 
     //Cart
@@ -206,16 +191,12 @@ class AndroidModel{
 
     private fun getCartLogic(): CartLogic {
         if(cartLogic==null){
-            val cartLogicListManager = ListManager(getAndroidView().getCartListener(),getAndroidView().getNotifierView())
+            val cartLogicListManager = listManager(R.string.cartList)
             cartLogic = CartLogic(cartLogicListManager)
         }
         return cartLogic!!
     }
 
-    fun setCartListManager() {
-        val userLogicListManager = ListManager(getAndroidView().getCartListener(),getAndroidView().getNotifierView())
-        getCartLogic().setListManager(userLogicListManager)
-    }
 
     fun getCartListToString(mutableList: MutableList<Product>): String {
         getTypeConverterAdapter().setBooleanStringToUser(true)
@@ -223,37 +204,29 @@ class AndroidModel{
     }
 
     //Customer
-    suspend fun updateCustomer(customerToUpdate: Customer): Boolean {
+    fun updateCustomer(customerToUpdate: Customer) {
         val customerToEdit = getAndroidView().getCustomerToEdit()
         customerToUpdate.idCustomer = customerToEdit.idCustomer
-        val resultTransaction = getCustomerLogic().updateCustomer(customerToUpdate)
-        if(resultTransaction)
-            getAndroidView().reloadCustomerList()
-        return resultTransaction
+        getCustomerLogic().updateCustomer(customerToUpdate)
     }
 
-    suspend fun getCustomerList(): MutableList<Customer> {
+    fun getCustomerList(): MutableList<Customer> {
         return getCustomerLogic().getCustomerList()
     }
 
     fun setCustomerSelected(item: Int) {
-        GlobalScope.launch (Dispatchers.IO){
-            customerNewSale = getCustomerList()[item]
+        GlobalScope.launch(Dispatchers.IO) {
+            newSaleCustomer = getCustomerList()[item]
         }
     }
 
-    suspend fun createCustomer(customer: Customer): Boolean {
-        val resultTransaction = getCustomerLogic().createCustomer(customer)
-        customerNewSale = customer //If it is a new customer register from new sale fragment
-        if(resultTransaction)
-            getAndroidView().reloadCustomerList()
-        return resultTransaction
+    fun createCustomer(customer: Customer) {
+        getCustomerLogic().createCustomer(customer)
+        newSaleCustomer = customer //If it is a new customer register from new sale fragment
     }
 
-    suspend fun deleteCustomer(customer: Customer): Boolean {
-        val resultTransaction = getCustomerLogic().deleteCustomer(customer)
-        getAndroidView().reloadCustomerList()
-        return resultTransaction
+    fun deleteCustomer(customer: Customer) {
+        getCustomerLogic().deleteCustomer(customer)
     }
 
     fun getCustomerToString(customer: Customer): String {
@@ -261,25 +234,12 @@ class AndroidModel{
     }
 
     //Product
-    suspend fun getProductList(): MutableList<Product> {
+    suspend fun updateProduct(productToUpdate: Product): Boolean {
         return try {
-            var list = mutableListOf<Product>()
-            withContext(Dispatchers.IO) {
-                list = getProductLogic().getProductList()
-            }
-            list
-        }catch (e: Exception){
-            mutableListOf()
-        }
-    }
-
-    suspend fun updateProduct(productToUpdate: Product):Boolean {
-        return try{
             withContext(Dispatchers.IO) {
                 val productToEdit = getAndroidView().getProductToEdit()
                 productToUpdate.idProduct = productToEdit.idProduct
                 getProductLogic().updateProduct(productToUpdate)
-                reloadProductList()
             }
             true
         }catch (e: Exception){
@@ -291,7 +251,6 @@ class AndroidModel{
         return try{
             withContext(Dispatchers.IO) {
                 getProductLogic().deleteProduct(product)
-                reloadProductList()
             }
             true
         }catch (e: Exception){
@@ -303,16 +262,9 @@ class AndroidModel{
         return getTypeConverterAdapter().productToString(product)
     }
 
-    fun loadProductListFromREST(){
-        getRESTLogic().getProductList()
-    }
-
     //   New product creation
     fun createProduct(product: Product) {
-        GlobalScope.launch(Dispatchers.IO){
-            getAndroidView().showResultTransaction(getProductLogic().createProduct(product))
-            reloadProductList()
-        }
+        getProductLogic().createProduct(product)
     }
 
     fun getPhotoCamera(context: Context) {
@@ -338,15 +290,12 @@ class AndroidModel{
         stringBitmap = stringEncoded
         return stringEncoded
     }
-    private fun reloadProductList() {
-        getAndroidView().reloadProductList()
-    }
 
     //Searches
     fun searchSale(view: View) {
         GlobalScope.launch(Dispatchers.IO){
             val saleListFragment = view.findFragment<SaleListFragment>()
-            saleListFragment.setList(
+            saleListFragment.reloadList(
                 getSaleLogic().searchSales(saleListFragment.editTextSearchSaleList.text.toString())
                     .toMutableList()
             )
@@ -354,18 +303,13 @@ class AndroidModel{
     }
 
     fun searchCustomer() {
-        GlobalScope.launch(Dispatchers.IO){
-            getAndroidView().setListSearched(
-                getCustomerLogic().searchCustomer(getAndroidView().getTextSearched()).toMutableList(),
-                    R.id.customerListFragment
-            )
-        }
+        getCustomerLogic().searchCustomer(getAndroidView().getTextSearched())
     }
 
     fun searchProduct(viewElement: View) {
         GlobalScope.launch(Dispatchers.IO){
             val view = viewElement.findFragment<ProductListFragment>()
-            view.setList(
+            view.reloadList(
                 getProductLogic().searchProduct(view.editTextSearchProductList.text.toString())
                     .toMutableList()
             )
@@ -373,41 +317,44 @@ class AndroidModel{
     }
 
     fun searchUser(view: View) {
-        GlobalScope.launch(Dispatchers.IO){
+        GlobalScope.launch(Dispatchers.IO) {
             val userListFragment = view.findFragment<UserListFragment>()
-            userListFragment.setList(
+            userListFragment.reloadList(
                 getUserLogic().searchUser(userListFragment.editTextSearchUserList.text.toString())
                     .toMutableList()
             )
         }
     }
-    //Logic classes
+
+    /*
+        Logic classes, they do the transactions with the database and have the logic of each
+        Need a list manager who notifies the changes to the view and needs a corresponding dao to get transactions from BD
+     */
     private fun getUserLogic(): UserLogic {
-        if(userLogic==null){
-            val userLogicListManager = ListManager(null,getAndroidView().getNotifierView()) // When the user login to application user list don't exist
-            userLogic = UserLogic(dataBaseLogic.getUserDao(),userLogicListManager)
+        if (userLogic == null) {
+            userLogic = UserLogic(dataBaseLogic.getUserDao(), listManager(R.string.userList))
         }
         return userLogic!!
     }
 
     private fun getCustomerLogic(): CustomerLogic {
-        if(customerLogic == null)
-            customerLogic = CustomerLogic(dataBaseLogic.getCustomerDao())
+        if (customerLogic == null) {
+            customerLogic =
+                CustomerLogic(dataBaseLogic.getCustomerDao(), listManager(R.string.customerList))
+        }
         return customerLogic!!
     }
 
     private fun getSaleLogic(): SaleLogic {
-        if(saleLogic==null){
-            val saleLogicListManager = ListManager(getAndroidView().getSaleListListener(),getAndroidView().getNotifierView())
-            saleLogic = SaleLogic(dataBaseLogic.getSaleDao(),getCartLogic(),saleLogicListManager)
-        }
+        if (saleLogic == null)
+            saleLogic = SaleLogic(dataBaseLogic.getSaleDao(), listManager(R.string.saleList))
         return saleLogic!!
     }
 
     private fun getProductLogic(): ProductLogic {
-        if(productLogic==null){
-            productLogic = ProductLogic(dataBaseLogic.getProductDao())
-        }
+        if (productLogic == null)
+            productLogic =
+                ProductLogic(dataBaseLogic.getProductDao(), listManager(R.string.productList))
         return productLogic!!
     }
 
@@ -415,12 +362,6 @@ class AndroidModel{
         if(androidView == null)
             androidView = AndroidView(this)
         return androidView!!
-    }
-    //REST
-    private fun getRESTLogic(): RESTLogic {
-        if(restLogic==null)
-            restLogic = RESTLogic(getAndroidView().getProductListListener(),getAndroidView().getNotifierView())
-        return restLogic!!
     }
 
     //Adapters
@@ -430,32 +371,107 @@ class AndroidModel{
         return photoConcreteAdapter!!
     }
     private fun getBitMapAdapter(): IBitMapAdapter {
-        if(bitMapConcreteAdapter==null)
+        if (bitMapConcreteAdapter == null)
             bitMapConcreteAdapter = BitMapConcreteAdapter()
         return bitMapConcreteAdapter!!
     }
-    private fun getTypeConverterAdapter():ITypeConverterAdapter{
-        if(typeConverterConcrete==null)
+
+    private fun getTypeConverterAdapter(): ITypeConverterAdapter {
+        if (typeConverterConcrete == null)
             typeConverterConcrete = TypeConverterConcrete()
         return typeConverterConcrete!!
     }
 
+    /*
+        List manager method, returns a LisManager created in a factory method.
+        With de list ID makes a list manager that allows to notify or reload lists.
+     */
+    private fun listManager(managerNeededID: Int): IListManager {
+        val concreteCreatorListManager: CreatorListManager = ConcreteCreatorListManager()
+        when (managerNeededID) {
+            R.string.productList -> {
+                if (productListManager == null)
+                    productListManager = concreteCreatorListManager.factoryMethod()
+                return productListManager!!
+            }
+            R.string.customerList -> {
+                if (customerListManager == null)
+                    customerListManager = concreteCreatorListManager.factoryMethod()
+                return customerListManager!!
+            }
+            R.string.saleList -> {
+                if (saleListManager == null)
+                    saleListManager = concreteCreatorListManager.factoryMethod()
+                return saleListManager!!
+            }
+            R.string.userList -> {
+                if (userListManager == null)
+                    userListManager = concreteCreatorListManager.factoryMethod()
+                return userListManager!!
+            }
+            R.string.cartList -> {
+                if (cartListManager == null)
+                    cartListManager = concreteCreatorListManager.factoryMethod()
+                return cartListManager!!
+            }
+            else -> return concreteCreatorListManager.factoryMethod()
+        }
+    }
+
+    /*
+        Methods to notify or start logic classes.
+        Needs a list listener that are methods from fragment lists that allow to the logic classes reload views.
+        Needs a notifier that show to the user the result of transactions
+     */
+    fun notifyProductLogic(listListener: IListListener) {
+        listManager(R.string.productList).setListListener(listListener)
+        listManager(R.string.productList).setNotifier(getAndroidView().getNotifierView())
+        getProductLogic().loadData()
+    }
+
+    fun notifySaleLogic(listListener: IListListener) {
+        listManager(R.string.saleList).setListListener(listListener)
+        listManager(R.string.saleList).setNotifier(getAndroidView().getNotifierView())
+        getSaleLogic().loadData()
+    }
+
+    fun notifyCustomerLogic(listListener: IListListener) {
+        listManager(R.string.customerList).setListListener(listListener)
+        listManager(R.string.customerList).setNotifier(getAndroidView().getNotifierView())
+        getCustomerLogic().loadData()
+    }
+
+    fun notifyUserLogic(listListener: IListListener) {
+        listManager(R.string.userList).setListListener(listListener)
+        listManager(R.string.userList).setNotifier(getAndroidView().getNotifierView())
+        getUserLogic().loadData()
+    }
+
+    fun notifyCartLogic(listListener: IListListener, iCart: ICart) {
+        listManager(R.string.cartList).setListListener(listListener)
+        listManager(R.string.cartList).setNotifier(getAndroidView().getNotifierView())
+        getProductLogic().setCartListener(iCart)
+    }
+
     suspend fun confirmLogin(login: LoginActivity, userName: String, password: String) {
         dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
-        //getUserLogic().insertTest(userName,password,googleAccount?.photoUrl.toString())
-        if(getUserLogic().confirmLogin(userName, password)){
+        if (getUserLogic().confirmLogin(userName, password)) {
+            getAndroidView().showToastMessage(
+                login.getString(R.string.welcome) + " " + getUser().getName(),
+                login
+            )
+
             userLatitude = getUser().getLatitude()
             userLongitude = getUser().getLongitude()
 
-            if(googleSingInClient!=null){
+            if (googleSingInClient != null) {
                 setUserPhotoData(googleAccount!!.photoUrl.toString())
-            }else{
+            } else {
                 setUserPhotoData(getUser().getPhotoData())
             }
 
             val intent = Intent(login, MainActivity::class.java)
             login.startActivity(intent)
-            getAndroidView().showToastMessage(login.getString(R.string.welcome)+" "+getUser().getName(),login)
         }
         else
             getAndroidView().showToastMessage("Usuario $userName no encontrado o contraseña incorrecta", login)
@@ -500,14 +516,18 @@ class AndroidModel{
         getAndroidView().showToastMessage(message)
     }
     fun showToastMessage(message:String, context: Context){
-        getAndroidView().showToastMessage(message,context)
+        getAndroidView().showToastMessage(message, context)
     }
 
-    fun showAlertMessage(titleID:Int, messageID: Int, context: Context) {
-        getAndroidView().showAlertMessage(titleID,messageID,context)
+    fun showAlertMessage(titleID: Int, messageID: Int, context: Context) {
+        getAndroidView().showAlertMessage(titleID, messageID, context)
     }
 
-    fun getUserToString(user:User): String {
+    fun getUserToString(user: User): String {
         return getTypeConverterAdapter().getUserToString(user)
+    }
+
+    fun getProductList(): MutableList<Product> {
+        return getProductLogic().getProductList()
     }
 }
