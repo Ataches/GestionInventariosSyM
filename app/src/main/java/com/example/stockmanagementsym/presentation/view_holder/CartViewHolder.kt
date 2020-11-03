@@ -24,9 +24,9 @@ RecyclerView.ViewHolder(itemView) {
         itemView.editTextQuantity.setText("""${productCart.getQuantity()}""")
 
         FragmentData.paintPhoto(
-            product.getStringBitMap(),
+            productCart.getStringBitMap(),
             itemView.imageViewProduct,
-            0
+            R.drawable.ic_done
         )
 
         itemView.textViewProdRealQuantity.text =

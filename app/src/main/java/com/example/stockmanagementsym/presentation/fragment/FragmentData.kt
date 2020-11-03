@@ -75,17 +75,9 @@ object FragmentData {
     }
 
     /*
-        Sale data
-     */
-    fun getDate(date: Calendar): String {
-        val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
-        return df.format(date.time)
-    }
-
-    /*
         Bitmap data
      */
-    fun setBitMap(bitMap: Bitmap) {
+    fun setBitMap(bitMap: Bitmap?) {
         getAndroidView().setBitMap(bitMap)
     }
 

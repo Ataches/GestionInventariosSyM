@@ -46,7 +46,7 @@ class CartListFragment : Fragment(), IListListener, ICart {
 
     override fun reloadList(mutableList: MutableList<Any>) {
         adapter.setProductList(FragmentData.getProductList() as MutableList<Product>)
-        adapter.setCartList(FragmentData.getCartList())
+        adapter.setCartList(mutableList as MutableList<Product>)
         requireActivity().runOnUiThread {
             textViewTotal.text = "Total: ${FragmentData.getTotalPriceCart()}"
             adapter.notifyDataSetChanged()

@@ -19,29 +19,20 @@ class ProductLogic : AbstractListLogic() {
             if (elementList.isEmpty()) {
                 elementList = productLogicDao.selectProductList().toMutableList()
             }
+            getRESTLogic().searchProductList()
             uiThread {
                 iListManager?.reloadList(elementList.toMutableList())
                 iCart.setProductList(elementList)
             }
         }
-        if (!listRESTLoaded)
-            doAsync {
-                getRESTLogic().searchProductList()
-                addProductListREST(getRESTLogic().getProductList())
-                listRESTLoaded = true
-            }
+
     }
 
     override fun insert(element: Any) {
         doAsyncResult {
             try {
                 productLogicDao.insert(element as Product)
-                uiThread {
-                    doAsyncResult {
-                        updateMutableList()
-                        notifyUserTransactionSuccess()
-                    }
-                }
+                updateMutableList()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
@@ -49,32 +40,28 @@ class ProductLogic : AbstractListLogic() {
     }
 
     override fun update(element: Any) {
-        val thread = doAsyncResult {
+        doAsyncResult {
             try {
                 productLogicDao.update(element as Product)
+                updateMutableList()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
         }
-        if (thread.isDone)
-            doAsyncResult {
-                updateMutableList()
-                notifyUserTransactionSuccess()
-                uiThread {
-                    if (notifyUserTransaction)
-                        notifyUserTransactionSuccess()
-                }
-            }
     }
 
     override fun updateMutableList() {
         doAsyncResult {
-            elementList = productLogicDao.selectProductList().toMutableList()
-            uiThread {
-                elementList.addAll(listREST)
-                iCart.setProductList(elementList)
-                if (notifyUserTransaction)
-                    notifyUserTransactionSuccess()
+            try {
+                elementList = productLogicDao.selectProductList().toMutableList()
+                uiThread {
+                    elementList.addAll(getRESTLogic().getProductList())
+                    iCart.setProductList(elementList)
+                    if (notifyUserTransaction)
+                        notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                iListManager?.showResultTransaction(false)
             }
         }
     }
@@ -83,12 +70,7 @@ class ProductLogic : AbstractListLogic() {
         doAsyncResult {
             try {
                 productLogicDao.delete(element as Product)
-                uiThread {
-                    doAsyncResult {
-                        updateMutableList()
-                        notifyUserTransactionSuccess()
-                    }
-                }
+                updateMutableList()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
@@ -115,26 +97,20 @@ class ProductLogic : AbstractListLogic() {
     }
 
     override fun decreaseMutableListQuantity(mutableList: MutableList<Any>) {
-        try {
             doAsync {
-                notifyUserTransaction = false
-                (mutableList as MutableList<Product>).forEach {
-                    val product = searchByIDInMutableList(it.idProduct)
-                    product.setQuantity(product.getQuantity() - it.getQuantity())
-                    update(product)
+                try {
+                    notifyUserTransaction = false
+                    (mutableList as MutableList<Product>).forEach {
+                        val product = searchByIDInMutableList(it.idProduct)
+                        product.setQuantity(product.getQuantity() - it.getQuantity())
+                        update(product)
+                    }
+                    iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_SUCCESS)
+                    notifyUserTransaction = true
+                } catch (e: Exception) {
+                    iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_FAILURE)
                 }
-                iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_SUCCESS)
-                notifyUserTransaction = true
             }
-        } catch (e: Exception) {
-            iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_FAILURE)
-        }
-    }
-
-    private fun addProductListREST(list: List<Product>) {
-        listREST = list
-        elementList.addAll(list)
-        iCart.setProductList(elementList)
     }
 
     private fun getRESTLogic(): ProductRESTLogic {

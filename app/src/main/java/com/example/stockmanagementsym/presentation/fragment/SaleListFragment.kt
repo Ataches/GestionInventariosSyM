@@ -11,6 +11,7 @@ import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.presentation.adapter.SaleListAdapter
 import kotlinx.android.synthetic.main.fragment_sale_list.*
+import kotlinx.android.synthetic.main.fragment_sale_list.view.*
 
 class SaleListFragment : Fragment(), IListListener {
 
@@ -35,7 +36,10 @@ class SaleListFragment : Fragment(), IListListener {
 
         FragmentData.notifySaleLogic(this)
 
-        buttonSaleListToSearch.setOnClickListener(FragmentData.getController())
+        buttonSaleListToSearch.setOnClickListener{
+            FragmentData.setTextSearched(view.editTextSearchSaleList.text.toString())
+            FragmentData.setControllerOnClickListener(it)
+        }
     }
 
     override fun reloadList(mutableList: MutableList<Any>) {

@@ -27,7 +27,6 @@ class UserLogic : AbstractListLogic() {
             try {
                 userLogicDao.insert(element as User)
                 updateMutableList()
-                notifyUserTransactionSuccess()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
@@ -39,7 +38,6 @@ class UserLogic : AbstractListLogic() {
             try {
                 userLogicDao.update(element as User)
                 updateMutableList()
-                notifyUserTransactionSuccess()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
@@ -47,9 +45,17 @@ class UserLogic : AbstractListLogic() {
     }
 
     override fun updateMutableList() {
-        if (elementList.isEmpty())
-            loadData()
-        elementList = userLogicDao.selectUserList().toMutableList()
+        doAsyncResult {
+            try {
+                elementList = userLogicDao.selectUserList().toMutableList()
+                uiThread {
+                    if (notifyUserTransaction)
+                        notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                iListManager?.showResultTransaction(false)
+            }
+        }
     }
 
     override fun delete(element: Any) {
@@ -57,7 +63,6 @@ class UserLogic : AbstractListLogic() {
             try {
                 userLogicDao.delete(element as User)
                 updateMutableList()
-                notifyUserTransactionSuccess()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }

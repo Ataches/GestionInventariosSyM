@@ -17,6 +17,9 @@ import com.example.stockmanagementsym.presentation.view.NotifierView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
@@ -211,9 +214,15 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getCustomerToString(customer)
     }
 
+
     /*
-        Sale
+        Sale data
      */
+    fun getDate(date: Calendar): String {
+        val df: DateFormat = SimpleDateFormat("dd-MMMM-yyyy")
+        return df.format(date.time)
+    }
+
     fun confirmNewSale() {
         getDialogView().dialogConfirmRegister(
             data = androidModel.getCartList(),

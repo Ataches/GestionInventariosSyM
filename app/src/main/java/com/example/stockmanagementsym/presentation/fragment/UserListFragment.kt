@@ -42,8 +42,8 @@ class UserListFragment : Fragment(), IListListener {
 
         view.buttonUserListToCreateUser.setOnClickListener(FragmentData.getController())
         view.buttonUserListToSearch.setOnClickListener{
-            FragmentData.setTextSearched(view.editTextSearchUserList.toString())
-            FragmentData.getController()
+            FragmentData.setTextSearched(view.editTextSearchUserList.text.toString())
+            FragmentData.setControllerOnClickListener(it)
         }
     }
 

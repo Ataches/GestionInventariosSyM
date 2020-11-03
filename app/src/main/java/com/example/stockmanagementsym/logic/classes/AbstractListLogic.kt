@@ -7,6 +7,8 @@ import com.example.stockmanagementsym.data.dao.UserDao
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.logic.list_manager.IListManager
 import com.example.stockmanagementsym.presentation.fragment.ICart
+import org.jetbrains.anko.doAsyncResult
+import org.jetbrains.anko.uiThread
 
 abstract class AbstractListLogic {
 
@@ -32,8 +34,14 @@ abstract class AbstractListLogic {
     // You must call it two times if the data is empty or call it in a
     // coroutine that uses the context to wait before data loads.
     fun getList(): MutableList<Any> {
-        if (elementList.isEmpty())
-            loadData()
+        if (elementList.isEmpty()){
+            doAsyncResult {
+                loadData()
+                uiThread {
+                    iListManager?.reloadList(elementList)
+                }
+            }
+        }
         return elementList
     }
 

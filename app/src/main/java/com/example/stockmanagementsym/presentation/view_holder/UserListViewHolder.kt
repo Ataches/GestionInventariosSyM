@@ -2,6 +2,7 @@ package com.example.stockmanagementsym.presentation.view_holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import kotlinx.android.synthetic.main.item_user.view.*
@@ -17,7 +18,7 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         FragmentData.paintPhoto(
             user.getPhotoData(),
             itemView.imageViewUserItem,
-            0
+            R.drawable.ic_person
         )
 
         itemView.textViewPrivilege.text = user.getPrivilege()

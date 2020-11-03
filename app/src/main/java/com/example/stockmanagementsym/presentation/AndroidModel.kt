@@ -8,7 +8,7 @@ import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
-import com.example.stockmanagementsym.logic.AbstractLogicFactory
+import com.example.stockmanagementsym.logic.classes.AbstractLogicFactory
 import com.example.stockmanagementsym.logic.CartLogicFactory
 import com.example.stockmanagementsym.logic.DataBaseLogic
 import com.example.stockmanagementsym.logic.ListLogicFactory
@@ -271,11 +271,18 @@ class AndroidModel {
         return getBitMapAdapter().decoderStringToBitMap(string)
     }
 
+    /**
+     *  Method to convert the BitMap to string, it calls an adapter that converts an bitmap to image
+     *  this method is only called when user do a register to BD.
+      */
     fun getStringFromBitMap():String{
         if(bitMap == null)
             return CONSTANTS.STRING_VOID_ELEMENT
         val stringEncoded = getBitMapAdapter().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
+        bitMap=null // Function get string from bitmap is only is called when you
+                    // do a register or update, so is necessary remove the bitmap.
+                    // In a future the image will be loaded from product or user data
         return stringEncoded
     }
 

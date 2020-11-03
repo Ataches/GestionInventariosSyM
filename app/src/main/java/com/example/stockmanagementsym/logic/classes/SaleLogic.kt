@@ -31,8 +31,17 @@ class SaleLogic : AbstractListLogic() {
     }
 
     override fun updateMutableList() {
-        elementList = saleLogicDao.selectSaleList().toMutableList()
-        notifyUserTransactionSuccess()
+        doAsyncResult {
+            try {
+                elementList = saleLogicDao.selectSaleList().toMutableList()
+                uiThread {
+                    if (notifyUserTransaction)
+                        notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                iListManager?.showResultTransaction(false)
+            }
+        }
     }
 
     override fun searchTextInMutableList(searchedText: String) {

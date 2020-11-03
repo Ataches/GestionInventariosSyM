@@ -14,7 +14,6 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidView
-import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import com.example.stockmanagementsym.presentation.fragment.NewProductFragment
 import com.example.stockmanagementsym.presentation.fragment.NewUserFragment
 import kotlinx.android.synthetic.main.dialog_new_customer.view.*
@@ -22,6 +21,8 @@ import kotlinx.android.synthetic.main.dialog_new_sale.view.*
 import kotlinx.android.synthetic.main.fragment_new_product.*
 import kotlinx.android.synthetic.main.fragment_new_user.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.doAsyncResult
+import org.jetbrains.anko.uiThread
 import java.util.*
 
 
@@ -42,20 +43,20 @@ class DialogView(private var androidView: AndroidView) {
         val user =
                 try{
                     User(
-                            newUserFragment.editTextUserName.text.toString(),
-                            newUserFragment.editTextPassword.text.toString(),
-                            newUserFragment.editTextPrivilege.text.toString(),
-                            androidView.getStringFromBitMap(),
-                            CONSTANTS.DEFAULT_USER_LATITUDE, CONSTANTS.DEFAULT_USER_LONGITUDE,
+                        newUserFragment.editTextUserName.text.toString(),
+                        newUserFragment.editTextPassword.text.toString(),
+                        newUserFragment.editTextPrivilege.text.toString(),
+                        androidView.getStringFromBitMap(),
+                        CONSTANTS.DEFAULT_USER_LATITUDE, CONSTANTS.DEFAULT_USER_LONGITUDE,
                     )
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     androidView.showToastMessage(R.string.emptyData)
                 }
-        androidView.setBitMap(null) //Photo already saved in user
+        androidView.setBitMap(null) //Photo already saved in user data
         dialogConfirmRegister(
-                user,
-                (R.string.titleAlertNewUser),
-                (R.string.messageAlertNewUser)
+            user,
+            (R.string.titleAlertNewUser),
+            (R.string.messageAlertNewUser)
         )
     }
 
@@ -69,16 +70,27 @@ class DialogView(private var androidView: AndroidView) {
         dialog.setContentView(view)
         dialog.show()
 
-        view.buttonNewCustomer.setOnClickListener{
+        view.buttonNewCustomer.setOnClickListener {
             newSaleCustomerBoolean = true
             dialogRegisterCustomer(false)
         }
-        view.buttonSelectCustomerName.setOnClickListener{
-            loadCustomerList()
-            dialogSelectList(
+        view.buttonSelectCustomerName.setOnClickListener {
+            newSaleCustomerBoolean = true
+            if (customerList.isEmpty())
+                doAsyncResult {
+                    loadCustomerList()
+                    uiThread {
+                        dialogSelectList(
+                            data = customerList,
+                            R.string.selectCustomer
+                        )
+                    }
+                }
+            else
+                dialogSelectList(
                     data = customerList,
                     R.string.selectCustomer
-            )
+                )
         }
 
         view.buttonDate.setOnClickListener {
@@ -89,9 +101,9 @@ class DialogView(private var androidView: AndroidView) {
             val newSale = androidView.getNewSale()
             if (newSale != null)
                 dialogConfirmRegister(
-                        data = newSale,
-                        title = R.string.titleAlertNewSaleBd,
-                        message = R.string.messageAlertNewSale
+                    data = newSale,
+                    title = R.string.titleAlertNewSaleBd,
+                    message = R.string.messageAlertNewSale
                 )
             dialog.dismiss()
         }
@@ -152,7 +164,7 @@ class DialogView(private var androidView: AndroidView) {
                         R.string.titleAlertUpdateCustomer,
                         R.string.messageAlertUpdateCustomer
                 )
-                FragmentData.setBooleanUpdate(false)
+                androidView.setBooleanUpdate(false)
             } else
                 dialogConfirmRegister(
                         customer,
@@ -174,29 +186,29 @@ class DialogView(private var androidView: AndroidView) {
         val product =
                 try{
                     Product(
-                            newProductFragment.editTextProductName.text.toString(),
-                            newProductFragment.editTextProductPrice.text.toString().toDouble(),
-                            newProductFragment.editTextProductDesc.text.toString(),
-                            androidView.getStringFromBitMap(),
-                            newProductFragment.editTextProductQuantity.text.toString().toInt()
+                        newProductFragment.editTextProductName.text.toString(),
+                        newProductFragment.editTextProductPrice.text.toString().toDouble(),
+                        newProductFragment.editTextProductDesc.text.toString(),
+                        androidView.getStringFromBitMap(),
+                        newProductFragment.editTextProductQuantity.text.toString().toInt()
                     )
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     androidView.showToastMessage(R.string.emptyData)
                 }
-        androidView.setBitMap(null) //Photo already saved in product
+        androidView.setBitMap(null) //Photo already saved in product data
         if (updateBoolean) {
             dialogConfirmRegister(
-                    product,
-                    R.string.titleAlertUpdateProd,
-                    R.string.messageAlertUpdateProd
+                product,
+                R.string.titleAlertUpdateProd,
+                R.string.messageAlertUpdateProd
             )
             androidView.goToProductList()
-            FragmentData.setBooleanUpdate(false)
-        }else {
+            androidView.setBooleanUpdate(false)
+        } else {
             dialogConfirmRegister(
-                    product,
-                    (R.string.titleAlertNewProd),
-                    (R.string.messageAlertNewProd)
+                product,
+                (R.string.titleAlertNewProd),
+                (R.string.messageAlertNewProd)
             )
         }
     }
@@ -236,13 +248,17 @@ class DialogView(private var androidView: AndroidView) {
                 }
 
                 (R.string.titleAlertNewCustomer) -> {
-                    val customer = data as Customer
-                    androidView.createCustomer(customer)
-                    androidView.getCustomerToString(customer)
-                    if (newSaleCustomerBoolean) {
-                        showCustomerSelected(androidView.getCustomerToString(customer))
-                        loadCustomerList() // Loads the customer list to show it in new sale fragment
-                        newSaleCustomerBoolean = false
+                    doAsyncResult {
+                        val customer = data as Customer
+                        androidView.createCustomer(customer)
+                        androidView.getCustomerToString(customer)
+                        uiThread {
+                            if (newSaleCustomerBoolean) {
+                                showCustomerSelected(androidView.getCustomerToString(customer))
+                                loadCustomerList() // Loads the customer list to show it in new sale fragment
+                                newSaleCustomerBoolean = false
+                            }
+                        }
                     }
                 }
 
@@ -263,8 +279,8 @@ class DialogView(private var androidView: AndroidView) {
             }
         }
         builder.setNegativeButton("No") { _, _ ->
-            FragmentData.setBooleanUpdate(false)
-            when(title){
+            androidView.setBooleanUpdate(false)
+            when (title) {
                 (R.string.location) -> {
                     androidView.askLogOut()
                 }
@@ -272,6 +288,7 @@ class DialogView(private var androidView: AndroidView) {
                     androidView.showToastMessage(androidView.getString(R.string.modifyIfIsNecessary))
                 }
             }
+            androidView.setBitMap(null) //
         }
         builder.create()
         builder.show()
@@ -301,9 +318,9 @@ class DialogView(private var androidView: AndroidView) {
         var dateSelected = ""
         val builder = DatePickerDialog(view.context, { _, yy, mm, dd ->
             date.set(yy, mm, dd)
-            dateSelected = FragmentData.getDate(date)
+            dateSelected = androidView.getDate(date)
             view.textViewDateSelected.text =
-                    androidView.getString(R.string.date) + ": " + dateSelected
+                androidView.getString(R.string.date) + ": " + dateSelected
             androidView.setDateSale(dateSelected)
         }, 2020, 9, 20)
         builder.show()

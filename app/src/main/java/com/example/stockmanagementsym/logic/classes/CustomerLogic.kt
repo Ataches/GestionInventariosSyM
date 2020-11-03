@@ -22,9 +22,6 @@ class CustomerLogic : AbstractListLogic() {
             try {
                 customerLogicDao.insert(element as Customer)
                 updateMutableList()
-                uiThread {
-                    notifyUserTransactionSuccess()
-                }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
@@ -36,9 +33,6 @@ class CustomerLogic : AbstractListLogic() {
             try {
                 customerLogicDao.update(element as Customer)
                 updateMutableList()
-                uiThread {
-                    notifyUserTransactionSuccess()
-                }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }
@@ -46,7 +40,17 @@ class CustomerLogic : AbstractListLogic() {
     }
 
     override fun updateMutableList() {
-        elementList = customerLogicDao.selectCustomerList().toMutableList()
+        doAsyncResult {
+            try {
+                elementList = customerLogicDao.selectCustomerList().toMutableList()
+                uiThread {
+                    if (notifyUserTransaction)
+                        notifyUserTransactionSuccess()
+                }
+            } catch (e: Exception) {
+                iListManager?.showResultTransaction(false)
+            }
+        }
     }
 
     override fun delete(element: Any) {
@@ -54,9 +58,6 @@ class CustomerLogic : AbstractListLogic() {
             try {
                 customerLogicDao.delete(element as Customer)
                 updateMutableList()
-                uiThread {
-                    notifyUserTransactionSuccess()
-                }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
             }

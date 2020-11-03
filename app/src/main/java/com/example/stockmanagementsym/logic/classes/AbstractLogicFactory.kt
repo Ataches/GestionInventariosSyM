@@ -1,4 +1,4 @@
-package com.example.stockmanagementsym.logic
+package com.example.stockmanagementsym.logic.classes
 
 import com.example.stockmanagementsym.logic.cart.AbstractCartLogic
 import com.example.stockmanagementsym.logic.classes.AbstractListLogic

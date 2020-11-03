@@ -9,26 +9,27 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class ProductRESTLogic(private val listener: IListManager?) {
-    private lateinit var productList: List<Product>
+    private var productList: List<Product> = listOf()
     fun searchProductList() {
-        doAsync {
-            val callRetrofit =
+        if (productList.isEmpty())
+            doAsync {
+                val callRetrofit =
                     RetrofitInstance()
-                            .getInstance()
-                            .create(APIService::class.java)
-                            .getProductList()
-                            .execute()
-            uiThread {
-                if (callRetrofit.isSuccessful) {
-                    productList = callRetrofit.body()?.productList?: listOf()
-                    listener?.addElementsToList(productList.toMutableList())
-                    listener?.showAlertMessage(R.string.titleProductListRestAdded,
+                        .getInstance()
+                        .create(APIService::class.java)
+                        .getProductList()
+                        .execute()
+                uiThread {
+                    if (callRetrofit.isSuccessful) {
+                        productList = callRetrofit.body()?.productList ?: listOf()
+                        listener?.addElementsToList(productList.toMutableList())
+                        listener?.showAlertMessage(R.string.titleProductListRestAdded,
                             R.string.messageProductListRestAdded)
-                }else{
-                    listener?.showToastMessage(R.string.productListRestFailure)
+                    }else{
+                        listener?.showToastMessage(R.string.productListRestFailure)
+                    }
                 }
             }
-        }
     }
 
     // If you call this method is possible that the data didn't already charged.
