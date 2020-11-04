@@ -4,6 +4,7 @@ import com.example.stockmanagementsym.logic.business.Product
 import java.lang.Exception
 
 class CartData {
+
     private var cartList:MutableList<Product> = mutableListOf()
 
     fun addProductToCartList(product: Product):Boolean{

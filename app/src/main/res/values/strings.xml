@@ -98,17 +98,21 @@
     <string name="logOut">Cerrar sesión</string>
     <string name="messageLogOut">¿Desea cerrar la sesión?</string>
     <string name="loginFailure">Fallo en inicio de sesión</string>
-    <string name="emptyData">Campos vacios</string>
+
+
     <string name="productDescriptionHint">"Ejemplo: Pieza de repuesto para autos "</string>
     <string name="productQuantityHint">Ej: 20</string>
+
+    <!--Alerts-->
     <string name="titleAlertDeleteProd">Eliminar producto</string>
     <string name="messageAlertDeleteProd">¿Desea eliminar el siguiente producto?</string>
     <string name="messageProductListRestAdded">Lista de productos REST añadida, los items con borde azul no estan en la BD, si los desea agregar en la BD o editar para su registro puede hacerlo</string>
     <string name="titleProductListRestAdded">Listado de productos REST</string>
-    <string name="buttonRegister">Registro</string>
     <string name="messageUserRegistered">Usuario registrado, inicie sesión</string>
     <string name="titleUserRegistered">Registro</string>
     <string name="messageUserNotRegistered">Fallo registrando el usuario</string>
+
+    <!--Failures and success-->
     <string name="userDeleteFailure">Fallo al eliminar el cliente</string>
     <string name="userInsertSuccess">Usuario registrado correctamente</string>
     <string name="userDeleteSuccess">Usuario eliminado exitosamente</string>
@@ -122,7 +126,14 @@
     <string name="productListRestFailure">"Fallo al cargar listado de productos REST "</string>
     <string name="imageLoadFailure">Fallo al cargar la URL de la imagen</string>
     <string name="productNotRegisted">Producto no registrado, redirigiendo</string>
+    <string name="emptyData">Campos vacios</string>
+
+    <!--Wrong quantities-->
+    <string name="outOfStock">No hay unidades disponibles, edite el producto</string>
     <string name="wrongQuantityNumber">Digite un numero correcto de acuerdo a la cantidad disponible</string>
     <string name="wrongNumber">Digite un numero correcto</string>
+
+    <!--Buttons-->
+    <string name="buttonRegister">Registro</string>
 
 </resources>

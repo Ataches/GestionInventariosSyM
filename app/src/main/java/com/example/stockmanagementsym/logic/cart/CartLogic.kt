@@ -44,7 +44,7 @@ class CartLogic: AbstractCartLogic() {
     override fun removeElementCart(item: Product){
         try{
             getCartData().removeElementList(item)
-            iListManager?.showResultTransaction(true)
+            notifyUserTransactionSuccess()
         }catch (e:Exception){
             iListManager?.showResultTransaction(false)
         }
@@ -57,7 +57,8 @@ class CartLogic: AbstractCartLogic() {
             iListManager?.showResultTransaction(false)
     }
 
-    override fun setListManager(iListManager: IListManager){
-        this.iListManager = iListManager
+    private fun notifyUserTransactionSuccess() {
+        iListManager?.reloadList(getCartData().getCartList().toMutableList())
+        iListManager?.showResultTransaction(true)
     }
 }

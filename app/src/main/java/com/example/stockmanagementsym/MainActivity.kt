@@ -11,7 +11,6 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -65,9 +64,9 @@ class MainActivity : AppCompatActivity() {
         val userLongitude = FragmentData.getUserLongitude()
 
         FragmentData.paintPhoto(
-            FragmentData.getUserPhotoData(),
-            headerView.imageViewUserNavHeader,
-            0
+                FragmentData.getUserPhotoData(),
+                headerView.imageViewUserNavHeader,
+                R.drawable.ic_person
         )
 
         if ((userLatitude == CONSTANTS.DEFAULT_USER_LATITUDE) && (userLongitude == CONSTANTS.DEFAULT_USER_LONGITUDE))
@@ -94,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         val newUserView:View? = FragmentData.getNewUserFragmentView()
         val newProductView:View? = FragmentData.getNewProductFragmentView()
 
-        if(requestCode == 10 && resultCode == RESULT_OK){
+        if (requestCode == CONSTANTS.CAMERA_INTENT_CODE && resultCode == RESULT_OK) {
             val bitMap = data?.extras?.get("data") as Bitmap
 
 
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
             FragmentData.setBitMap(bitMap)
         }
-        if(requestCode == 101 && resultCode == RESULT_OK){
+        if (requestCode == CONSTANTS.GALLERY_INTENT_CODE && resultCode == RESULT_OK) {
             val imageUri = data!!.data!!
 
             newProductView?.imageViewNewProduct?.setImageURI(imageUri)
@@ -166,7 +165,7 @@ class MainActivity : AppCompatActivity() {
         if(locationObserver){
             val locationRequest = LocationRequest()
             locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            locationRequest.interval = 10_000
+            locationRequest.interval = CONSTANTS.LOCATION_REQUEST_TIME_INTERVAL
 
             fusedLocation!!.requestLocationUpdates(locationRequest,androidLocation,null)
         }else{

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
@@ -14,9 +15,6 @@ import com.example.stockmanagementsym.presentation.fragment.ICart
 import com.example.stockmanagementsym.presentation.fragment.IListListener
 import com.example.stockmanagementsym.presentation.view.DialogView
 import com.example.stockmanagementsym.presentation.view.NotifierView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -139,10 +137,16 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun updateProduct(product: Product, booleanUpdate: Boolean) {
         productToEdit = product
         this.booleanUpdate = booleanUpdate
-        updateProduct()
+        goToNewProduct()
     }
 
-    private fun updateProduct() {
+    fun getStringBitMapProductToEdit(): String {
+        if(productToEdit==null)
+            return CONSTANTS.STRING_VOID_ELEMENT
+        return productToEdit!!.getStringBitMap()
+    }
+
+    private fun goToNewProduct() {
         getAndroidController().goToNewProduct()
     }
     /*
@@ -231,8 +235,8 @@ class AndroidView(private val androidModel: AndroidModel) {
         )
     }
 
-    fun createSale() {
-        androidModel.createSale()
+    fun insertSale() {
+        androidModel.insertSale()
     }
 
     fun getNewSale(): Sale? {

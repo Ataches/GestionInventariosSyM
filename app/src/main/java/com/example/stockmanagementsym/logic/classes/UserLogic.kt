@@ -3,8 +3,6 @@ package com.example.stockmanagementsym.logic.classes
 import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.logic.list_manager.IListManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.uiThread
 
@@ -49,8 +47,7 @@ class UserLogic : AbstractListLogic() {
             try {
                 elementList = userLogicDao.selectUserList().toMutableList()
                 uiThread {
-                    if (notifyUserTransaction)
-                        notifyUserTransactionSuccess()
+                    notifyUserTransactionSuccess()
                 }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)

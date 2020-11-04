@@ -14,11 +14,11 @@ data class Product(
     private val price: Double,
     @SerializedName("description")
     private val description: String,
+    @SerializedName("quantity")
+    private var quantity: Int,
     @SerializedName("photoUrl")
     @ColumnInfo(name = "id_image")
-    private var stringBitMap: String,
-    @SerializedName("quantity")
-    private var quantity: Int
+    private var stringBitMap: String
 ){
     @PrimaryKey(autoGenerate = true)
     @NonNull @ColumnInfo(name = "id_product")

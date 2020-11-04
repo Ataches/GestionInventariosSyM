@@ -12,6 +12,10 @@ abstract class AbstractCartLogic {
 
     var iListManager: IListManager? = null
 
+    fun setListManager(iListManager: IListManager){
+        this.iListManager = iListManager
+    }
+
     abstract fun getCartData(): CartData
     abstract fun addProductToCart(item: Product)
     abstract fun getTotalPrice(): String
@@ -20,5 +24,4 @@ abstract class AbstractCartLogic {
 
     abstract fun getList(): MutableList<Product>
 
-    abstract fun setListManager(iListManager: IListManager)
 }

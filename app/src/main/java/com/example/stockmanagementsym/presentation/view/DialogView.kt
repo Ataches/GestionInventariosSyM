@@ -116,9 +116,9 @@ class DialogView(private var androidView: AndroidView) {
     private fun loadCustomerList() {
         doAsync {
             customerList = (androidView.getCustomerList() as MutableList<Customer>).map {
-                "Nombre: " + it.getName() + CONSTANTS.STRING_ITEM_LIMITER +
-                        "Direccion: " + it.getAddress() + CONSTANTS.STRING_ITEM_LIMITER +
-                        "Telefono: " + it.getPhone() + CONSTANTS.STRING_ITEM_LIMITER +
+                "Nombre: " + it.getName() + CONSTANTS.STRING_NEW_LINE +
+                        "Direccion: " + it.getAddress() + CONSTANTS.STRING_NEW_LINE +
+                        "Telefono: " + it.getPhone() + CONSTANTS.STRING_NEW_LINE +
                         "Ciudad: " + it.getCity() + CONSTANTS.STRING_NEW_LINE
             }.toTypedArray()
         }
@@ -136,14 +136,12 @@ class DialogView(private var androidView: AndroidView) {
 
         if (updateBoolean) {
             val customerToEdit = androidView.getCustomerToEdit()
-            view.textViewCustomerTitle.text =
-                    view.context.getString(R.string.titleAlertUpdateCustomer)
+            view.textViewCustomerTitle.text = view.context.getString(R.string.titleAlertUpdateCustomer)
             view.editTextCustomerName.setText(customerToEdit.getName())
             view.editTextCustomerAddress.setText(customerToEdit.getAddress())
             view.editTextPhone.setText(customerToEdit.getPhone())
             view.editTextCity.setText(customerToEdit.getCity())
-            view.buttonNewCustomerToNewCustomer.text =
-                    view.context.getString(R.string.titleAlertUpdateCustomer)
+            view.buttonNewCustomerToNewCustomer.text = view.context.getString(R.string.titleAlertUpdateCustomer)
         } else
             view.textViewCustomerTitle.text = view.context.getString(R.string.titleAlertNewCustomer)
 
@@ -186,23 +184,23 @@ class DialogView(private var androidView: AndroidView) {
         val product =
                 try{
                     Product(
-                        newProductFragment.editTextProductName.text.toString(),
-                        newProductFragment.editTextProductPrice.text.toString().toDouble(),
-                        newProductFragment.editTextProductDesc.text.toString(),
-                        androidView.getStringFromBitMap(),
-                        newProductFragment.editTextProductQuantity.text.toString().toInt()
+                            newProductFragment.editTextProductName.text.toString(),
+                            newProductFragment.editTextProductPrice.text.toString().toDouble(),
+                            newProductFragment.editTextProductDesc.text.toString(),
+                            newProductFragment.editTextProductQuantity.text.toString().toInt(),
+                            androidView.getStringFromBitMap()
                     )
                 } catch (e: Exception) {
                     androidView.showToastMessage(R.string.emptyData)
                 }
         androidView.setBitMap(null) //Photo already saved in product data
+        androidView.goToProductList()
         if (updateBoolean) {
             dialogConfirmRegister(
                 product,
                 R.string.titleAlertUpdateProd,
                 R.string.messageAlertUpdateProd
             )
-            androidView.goToProductList()
             androidView.setBooleanUpdate(false)
         } else {
             dialogConfirmRegister(
@@ -223,18 +221,9 @@ class DialogView(private var androidView: AndroidView) {
 
         builder.setPositiveButton("Si") { _, _ ->
             when (title) {
-                (R.string.titleAlertNewProd) -> {
-                    androidView.goToProductList()
-                    androidView.createProduct(data as Product)
-                }
-
-                (R.string.titleAlertUpdateProd) -> {
-                    doAsync {
-                        androidView.goToProductList()
-                        androidView.updateProduct(data as Product)
-                    }
-                }
-                (R.string.titleAlertDeleteProd) -> androidView.deleteProduct(data as Product)
+                R.string.titleAlertNewProd -> androidView.createProduct(data as Product)
+                R.string.titleAlertUpdateProd -> androidView.updateProduct(data as Product)
+                R.string.titleAlertDeleteProd -> androidView.deleteProduct(data as Product)
 
                 (R.string.titleAlertNewSale) -> {
                     if (androidView.getCartList().isEmpty())
@@ -243,9 +232,7 @@ class DialogView(private var androidView: AndroidView) {
                         dialogNewSale()
                 }
 
-                (R.string.titleAlertNewSaleBd) -> {
-                    androidView.createSale()
-                }
+                R.string.titleAlertNewSaleBd -> androidView.insertSale()
 
                 (R.string.titleAlertNewCustomer) -> {
                     doAsyncResult {
@@ -262,9 +249,8 @@ class DialogView(private var androidView: AndroidView) {
                     }
                 }
 
-                R.string.titleAlertUpdateCustomer -> {
-                    androidView.updateCustomer(data as Customer)
-                }
+                R.string.titleAlertUpdateCustomer -> androidView.updateCustomer(data as Customer)
+
                 (R.string.titleAlertNewUser) -> {
                     androidView.goNewUserToUserList()
                     androidView.newUser(data as User)
@@ -273,22 +259,17 @@ class DialogView(private var androidView: AndroidView) {
                     androidView.saveUserLocation()
                     androidView.askLogOut()
                 }
-                (R.string.logOut) -> {
-                    androidView.logOut()
-                }
+                (R.string.logOut) -> androidView.logOut()
             }
         }
         builder.setNegativeButton("No") { _, _ ->
             androidView.setBooleanUpdate(false)
+            androidView.setBitMap(null) // If user cancel the update of products or users is needed to remove the picture
             when (title) {
-                (R.string.location) -> {
-                    androidView.askLogOut()
-                }
-                else -> {
-                    androidView.showToastMessage(androidView.getString(R.string.modifyIfIsNecessary))
-                }
+                (R.string.location) -> androidView.askLogOut()
+
+                else -> androidView.showToastMessage(androidView.getString(R.string.modifyIfIsNecessary))
             }
-            androidView.setBitMap(null) //
         }
         builder.create()
         builder.show()
@@ -314,15 +295,15 @@ class DialogView(private var androidView: AndroidView) {
     }
 
     private fun dialogGetDate(view: View):String{
-        val date = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         var dateSelected = ""
         val builder = DatePickerDialog(view.context, { _, yy, mm, dd ->
-            date.set(yy, mm, dd)
-            dateSelected = androidView.getDate(date)
+            calendar.set(yy, mm, dd)
+            dateSelected = androidView.getDate(calendar)
             view.textViewDateSelected.text =
-                androidView.getString(R.string.date) + ": " + dateSelected
+                    androidView.getString(R.string.date) + ": " + dateSelected
             androidView.setDateSale(dateSelected)
-        }, 2020, 9, 20)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
         builder.show()
         return dateSelected
     }

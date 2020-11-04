@@ -29,8 +29,11 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.constraintLayoutCard.setBackgroundResource(R.color.cardBackground)
 
         itemView.buttonAddProductToCart.setOnClickListener {
-            if (product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT) {   //If the id product has a default ID means that comes from REST search
-                FragmentData.addProductToCart(product)
+            if (product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT) {   //If the id product has a default ID means that comes from REST
+                if (product.getQuantity() > 0)
+                    FragmentData.addProductToCart(product)
+                else
+                    FragmentData.showToastMessage(R.string.outOfStock)
             } else {
                 FragmentData.showToastMessage(R.string.productNotRegisted)
                 FragmentData.confirmNewProduct(product)

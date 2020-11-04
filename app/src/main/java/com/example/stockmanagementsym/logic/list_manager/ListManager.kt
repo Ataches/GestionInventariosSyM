@@ -31,11 +31,11 @@ class ListManager : IListManager {
         listener?.addElementsToList(mutableList)
     }
 
-    override fun setListListener(listener: IListListener) {
+    override fun setListListener(listener: IListListener?) {
         this.listener = listener
     }
 
-    override fun setNotifier(notifierView: NotifierView) {
+    override fun setNotifier(notifierView: NotifierView?) {
         this.notifierView = notifierView
     }
 }

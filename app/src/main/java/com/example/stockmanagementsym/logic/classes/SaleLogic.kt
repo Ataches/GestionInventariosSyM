@@ -1,6 +1,5 @@
 package com.example.stockmanagementsym.logic.classes
 
-import android.util.Log
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.list_manager.IListManager
 import org.jetbrains.anko.doAsyncResult
@@ -25,7 +24,6 @@ class SaleLogic : AbstractListLogic() {
                 updateMutableList()
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
-                Log.d("ERROR SALE", "" + e.stackTrace)
             }
         }
     }
@@ -35,8 +33,7 @@ class SaleLogic : AbstractListLogic() {
             try {
                 elementList = saleLogicDao.selectSaleList().toMutableList()
                 uiThread {
-                    if (notifyUserTransaction)
-                        notifyUserTransactionSuccess()
+                    notifyUserTransactionSuccess()
                 }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)

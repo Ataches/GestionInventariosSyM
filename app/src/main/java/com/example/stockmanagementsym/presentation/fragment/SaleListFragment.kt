@@ -44,9 +44,11 @@ class SaleListFragment : Fragment(), IListListener {
 
     override fun reloadList(mutableList: MutableList<Any>) {
         adapter.setSaleList(mutableList as MutableList<Sale>)
-        requireActivity().runOnUiThread {
-            adapter.notifyDataSetChanged()
-        }
+        if (isAdded)                            // Is possible that the list is called from another view. It's this occurs
+                                                // With this it wont change the view.
+            requireActivity().runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
     }
 
     override fun addElementsToList(mutableList: MutableList<Any>) {

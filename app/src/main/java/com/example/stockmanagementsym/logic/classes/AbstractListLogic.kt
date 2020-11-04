@@ -17,17 +17,13 @@ abstract class AbstractListLogic {
     lateinit var saleLogicDao: SaleDao
     lateinit var userLogicDao: UserDao
 
-    var listRESTLoaded = false
     var iListManager: IListManager? = null
-    var notifyUserTransaction = true
     var elementList: MutableList<Any> = mutableListOf()
-    var listREST: List<Any> = listOf()
 
     fun notifyUserTransactionSuccess() {
-        iListManager!!.reloadList(elementList)
-        iListManager!!.showResultTransaction(true)
+        iListManager?.reloadList(elementList)
+        iListManager?.showResultTransaction(true)
     }
-
 
     // If you call this method is possible that the data didn't already
     // charged for it the loadData() method.
@@ -45,30 +41,33 @@ abstract class AbstractListLogic {
         return elementList
     }
 
-    abstract fun loadData()
-
-    abstract fun insert(element: Any)
-    open fun update(element: Any){}
-    abstract fun updateMutableList()
-    open fun delete(element: Any) {}
-
-    abstract fun searchTextInMutableList(searchedText: String)
-    abstract fun setListManager(iListManager: IListManager)
-    open fun searchByIDInMutableList(id: Long): Any? {
-        return null
-    }
-
     fun setProductDao(productLogicDao: ProductDao) {
         this.productLogicDao = productLogicDao
     }
+
     fun setCustomerDao(customerLogicDao: CustomerDao) {
         this.customerLogicDao = customerLogicDao
     }
+
     fun setSaleDao(saleLogicDao: SaleDao) {
         this.saleLogicDao = saleLogicDao
     }
+
     fun setUserDao(userLogicDao: UserDao) {
         this.userLogicDao = userLogicDao
+    }
+
+    abstract fun loadData()
+    abstract fun insert(element: Any)
+    open fun update(element: Any) {}
+    abstract fun updateMutableList()
+
+    open fun delete(element: Any) {}
+    abstract fun searchTextInMutableList(searchedText: String)
+    abstract fun setListManager(iListManager: IListManager)
+
+    open fun searchByIDInMutableList(id: Long): Any? {
+        return null
     }
 
     open fun setCartListener(iCart: ICart) {}

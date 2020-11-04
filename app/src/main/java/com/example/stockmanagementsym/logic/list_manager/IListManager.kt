@@ -11,6 +11,6 @@ interface IListManager {
     fun reloadList(mutableList: MutableList<Any>)
     fun addElementsToList(mutableList: MutableList<Any>)
 
-    fun setListListener(listener: IListListener)
-    fun setNotifier(notifierView: NotifierView)
+    fun setListListener(listener: IListListener?)
+    fun setNotifier(notifierView: NotifierView?)
 }

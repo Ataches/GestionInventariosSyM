@@ -44,8 +44,7 @@ class CustomerLogic : AbstractListLogic() {
             try {
                 elementList = customerLogicDao.selectCustomerList().toMutableList()
                 uiThread {
-                    if (notifyUserTransaction)
-                        notifyUserTransactionSuccess()
+                    notifyUserTransactionSuccess()
                 }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)

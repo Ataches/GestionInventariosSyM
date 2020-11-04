@@ -5,7 +5,6 @@ import com.example.stockmanagementsym.logic.ProductRESTLogic
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.list_manager.IListManager
 import com.example.stockmanagementsym.presentation.fragment.ICart
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.uiThread
 
@@ -54,11 +53,10 @@ class ProductLogic : AbstractListLogic() {
         doAsyncResult {
             try {
                 elementList = productLogicDao.selectProductList().toMutableList()
+                elementList.addAll(getRESTLogic().getProductList())
+                iCart.setProductList(elementList)
                 uiThread {
-                    elementList.addAll(getRESTLogic().getProductList())
-                    iCart.setProductList(elementList)
-                    if (notifyUserTransaction)
-                        notifyUserTransactionSuccess()
+                    notifyUserTransactionSuccess()
                 }
             } catch (e: Exception) {
                 iListManager?.showResultTransaction(false)
@@ -97,20 +95,20 @@ class ProductLogic : AbstractListLogic() {
     }
 
     override fun decreaseMutableListQuantity(mutableList: MutableList<Any>) {
-            doAsync {
-                try {
-                    notifyUserTransaction = false
-                    (mutableList as MutableList<Product>).forEach {
-                        val product = searchByIDInMutableList(it.idProduct)
-                        product.setQuantity(product.getQuantity() - it.getQuantity())
-                        update(product)
-                    }
-                    iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_SUCCESS)
-                    notifyUserTransaction = true
-                } catch (e: Exception) {
-                    iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_FAILURE)
+        doAsyncResult {
+            try {
+                for (productInCart in mutableList as MutableList<Product>) {
+                    val product = searchByIDInMutableList(productInCart.idProduct)
+                    product.setQuantity(product.getQuantity() - productInCart.getQuantity())
+                    productLogicDao.update(product)
                 }
+            } catch (e: Exception) {
+                iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_FAILURE)
             }
+            uiThread {
+                iListManager?.showToastMessage(MESSAGES.PRODUCT_LIST_UPDATE_SUCCESS)
+            }
+        }
     }
 
     private fun getRESTLogic(): ProductRESTLogic {

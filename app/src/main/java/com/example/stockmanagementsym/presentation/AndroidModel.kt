@@ -8,22 +8,17 @@ import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
-import com.example.stockmanagementsym.logic.classes.AbstractLogicFactory
+import com.example.stockmanagementsym.logic.AdapterClient
 import com.example.stockmanagementsym.logic.CartLogicFactory
 import com.example.stockmanagementsym.logic.DataBaseLogic
 import com.example.stockmanagementsym.logic.ListLogicFactory
-import com.example.stockmanagementsym.logic.adapter.bit_map.BitMapConcreteAdapter
-import com.example.stockmanagementsym.logic.adapter.bit_map.IBitMapAdapter
-import com.example.stockmanagementsym.logic.adapter.photo.IPhotoAdapter
-import com.example.stockmanagementsym.logic.adapter.photo.PhotoConcreteAdapter
-import com.example.stockmanagementsym.logic.adapter.type_converter.ITypeConverterAdapter
-import com.example.stockmanagementsym.logic.adapter.type_converter.TypeConverterConcrete
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.logic.cart.AbstractCartLogic
 import com.example.stockmanagementsym.logic.classes.AbstractListLogic
+import com.example.stockmanagementsym.logic.classes.AbstractLogicFactory
 import com.example.stockmanagementsym.logic.classes.LogicAbstractionNames
 import com.example.stockmanagementsym.logic.list_manager.ConcreteCreatorListManager
 import com.example.stockmanagementsym.logic.list_manager.CreatorListManager
@@ -39,6 +34,7 @@ import org.jetbrains.anko.uiThread
 
 class AndroidModel {
 
+    private var adapterClient: AdapterClient? = null
     private var userListManager: IListManager? = null
     private var productListManager: IListManager? = null
     private var cartListManager: IListManager? = null
@@ -71,11 +67,6 @@ class AndroidModel {
     private var newSaleCustomer: Customer? = null
     private var newSale: Sale? = null
 
-    //adapters
-    private var photoConcreteAdapter: IPhotoAdapter? = null
-    private var bitMapConcreteAdapter: IBitMapAdapter? = null
-    private var typeConverterConcrete: ITypeConverterAdapter? = null
-
     //bitmap
     private var stringBitmap: String = ""
 
@@ -104,6 +95,10 @@ class AndroidModel {
 
     fun getUserPrivileges(): String {
         return getUser().getPrivilege()
+    }
+
+    fun getUserToString(user: User): String {
+        return getAdapterClient().getUserToString(user)
     }
 
     fun setUserLocation(latitude: Double, longitude: Double) {
@@ -136,16 +131,17 @@ class AndroidModel {
     }
 
     //Sale
-    fun createSale() {
+    fun insertSale() {
         val saleNew = getNewSale()
         if (saleNew == null) {
             showToastMessage(getAndroidView().getString(R.string.emptyData))
             return
         } else {
+            notifySaleLogic(null) // To show the transaction result sale logic needs a notifier instance, isn't necessary a list listener
             doAsyncResult {
                 getSaleLogic().insert(saleNew)
                 getProductLogic().decreaseMutableListQuantity(
-                    saleNew.getProductList().toMutableList()
+                        saleNew.getProductList().toMutableList()
                 )
                 getCartLogic().clearCart()
                 newSale = null
@@ -178,10 +174,10 @@ class AndroidModel {
     }
 
     fun getSaleToString(sale: Sale): String {
-        getTypeConverterAdapter().setBooleanStringToUser(true)
+        getAdapterClient().setBooleanStringToUser(true)
         return "Fecha: " + sale.getDate() + "\n\n" +
                 "Cliente: \n\n" + getCustomerToString(sale.getCustomer()) + "\n\n" +
-                "Listado de productos: \n\n" + getTypeConverterAdapter().productListToString(sale.getProductList())
+                "Listado de productos: \n\n" + getAdapterClient().productListToString(sale.getProductList())
     }
 
     //Cart
@@ -203,8 +199,8 @@ class AndroidModel {
 
 
     fun getCartListToString(mutableList: MutableList<Product>): String {
-        getTypeConverterAdapter().setBooleanStringToUser(true)
-        return getTypeConverterAdapter().productListToString(mutableList)
+        getAdapterClient().setBooleanStringToUser(true)
+        return getAdapterClient().productListToString(mutableList)
     }
 
     //Customer
@@ -232,7 +228,7 @@ class AndroidModel {
     }
 
     fun getCustomerToString(customer: Customer): String {
-        return getTypeConverterAdapter().customerToString(customer)
+        return getAdapterClient().customerToString(customer)
     }
 
     //Product
@@ -242,12 +238,16 @@ class AndroidModel {
         getProductLogic().update(productToUpdate)
     }
 
+    fun getProductList(): MutableList<Any> {
+        return getProductLogic().getList()
+    }
+
     fun deleteProduct(product: Product) {
         getProductLogic().delete(product)
     }
 
     fun getProductToString(product: Product): String {
-        return getTypeConverterAdapter().productToString(product)
+        return getAdapterClient().productToString(product)
     }
 
     //   New product creation
@@ -256,11 +256,11 @@ class AndroidModel {
     }
 
     fun getPhotoCamera(context: Context) {
-        getPhotoAdapter().startCamera(context)
+        getAdapterClient().startCamera(context)
     }
 
     fun getPhotoGallery(context: Context) {
-        getPhotoAdapter().startGallery(context)
+        getAdapterClient().startGallery(context)
     }
     //BitMap generation
     fun setBitMap(bitMap: Bitmap?) {
@@ -268,7 +268,7 @@ class AndroidModel {
     }
 
     fun getBitMapFromString(string: String): Bitmap {
-        return getBitMapAdapter().decoderStringToBitMap(string)
+        return getAdapterClient().decoderStringToBitMap(string)
     }
 
     /**
@@ -276,9 +276,11 @@ class AndroidModel {
      *  this method is only called when user do a register to BD.
       */
     fun getStringFromBitMap():String{
+        if(getAndroidView().getStringBitMapProductToEdit()!=CONSTANTS.STRING_VOID_ELEMENT) // If the user is editing a product this line will get the product to edit string bit map
+            return getAndroidView().getStringBitMapProductToEdit()
         if(bitMap == null)
             return CONSTANTS.STRING_VOID_ELEMENT
-        val stringEncoded = getBitMapAdapter().encoderBitMapToString(bitMap!!)
+        val stringEncoded = getAdapterClient().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
         bitMap=null // Function get string from bitmap is only is called when you
                     // do a register or update, so is necessary remove the bitmap.
@@ -348,9 +350,9 @@ class AndroidModel {
     }
 
     /**
-     * Logic classes, they do the transactions with the database and have the logic of each
+     * Logic classes, they do the transactions with the database and have the logic of each fragment
      * Needs a corresponding dao to get transactions from BD.
-     * Need a list manager who notifies the changes to the view.
+     * Need a list manager who notifies the changes to the view and the result of transactions.
      */
     private fun getUserLogic(): AbstractListLogic {
         if (userLogic == null)
@@ -382,27 +384,15 @@ class AndroidModel {
         return androidView!!
     }
 
-    //Adapters
-    private fun getPhotoAdapter(): IPhotoAdapter {
-        if(photoConcreteAdapter==null)
-            photoConcreteAdapter = PhotoConcreteAdapter()
-        return photoConcreteAdapter!!
-    }
-    private fun getBitMapAdapter(): IBitMapAdapter {
-        if (bitMapConcreteAdapter == null)
-            bitMapConcreteAdapter = BitMapConcreteAdapter()
-        return bitMapConcreteAdapter!!
-    }
-
-    private fun getTypeConverterAdapter(): ITypeConverterAdapter {
-        if (typeConverterConcrete == null)
-            typeConverterConcrete = TypeConverterConcrete()
-        return typeConverterConcrete!!
+    private fun getAdapterClient(): AdapterClient{
+        if(adapterClient==null)
+            adapterClient = AdapterClient()
+        return adapterClient!!
     }
 
     /**
-    List manager method, returns a LisManager created in a factory method.
-    With de list ID makes a list manager that allows to notify or reload lists.
+     * List manager method, returns a LisManager created in a factory method.
+     * With de list ID makes a list manager that allows to notify or reload lists.
      */
     private fun listManager(listManagerInstance: ListManagerInstances): IListManager {
         val concreteCreatorListManager: CreatorListManager = ConcreteCreatorListManager()
@@ -441,31 +431,31 @@ class AndroidModel {
      * Optional a list listener that are methods from fragment lists that allow to the logic classes reload views.
      * Optional a notifier that show to the user the result of transactions
      */
-    fun notifyProductLogic(listListener: IListListener) {
+    fun notifyProductLogic(listListener: IListListener?) {
         listManager(ListManagerInstances.ProductList).setListListener(listListener)
         listManager(ListManagerInstances.ProductList).setNotifier(getAndroidView().getNotifierView())
         getProductLogic().loadData()
     }
 
-    fun notifySaleLogic(listListener: IListListener) {
+    fun notifySaleLogic(listListener: IListListener?) {
         listManager(ListManagerInstances.SaleList).setListListener(listListener)
         listManager(ListManagerInstances.SaleList).setNotifier(getAndroidView().getNotifierView())
         getSaleLogic().loadData()
     }
 
-    fun notifyCustomerLogic(listListener: IListListener) {
+    fun notifyCustomerLogic(listListener: IListListener?) {
         listManager(ListManagerInstances.CustomerList).setListListener(listListener)
         listManager(ListManagerInstances.CustomerList).setNotifier(getAndroidView().getNotifierView())
         getCustomerLogic().loadData()
     }
 
-    fun notifyUserLogic(listListener: IListListener) {
+    fun notifyUserLogic(listListener: IListListener?) {
         listManager(ListManagerInstances.UserList).setListListener(listListener)
         listManager(ListManagerInstances.UserList).setNotifier(getAndroidView().getNotifierView())
         getUserLogic().loadData()
     }
 
-    fun notifyCartLogic(listListener: IListListener, iCart: ICart) {
+    fun notifyCartLogic(listListener: IListListener?, iCart: ICart) {
         listManager(ListManagerInstances.CartList).setListListener(listListener)
         listManager(ListManagerInstances.CartList).setNotifier(getAndroidView().getNotifierView())
         getProductLogic().setCartListener(iCart)
@@ -494,7 +484,7 @@ class AndroidModel {
                     val intent = Intent(login, MainActivity::class.java)
                     login.startActivity(intent)
                 } else{
-                    user = null
+                    user = null // Allows to user to try again inserting a new user and password
                     getAndroidView().showToastMessage(
                         "Usuario $userName no encontrado o contraseña incorrecta",
                         login
@@ -550,13 +540,5 @@ class AndroidModel {
 
     fun showAlertMessage(titleID: Int, messageID: Int, context: Context) {
         getAndroidView().showAlertMessage(titleID, messageID, context)
-    }
-
-    fun getUserToString(user: User): String {
-        return getTypeConverterAdapter().getUserToString(user)
-    }
-
-    fun getProductList(): MutableList<Any> {
-        return getProductLogic().getList()
     }
 }

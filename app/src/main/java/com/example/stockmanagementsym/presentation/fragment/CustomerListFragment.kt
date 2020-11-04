@@ -56,6 +56,8 @@ class CustomerListFragment : Fragment(), IListListener {
 
     override fun reloadList(mutableList: MutableList<Any>) {
         adapter.setCustomerList(mutableList as MutableList<Customer>)
+        if (isAdded)                        // Is possible that the list is called from another view. It's this occurs
+                                            // With this it wont change the view.
         requireActivity().runOnUiThread {
             adapter.notifyDataSetChanged()
         }

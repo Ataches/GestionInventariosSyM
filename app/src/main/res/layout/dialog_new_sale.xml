@@ -76,9 +76,9 @@
         android:layout_marginBottom="30dp"
         android:text="@string/customerNotSelected"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/textViewDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/buttonSelectCustomerName"
+        app:layout_constraintBottom_toTopOf="@id/textViewDate"
         app:layout_constraintTop_toBottomOf="@+id/buttonNewCustomer" />
 
     <TextView

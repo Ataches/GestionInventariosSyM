@@ -13,7 +13,7 @@ import java.text.DecimalFormat
 class CartViewHolder(itemView: View, private var adapter: CartAdapter) :
 RecyclerView.ViewHolder(itemView) {
 
-    private var product = Product("", 0.0, "", "", 1)
+    private var product = Product("", 0.0, "", 0, "")
 
     fun bind(productCart: Product) {
         val df = DecimalFormat("$###,###,###")
@@ -35,7 +35,6 @@ RecyclerView.ViewHolder(itemView) {
 
         itemView.buttonRemoveCart.setOnClickListener {
             FragmentData.removeElementCart(productCart)
-            adapter.notifyDataSetChanged()
         }
 
         itemView.buttonRemoveQuantityProdCart.setOnClickListener {

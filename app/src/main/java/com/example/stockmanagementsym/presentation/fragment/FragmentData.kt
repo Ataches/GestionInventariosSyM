@@ -238,7 +238,7 @@ object FragmentData {
                 imageView.background = null
             }
         } else {
-            if (drawableID != 0) {
+            if (drawableID != CONSTANTS.DEFAULT_DRAWABLE_ID) {
                 imageView.setImageBitmap(null)
                 imageView.setBackgroundResource(drawableID)
             }

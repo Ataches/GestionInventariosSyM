@@ -8,14 +8,14 @@ class CustomerConverterAdaptee {
 
     @TypeConverter
     fun customerToStoredString(customer: Customer):String{
-        return customer.getName()+CONSTANTS.STRING_ITEM_LIMITER+
-                customer.getAddress()+CONSTANTS.STRING_ITEM_LIMITER+
-                customer.getPhone()+CONSTANTS.STRING_ITEM_LIMITER+
+        return customer.getName()+CONSTANTS.STORED_STRING_ITEM_LIMITER+
+                customer.getAddress()+CONSTANTS.STORED_STRING_ITEM_LIMITER+
+                customer.getPhone()+CONSTANTS.STORED_STRING_ITEM_LIMITER+
                 customer.getCity()
     }
     @TypeConverter
     fun storedStringToCustomer(string: String): Customer? {
-        val dataCustomer = string.split(CONSTANTS.STRING_ITEM_LIMITER)
+        val dataCustomer = string.split(CONSTANTS.STORED_STRING_ITEM_LIMITER)
         if(dataCustomer.isNotEmpty())
             return Customer(
                 name = dataCustomer[0],
@@ -27,9 +27,9 @@ class CustomerConverterAdaptee {
     }
 
     fun customerToString(customer: Customer):String{
-        return  "Nombre: "+customer.getName()+ CONSTANTS.STRING_ITEM_LIMITER+
-                "Direccion: "+customer.getAddress()+ CONSTANTS.STRING_ITEM_LIMITER+
-                "Telefono: "+customer.getPhone()+ CONSTANTS.STRING_ITEM_LIMITER+
+        return  "Nombre: "+customer.getName()+ CONSTANTS.STRING_NEW_LINE+
+                "Direccion: "+customer.getAddress()+ CONSTANTS.STRING_NEW_LINE+
+                "Telefono: "+customer.getPhone()+ CONSTANTS.STRING_NEW_LINE+
                 "Ciudad: "+customer.getCity()+ CONSTANTS.STRING_NEW_LINE
     }
 }

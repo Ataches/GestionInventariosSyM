@@ -15,7 +15,7 @@ class TypeConverterConcrete:ITypeConverterAdapter {
         Product
      */
     @TypeConverter
-    override fun productListToString(productList:MutableList<Product>):String{
+    override fun productListToString(productList: MutableList<Product>): String {
         return getProductConverter().productListToStoredString(productList)
     }
 
