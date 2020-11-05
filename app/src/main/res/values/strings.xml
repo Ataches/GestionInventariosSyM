@@ -36,11 +36,11 @@
     <string name="customer">Cliente</string>
     <string name="customerName">Nombre del cliente: </string>
     <string name="nameHint">Ejemplo: Carlos Perez</string>
-    <string name="customerAddress">Dirección: </string>
+    <string name="address">Dirección: </string>
     <string name="customerAddressHint">Ejemplo: Calle falsa 123</string>
     <string name="customerPhoneHint">Ejemplo: 3203992323</string>
-    <string name="customerPhone">Número telefonico</string>
-    <string name="customerCity">Ciudad:</string>
+    <string name="phone">Número telefonico</string>
+    <string name="city">Ciudad:</string>
     <string name="customerCityHint">Ejemplo: Bogotá</string>
     <string name="cancel">Cancelar</string>
     <string name="createSale">Nueva venta</string>
@@ -81,16 +81,15 @@
     <string name="messageAlertNewUser">¿Desea registrar un nuevo usuario con los siguientes datos?:</string>
     <string name="titleAlertNewUser">Nuevo usuario</string>
     <string name="userPrivilegeHint">Ej: user</string>
-    <string name="userPrivilege">Privilegio:</string>
     <string name="cartList">Carrito</string>
-    <string name="userName">Usuario:</string>
+    <string name="userName">Usuario: </string>
     <string name="newUser">Nuevo usuario</string>
     <string name="saveLastLocation">Guardar localización</string>
 
     <!--Location-->
     <string name="location">Localización</string>
     <string name="saveLastLocationObs">Localización periodica</string>
-    <string name="saveLocation">"¿Desea registrar la ultima localización?: "</string>
+    <string name="saveLocation">¿Desea registrar la ultima localización?: </string>
     <string name="locationFailure">No es posible encontrar la localización</string>
     <string name="pressToReloadMap">Presione el mapa para recargar la ubicación</string>
 
@@ -100,7 +99,7 @@
     <string name="loginFailure">Fallo en inicio de sesión</string>
 
 
-    <string name="productDescriptionHint">"Ejemplo: Pieza de repuesto para autos "</string>
+    <string name="productDescriptionHint">Ejemplo: Pieza de repuesto para autos </string>
     <string name="productQuantityHint">Ej: 20</string>
 
     <!--Alerts-->
@@ -123,7 +122,7 @@
     <string name="productAlreadyInCart">El producto ya esta en el carrito</string>
     <string name="productListUpdateFailure">Falla al actualizar la cantidad del listado de productos</string>
     <string name="productListUpdateSuccess">Cantidades del listado de productos actualizada</string>
-    <string name="productListRestFailure">"Fallo al cargar listado de productos REST "</string>
+    <string name="productListRestFailure">Fallo al cargar listado de productos REST </string>
     <string name="imageLoadFailure">Fallo al cargar la URL de la imagen</string>
     <string name="productNotRegisted">Producto no registrado, redirigiendo</string>
     <string name="emptyData">Campos vacios</string>
@@ -135,5 +134,13 @@
 
     <!--Buttons-->
     <string name="buttonRegister">Registro</string>
+    <string name="backUserList">Volver a listado de usuarios</string>
+    <string name="redirectingToNewUser">Redirigiendo a crear un nuevo usuario</string>
+
+    <!--Messages to adapters or user-->
+    <string name="name">Nombre: </string>
+    <string name="userPrivilege">Privilegio: </string>
+    <string name="registerUserBD">Opción 2: Registro en BD</string>
+    <string name="registerUserGoogle">Opción 1: Registro con Google</string>
 
 </resources>

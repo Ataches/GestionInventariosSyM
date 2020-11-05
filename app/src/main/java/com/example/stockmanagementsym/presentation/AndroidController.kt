@@ -1,5 +1,7 @@
 package com.example.stockmanagementsym.presentation
 
+import android.app.Activity
+import android.util.Log
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -8,12 +10,12 @@ import com.example.stockmanagementsym.R
 
 class AndroidController(private val androidView: AndroidView): View.OnClickListener {
 
-    private var navController: NavController ?= null
-    private lateinit var view:View
+    private var navController: NavController? = null
+    private lateinit var view: View
 
     override fun onClick(view: View) {
         this.view = view
-        when(view.id){
+        when (view.id) {
 
             //Home
             R.id.buttonHomeToShop -> getNavController().navigate(R.id.action_home_to_shopFragment)
@@ -45,31 +47,40 @@ class AndroidController(private val androidView: AndroidView): View.OnClickListe
             //User fragment
             R.id.buttonUserListToCreateUser -> getNavController().navigate(R.id.action_userFragment_to_newUserFragment)
             R.id.buttonUserListToSearch -> androidView.searchUser()
+
             //User fragment - new user
-            R.id.buttonNewUserToUserList-> getNavController().navigate(R.id.action_newUserFragment_to_userFragment)
+            R.id.buttonNewUserToUserList -> getNavController().navigate(R.id.action_newUserFragment_to_userFragment)
             R.id.buttonNewUserToHome -> getNavController().navigate(R.id.action_newUserFragment_to_home)
             R.id.buttonNewUserToGallery -> androidView.getGallery(view.context)
             R.id.buttonNewUserToCamera -> androidView.getCamera(view.context)
             R.id.buttonNewUserToNewUser -> androidView.newUser(view)
-            R.id.buttonNewUserCancel -> getNavController().navigate(R.id.action_newUserFragment_to_home)
+            R.id.buttonNewUserCancel -> {
+                if(navController!=null)
+                    getNavController().navigate(R.id.action_newUserFragment_to_home)
+                else{
+                    androidView.goFromNewUserToLogin()
+                    Log.d("TEST",""+view+view.context+view.context as Activity)
+                }
+            }
         }
     }
 
-    fun goToProductList(){
-        if(getNavController().currentDestination!!.id == R.id.newProductFragment) //if you register a product from REST service, you will be in the same place (new product fragment).
+    fun goFromNewProductToProductList() {
+        if (getNavController().currentDestination!!.id == R.id.newProductFragment) //if you register a product from REST service, you will be in the same place (new product fragment).
             getNavController().navigate(R.id.action_newProductFragment_to_shopFragment)
     }
 
-    fun goToNewProduct(){
+    fun goFromShopToNewProduct() {
         getNavController().navigate(R.id.action_shopFragment_to_newProductFragment)
     }
 
-    fun goNewUserToUserList() {
-        getNavController().navigate(R.id.action_newUserFragment_to_userFragment)
+    fun goFromNewUserToUserList() {
+        if (getNavController().currentDestination!!.id == R.id.newUserFragment) // If you register a user from a diferent activity like login activity
+            getNavController().navigate(R.id.action_newUserFragment_to_userFragment)
     }
 
     private fun getNavController(): NavController {
-        if(navController==null)
+        if (navController == null)
             navController = Navigation.findNavController(view)
         return navController!!
     }

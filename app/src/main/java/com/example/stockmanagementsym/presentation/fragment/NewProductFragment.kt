@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.R
 import kotlinx.android.synthetic.main.fragment_new_product.view.*
 
@@ -51,14 +52,13 @@ class NewProductFragment: Fragment(){
         view.buttonNewProductToProductList.setOnClickListener (FragmentData.getController())
         view.buttonNewProduct.setOnClickListener (FragmentData.getController())
         view.buttonNewProductToGallery.setOnClickListener{
-            FragmentData.setNewProductFragmentView(requireView())
+            FragmentData.setNewProductImageView(view.imageViewNewProduct)
             FragmentData.setControllerOnClickListener(it)
         }
         view.buttonNewProductToCamera.setOnClickListener{
-            FragmentData.setNewProductFragmentView(requireView())
+            FragmentData.setNewProductImageView(view.imageViewNewProduct)
             FragmentData.setControllerOnClickListener(it)
         }
-
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.stockmanagementsym.logic.cart
 import com.example.stockmanagementsym.data.CartData
 import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.logic.business.Product
-import com.example.stockmanagementsym.logic.list_manager.IListManager
 import java.text.DecimalFormat
 
 class CartLogic: AbstractCartLogic() {
@@ -55,10 +54,5 @@ class CartLogic: AbstractCartLogic() {
             iListManager?.reloadList(mutableListOf()) //Data cart is empty
         else
             iListManager?.showResultTransaction(false)
-    }
-
-    private fun notifyUserTransactionSuccess() {
-        iListManager?.reloadList(getCartData().getCartList().toMutableList())
-        iListManager?.showResultTransaction(true)
     }
 }

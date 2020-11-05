@@ -7,16 +7,15 @@ import android.view.View
 import android.widget.ImageView
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.logic.AndroidActivityResult
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.AndroidController
+import com.example.stockmanagementsym.presentation.AndroidModel
 import com.example.stockmanagementsym.presentation.AndroidView
 import com.squareup.picasso.Picasso
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  *  Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
@@ -74,6 +73,10 @@ object FragmentData {
         return getAndroidView().getUserLongitude()
     }
 
+    fun userIsNull(): Boolean {
+        return getAndroidView().userIsNull()
+    }
+
     /*
         Bitmap data
      */
@@ -81,7 +84,7 @@ object FragmentData {
         getAndroidView().setBitMap(bitMap)
     }
 
-    fun getBitMapFromString(stringBitMap: String): Bitmap {
+    private fun getBitMapFromString(stringBitMap: String): Bitmap {
         return getAndroidView().getBitMapFromString(stringBitMap)
     }
 
@@ -124,10 +127,6 @@ object FragmentData {
     /*
         Update boolean
      */
-    fun setBooleanUpdate(confirmUpdate: Boolean) {
-        getAndroidView().setBooleanUpdate(confirmUpdate)
-    }
-
     fun getBooleanUpdate():Boolean{
         return getAndroidView().getBooleanUpdate()
     }
@@ -165,10 +164,6 @@ object FragmentData {
         getAndroidView().showToastMessage(message)
     }
 
-    fun finish(){
-        androidView  = null
-    }
-
     fun setContext(context: Context) {
         getAndroidView().setContext(context)
     }
@@ -177,20 +172,20 @@ object FragmentData {
         getAndroidView().setTextSearched(textSearched)
     }
 
-    fun getNewProductFragmentView(): View? {
+    fun getNewProductFragmentView(): ImageView? {
         return getAndroidView().getNewProductFragmentView()
     }
 
-    fun setNewProductFragmentView(view: View) {
-        getAndroidView().setNewProductFragmentView(view)
+    fun setNewProductImageView(imageView: ImageView) {
+        getAndroidView().setNewProductImageView(imageView)
     }
 
-    fun getNewUserFragmentView(): View? {
-        return getAndroidView().getNewUserFragmentView()
+    fun getNewUserImageView(): ImageView? {
+        return getAndroidView().getNewUserImageView()
     }
 
-    fun setNewUserFragmentView(view: View) {
-        getAndroidView().setNewUserFragmentView(view)
+    fun setNewUserImageView(imageView: ImageView) {
+        getAndroidView().setNewUserImageView(imageView)
     }
 
     fun notifyProductLogic(listListener: IListListener) {
@@ -214,7 +209,7 @@ object FragmentData {
     }
 
     fun showAlertMessage(titleID: Int, messageID: Int) {
-        getAndroidView().showAlertMessage(titleID, messageID, null)
+        getAndroidView().showAlertMessage(titleID, messageID)
     }
 
     /**
@@ -243,5 +238,25 @@ object FragmentData {
                 imageView.setBackgroundResource(drawableID)
             }
         }
+    }
+
+    fun getContext(): Context {
+        return getAndroidView().getContext()
+    }
+
+    fun getString(stringID: Int): String {
+        return getAndroidView().getString(stringID)
+    }
+
+    fun getAndroidModel(): AndroidModel {
+        return getAndroidView().getAndroidModel()
+    }
+
+    fun getAndroidActivityResult(): AndroidActivityResult {
+        return getAndroidView().getAndroidActivityResult()
+    }
+
+    fun setAndroidActivityResult(androidActivityResult: AndroidActivityResult) {
+        getAndroidView().setAndroidActivityResult(androidActivityResult)
     }
 }

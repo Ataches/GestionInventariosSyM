@@ -1,10 +1,12 @@
 package com.example.stockmanagementsym.data
 
 object CONSTANTS {
-
+    const val GOOGLE_USER_LOGIN_INTENT_CODE:Int = 50
+    const val GOOGLE_USER_REGISTER_INTENT_CODE:Int = 51
+    const val LOCATION_INTENT_CODE = 102
     const val GALLERY_INTENT_CODE = 101
-
     const val CAMERA_INTENT_CODE = 102
+
     const val STRING_VOID_ELEMENT: String = "VOID ELEMENT"
 
     const val URL_MAX_LENGTH: Int = 400

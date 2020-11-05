@@ -46,7 +46,7 @@
         android:id="@+id/textViewAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/customerAddress"
+        android:text="@string/address"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/editTextCustomerName"
         app:layout_constraintTop_toBottomOf="@+id/editTextCustomerName"
@@ -55,6 +55,7 @@
 
     <EditText
         android:id="@+id/editTextCustomerAddress"
+        android:inputType="textPostalAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/customerAddressHint"
@@ -68,7 +69,7 @@
         android:id="@+id/textViewPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/customerPhone"
+        android:text="@string/phone"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/editTextCustomerAddress"
         app:layout_constraintTop_toBottomOf="@+id/editTextCustomerAddress"
@@ -91,7 +92,7 @@
         android:id="@+id/textViewCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/customerCity"
+        android:text="@string/city"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/editTextPhone"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone"
@@ -100,6 +101,7 @@
 
     <EditText
         android:id="@+id/editTextCity"
+        android:inputType="textAutoComplete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/customerCityHint"

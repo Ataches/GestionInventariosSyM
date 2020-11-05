@@ -8,7 +8,7 @@ import com.example.stockmanagementsym.data.dao.ProductDao
 import com.example.stockmanagementsym.data.dao.SaleDao
 import com.example.stockmanagementsym.data.dao.UserDao
 
-class DataBaseLogic(application: Application) : AndroidViewModel(application) {
+internal class DataBaseLogic(application: Application) : AndroidViewModel(application) {
 
     private var saleDao:SaleDao ?= null
     private var productDao: ProductDao ?= null

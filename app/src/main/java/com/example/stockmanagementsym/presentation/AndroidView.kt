@@ -4,8 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
+import android.widget.ImageView
+import com.example.stockmanagementsym.LoginActivity
+import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.data.MESSAGES
+import com.example.stockmanagementsym.logic.AndroidActivityResult
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
@@ -24,8 +29,9 @@ import java.util.*
  */
 class AndroidView(private val androidModel: AndroidModel) {
 
-    private var viewNewUserFragment: View? = null
-    private var viewNewProductFragment: View? = null
+    private lateinit var androidActivityResult: AndroidActivityResult
+    private var newUserImageView: ImageView? = null
+    private var newProductImageView: ImageView? = null
     private lateinit var textSearched: String
     private lateinit var context: Context
     private var androidController: AndroidController? = null
@@ -37,7 +43,6 @@ class AndroidView(private val androidModel: AndroidModel) {
     private var notifierView: NotifierView? = null
     private var dialogView: DialogView? = null
     private var fragmentData: FragmentData? = null
-    private lateinit var view: View
 
     init {
         getFragmentData().setAndroidView(this)
@@ -62,6 +67,7 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun setContext(context: Context) {
         getNotifierView().setNotifierContext(context)
+        MESSAGES.setContext(context)
         this.context = context
     }
     fun getContext():Context{
@@ -89,6 +95,10 @@ class AndroidView(private val androidModel: AndroidModel) {
      */
     fun setUserLocation(latitude: Double, longitude: Double) {
         androidModel.setUserLocation(latitude, longitude)
+    }
+
+    fun userIsNull(): Boolean {
+        return androidModel.userIsNull()
     }
 
     /*
@@ -123,7 +133,7 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
 
     fun goToProductList() {
-        getAndroidController().goToProductList()
+        getAndroidController().goFromNewProductToProductList()
     }
 
     fun getProductToString(product: Product): String {
@@ -147,7 +157,7 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
 
     private fun goToNewProduct() {
-        getAndroidController().goToNewProduct()
+        getAndroidController().goFromShopToNewProduct()
     }
     /*
         Update boolean
@@ -201,8 +211,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         getDialogView().dialogRegisterCustomer(false)
     }
 
-    fun setCustomerSelected(item: Int, view: View) {
-        this.view = view
+    fun setCustomerSelected(item: Int) {
         androidModel.setCustomerSelected(item)
     }
 
@@ -287,11 +296,6 @@ class AndroidView(private val androidModel: AndroidModel) {
     /*
         Messages
      */
-    fun showToastMessage(message: String, context: Context) {
-        getNotifierView().setNotifierContext(context)
-        getNotifierView().showToastMessage(message)
-    }
-
     fun showToastMessage(message: String) {
         getNotifierView().showToastMessage(message)
     }
@@ -300,9 +304,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         getNotifierView().showToastMessage(messageID)
     }
 
-    fun showAlertMessage(titleID: Int, messageID: Int, context: Context?) {
-        if (context != null)
-            getNotifierView().setNotifierContext(context)
+    fun showAlertMessage(titleID: Int, messageID: Int) {
         getNotifierView().showAlertMessage(titleID, messageID)
     }
 
@@ -327,6 +329,10 @@ class AndroidView(private val androidModel: AndroidModel) {
         return androidModel.getUserPrivileges()
     }
 
+    fun newUser(user: User) {
+        androidModel.createUser(user)
+    }
+
     fun newUser(view: View) {
         getDialogView().dialogRegisterUser(view)
     }
@@ -336,17 +342,20 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
 
     fun getNotifierView(): NotifierView {
-        if(notifierView == null)
+        if (notifierView == null)
             notifierView = NotifierView()
         return notifierView!!
     }
 
-    fun newUser(user: User){
-        androidModel.createUser(user)
+    fun goNewUserToUserList() {
+        when (context) {
+            is MainActivity -> getAndroidController().goFromNewUserToUserList()
+            is LoginActivity -> androidModel.goFromNewUserToLogin()
+        }
     }
 
-    fun goNewUserToUserList() {
-        getAndroidController().goNewUserToUserList()
+    fun goFromNewUserToLogin() {
+        androidModel.goFromNewUserToLogin()
     }
 
     fun getUserLatitude(): Double {
@@ -400,24 +409,25 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun setTextSearched(textSearched: String) {
         this.textSearched = textSearched
     }
+
     fun getTextSearched(): String {
         return textSearched
     }
 
-    fun setNewProductFragmentView(view: View) {
-        viewNewProductFragment = view
+    fun setNewProductImageView(imageView: ImageView) {
+        newProductImageView = imageView
     }
 
-    fun getNewProductFragmentView(): View? {
-        return viewNewProductFragment
+    fun getNewProductFragmentView(): ImageView? {
+        return newProductImageView
     }
 
-    fun setNewUserFragmentView(view: View) {
-        viewNewUserFragment = view
+    fun setNewUserImageView(imageView: ImageView) {
+        this.newUserImageView = imageView
     }
 
-    fun getNewUserFragmentView(): View? {
-        return viewNewUserFragment
+    fun getNewUserImageView(): ImageView? {
+        return newUserImageView
     }
 
     fun notifyProductLogic(listListener: IListListener) {
@@ -439,4 +449,17 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun notifyCustomerLogic(listListener: IListListener) {
         androidModel.notifyCustomerLogic(listListener)
     }
+
+    fun getAndroidModel(): AndroidModel {
+        return androidModel
+    }
+
+    fun setAndroidActivityResult(androidActivityResult: AndroidActivityResult) {
+        this.androidActivityResult = androidActivityResult
+    }
+
+    fun getAndroidActivityResult(): AndroidActivityResult {
+        return androidActivityResult
+    }
+
 }

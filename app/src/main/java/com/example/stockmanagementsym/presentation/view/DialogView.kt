@@ -9,6 +9,7 @@ import android.view.View
 import androidx.fragment.app.findFragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.logic.business.Customer
 import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.logic.business.Sale
@@ -39,7 +40,7 @@ class DialogView(private var androidView: AndroidView) {
     //New user
     fun dialogRegisterUser(viewElement: View) {
         view = viewElement
-        val newUserFragment:NewUserFragment = viewElement.findFragment()
+        val newUserFragment: NewUserFragment = viewElement.findFragment()
         val user =
                 try{
                     User(
@@ -116,10 +117,10 @@ class DialogView(private var androidView: AndroidView) {
     private fun loadCustomerList() {
         doAsync {
             customerList = (androidView.getCustomerList() as MutableList<Customer>).map {
-                "Nombre: " + it.getName() + CONSTANTS.STRING_NEW_LINE +
-                        "Direccion: " + it.getAddress() + CONSTANTS.STRING_NEW_LINE +
-                        "Telefono: " + it.getPhone() + CONSTANTS.STRING_NEW_LINE +
-                        "Ciudad: " + it.getCity() + CONSTANTS.STRING_NEW_LINE
+                MESSAGES.STRING_NAME + it.getName() + CONSTANTS.STRING_NEW_LINE +
+                        MESSAGES.STRING_ADDRESS + it.getAddress() + CONSTANTS.STRING_NEW_LINE +
+                        MESSAGES.STRING_PHONE + it.getPhone() + CONSTANTS.STRING_NEW_LINE +
+                        MESSAGES.STRING_CITY + it.getCity() + CONSTANTS.STRING_NEW_LINE
             }.toTypedArray()
         }
     }
@@ -251,7 +252,7 @@ class DialogView(private var androidView: AndroidView) {
 
                 R.string.titleAlertUpdateCustomer -> androidView.updateCustomer(data as Customer)
 
-                (R.string.titleAlertNewUser) -> {
+                R.string.titleAlertNewUser -> {
                     androidView.goNewUserToUserList()
                     androidView.newUser(data as User)
                 }
@@ -316,7 +317,7 @@ class DialogView(private var androidView: AndroidView) {
         builder.setItems(data) { _, item ->
             when(title){
                 (R.string.selectCustomer) -> {
-                    androidView.setCustomerSelected(item, view)
+                    androidView.setCustomerSelected(item)
                     showCustomerSelected(customerList[item])
                 }
             }

@@ -1,7 +1,8 @@
-package com.example.stockmanagementsym.logic
+package com.example.stockmanagementsym.logic.adapter
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.logic.adapter.bit_map.BitMapConcreteAdapter
 import com.example.stockmanagementsym.logic.adapter.bit_map.IBitMapAdapter
 import com.example.stockmanagementsym.logic.adapter.photo.IPhotoAdapter

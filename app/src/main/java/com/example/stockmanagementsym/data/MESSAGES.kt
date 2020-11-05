@@ -1,8 +1,18 @@
 package com.example.stockmanagementsym.data
 
+import android.content.Context
 import com.example.stockmanagementsym.R
 
 object MESSAGES {
+
+    private lateinit var context: Context
+
+    lateinit var STRING_PRIVILEGE:String
+
+    lateinit var STRING_NAME:String
+    lateinit var STRING_ADDRESS:String
+    lateinit var STRING_PHONE:String
+    lateinit var STRING_CITY:String
 
     const val PRODUCT_LIST_UPDATE_FAILURE = R.string.productListUpdateFailure
     const val PRODUCT_LIST_UPDATE_SUCCESS = R.string.productListUpdateSuccess
@@ -14,4 +24,18 @@ object MESSAGES {
 
     const val TRANSACTION_SUCCESS = R.string.transactionSuccess
     const val TRANSACTION_FAILURE = R.string.transactionFailure
+
+    fun setContext(context:Context){
+        this.context = context
+        loadStrings()
+    }
+
+    private fun loadStrings() {
+        STRING_PRIVILEGE = context.getString(R.string.userPrivilege)
+
+        STRING_NAME = context.getString(R.string.name)
+        STRING_ADDRESS = context.getString(R.string.address)
+        STRING_PHONE = context.getString(R.string.phone)
+        STRING_CITY = context.getString(R.string.city)
+    }
 }

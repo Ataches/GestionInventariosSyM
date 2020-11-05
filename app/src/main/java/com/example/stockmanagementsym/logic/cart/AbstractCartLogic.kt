@@ -16,6 +16,11 @@ abstract class AbstractCartLogic {
         this.iListManager = iListManager
     }
 
+    fun notifyUserTransactionSuccess() {
+        iListManager?.reloadList(getCartData().getCartList().toMutableList())
+        iListManager?.showResultTransaction(true)
+    }
+
     abstract fun getCartData(): CartData
     abstract fun addProductToCart(item: Product)
     abstract fun getTotalPrice(): String
