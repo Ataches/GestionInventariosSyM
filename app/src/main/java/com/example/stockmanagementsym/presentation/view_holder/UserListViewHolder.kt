@@ -3,6 +3,7 @@ package com.example.stockmanagementsym.presentation.view_holder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
 import kotlinx.android.synthetic.main.item_user.view.*
@@ -10,7 +11,7 @@ import kotlinx.android.synthetic.main.item_user.view.*
 class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(user: User) {
         itemView.textViewName.text = user.getName()
-        if(FragmentData.getUserPrivilege()!="admin"){
+        if(FragmentData.getUserPrivilege()!=CONSTANTS.USER_PRIVILEGE_ADMIN){
             itemView.buttonDeleteUser.visibility = View.GONE
             itemView.buttonDeleteUser.isEnabled = false
             itemView.buttonDeleteUser.isClickable = false

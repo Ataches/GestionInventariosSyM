@@ -77,7 +77,12 @@ class UserLogic : AbstractListLogic() {
 
     override fun getUser(): User {
         if(user==null)
-            user = User(CONSTANTS.STRING_VOID_ELEMENT,CONSTANTS.STRING_VOID_ELEMENT,CONSTANTS.STRING_VOID_ELEMENT,CONSTANTS.STRING_VOID_ELEMENT,CONSTANTS.DEFAULT_USER_LATITUDE,CONSTANTS.DEFAULT_USER_LONGITUDE)
+            user = User(CONSTANTS.STRING_VOID_ELEMENT, //User isn't registered
+                        CONSTANTS.STRING_VOID_ELEMENT,
+                        CONSTANTS.STRING_VOID_ELEMENT,
+                        CONSTANTS.STRING_VOID_ELEMENT,
+                        CONSTANTS.STRING_VOID_ELEMENT,
+                        CONSTANTS.DEFAULT_USER_LATITUDE,CONSTANTS.DEFAULT_USER_LONGITUDE)
         return user!!
     }
 

@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.layout_navigation_header.view.*
 /*
     Created by Juan Sebastian Sanchez Mancilla on 4/11/2020
 */
-class NavigationViewLogic() {
+class NavigationViewLogic(private val activity: Activity) {
 
     private lateinit var textViewUserLocation: TextView
     private var androidLocation: AndroidLocation? = null
@@ -44,6 +44,8 @@ class NavigationViewLogic() {
             headerView.textViewUserLocationNavView.text = FragmentData.getString(R.string.location) + " " + userLatitude + " " + userLongitude
         }
 
+        textViewUserLocation = headerView.textViewUserLocationNavView
+
         headerView.buttonLocation.setOnClickListener {
             locationObserver = false
             checkPermission()
@@ -52,13 +54,12 @@ class NavigationViewLogic() {
             locationObserver = true
             checkPermission()
         }
-        textViewUserLocation = headerView.textViewUserLocationNavView
     }
 
     private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(FragmentData.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(FragmentData.getContext() as Activity,
+            ActivityCompat.requestPermissions(activity,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), CONSTANTS.LOCATION_INTENT_CODE)
         } else
             loadLocation() //The permission is al ready
@@ -69,7 +70,7 @@ class NavigationViewLogic() {
         if (androidLocation == null)
             androidLocation = AndroidLocation(textViewUserLocation)
         if (fusedLocation == null)
-            fusedLocation = LocationServices.getFusedLocationProviderClient(FragmentData.getContext() as Activity)
+            fusedLocation = LocationServices.getFusedLocationProviderClient(activity)
         if (locationObserver) {
             val locationRequest = LocationRequest()
             locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY

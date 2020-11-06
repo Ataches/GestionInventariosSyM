@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), ILauncher {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CONSTANTS.LOCATION_INTENT_CODE)
             if (!grantResults.all { it == PackageManager.PERMISSION_GRANTED })
-                finish()
+                FragmentData.showAlertMessage(R.string.location,R.string.locationFailure)
             else
                 getNavigationViewLogic().loadLocation() //Permission was granted by user
     }
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), ILauncher {
 
     private fun getNavigationViewLogic():NavigationViewLogic{
         if (navigationViewLogic == null)
-            navigationViewLogic = NavigationViewLogic()
+            navigationViewLogic = NavigationViewLogic(this)
         return navigationViewLogic!!
     }
 }

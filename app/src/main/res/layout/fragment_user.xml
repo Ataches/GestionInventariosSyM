@@ -23,6 +23,9 @@
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_search"
         android:text="@string/search"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:background="@color/buttonSecondaryLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextSearchUserList"
         app:layout_constraintTop_toTopOf="@+id/editTextSearchUserList"
@@ -35,19 +38,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonUserListToSearch"
-
         android:layout_width="0dp"
         android:layout_height="0dp"
         />
 
     <Button
         android:id="@+id/buttonUserListToCreateUser"
-        android:layout_width="185dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:drawableStart="@drawable/ic_add_quantity"
         android:paddingBottom="5dp"
         android:layout_margin="8dp"
         android:text="@string/newUser"
+        android:padding="8dp"
+        android:drawablePadding="8dp"
+        android:background="@color/buttonSecondaryLight"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

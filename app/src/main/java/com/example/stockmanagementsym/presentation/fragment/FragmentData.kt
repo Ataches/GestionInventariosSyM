@@ -47,7 +47,7 @@ object FragmentData {
         User data
      */
     fun getUserName(): String {
-        return getAndroidView().getUserNae()
+        return getAndroidView().getUserName()
     }
     fun getUserPrivilege(): String {
         return getAndroidView().getUserPrivileges()

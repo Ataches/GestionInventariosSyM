@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.logic.AndroidActivityResult
 import com.example.stockmanagementsym.presentation.fragment.FragmentData
+import kotlinx.android.synthetic.main.fragment_new_user.*
 import kotlinx.android.synthetic.main.fragment_new_user.view.*
 
 class NewUserFragment: Fragment(){
@@ -25,6 +26,8 @@ class NewUserFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.textViewUserTitle.text = FragmentData.getString(R.string.createUser)
 
         if(FragmentData.userIsNull()){
             view.buttonNewUserToHome.visibility = View.GONE

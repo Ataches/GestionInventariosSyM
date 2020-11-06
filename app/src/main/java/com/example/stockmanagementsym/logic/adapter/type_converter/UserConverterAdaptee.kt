@@ -10,7 +10,8 @@ import com.example.stockmanagementsym.logic.business.User
 class UserConverterAdaptee {
 
     fun getUserToString(user: User): String {
-        return  MESSAGES.STRING_NAME+user.getName()+ CONSTANTS.STRING_NEW_LINE+
+        return  MESSAGES.STRING_IDENTIFICATION+user.getUserIdentification()+ CONSTANTS.STRING_NEW_LINE+
+                MESSAGES.STRING_NAME+user.getName()+ CONSTANTS.STRING_NEW_LINE+
                 MESSAGES.STRING_PRIVILEGE+user.getPrivilege()
     }
 }

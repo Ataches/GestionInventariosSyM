@@ -8,7 +8,7 @@ object MESSAGES {
     private lateinit var context: Context
 
     lateinit var STRING_PRIVILEGE:String
-
+    lateinit var STRING_IDENTIFICATION:String
     lateinit var STRING_NAME:String
     lateinit var STRING_ADDRESS:String
     lateinit var STRING_PHONE:String
@@ -32,7 +32,7 @@ object MESSAGES {
 
     private fun loadStrings() {
         STRING_PRIVILEGE = context.getString(R.string.userPrivilege)
-
+        STRING_IDENTIFICATION = context.getString(R.string.identification)
         STRING_NAME = context.getString(R.string.name)
         STRING_ADDRESS = context.getString(R.string.address)
         STRING_PHONE = context.getString(R.string.phone)

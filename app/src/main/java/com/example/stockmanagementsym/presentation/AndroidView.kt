@@ -29,6 +29,7 @@ import java.util.*
  */
 class AndroidView(private val androidModel: AndroidModel) {
 
+    private var booleanNewProductREST: Boolean = false
     private lateinit var androidActivityResult: AndroidActivityResult
     private var newUserImageView: ImageView? = null
     private var newProductImageView: ImageView? = null
@@ -105,7 +106,7 @@ class AndroidView(private val androidModel: AndroidModel) {
         Product
      */
     fun registerProduct(view: View) {
-        getDialogView().dialogRegisterProduct(view, getBooleanUpdate())
+        getDialogView().dialogRegisterProduct(view, getBooleanUpdate(), getBooleanNewProductREST())
     }
 
     fun createProduct(product: Product) {
@@ -146,14 +147,10 @@ class AndroidView(private val androidModel: AndroidModel) {
 
     fun updateProduct(product: Product, booleanUpdate: Boolean) {
         productToEdit = product
+        if(product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT)
+            booleanNewProductREST = true
         this.booleanUpdate = booleanUpdate
         goToNewProduct()
-    }
-
-    fun getStringBitMapProductToEdit(): String {
-        if(productToEdit==null)
-            return CONSTANTS.STRING_VOID_ELEMENT
-        return productToEdit!!.getStringBitMap()
     }
 
     private fun goToNewProduct() {
@@ -167,6 +164,12 @@ class AndroidView(private val androidModel: AndroidModel) {
     }
     fun getBooleanUpdate():Boolean{
         return booleanUpdate
+    }
+    fun setBooleanNewProductREST(booleanUpdate: Boolean) {
+        this.booleanUpdate = booleanUpdate
+    }
+    fun getBooleanNewProductREST():Boolean{
+        return booleanNewProductREST
     }
 
     fun confirmNewProduct(product: Product) {
@@ -321,7 +324,7 @@ class AndroidView(private val androidModel: AndroidModel) {
     /*
         User
      */
-    fun getUserNae(): String {
+    fun getUserName(): String {
         return androidModel.getUserName()
     }
 
@@ -350,12 +353,12 @@ class AndroidView(private val androidModel: AndroidModel) {
     fun goNewUserToUserList() {
         when (context) {
             is MainActivity -> getAndroidController().goFromNewUserToUserList()
-            is LoginActivity -> androidModel.goFromNewUserToLogin()
+            is LoginActivity -> goBackFromNewUser()
         }
     }
 
-    fun goFromNewUserToLogin() {
-        androidModel.goFromNewUserToLogin()
+    fun goBackFromNewUser() {
+        androidModel.goBackFromNewUser()
     }
 
     fun getUserLatitude(): Double {

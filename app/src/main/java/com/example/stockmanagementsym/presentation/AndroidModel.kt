@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.example.stockmanagementsym.ILauncher
 import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
@@ -35,6 +36,7 @@ import org.jetbrains.anko.uiThread
 
 class AndroidModel {
 
+    private lateinit var iLauncher: ILauncher
     private var adapterClient: AdapterClient? = null
     private var userListManager: IListManager? = null
     private var productListManager: IListManager? = null
@@ -44,7 +46,7 @@ class AndroidModel {
     private var userLatitude: Double = -1.0
 
     private var userLongitude: Double = -1.0
-    private lateinit var dataBaseLogic: DataBaseLogic
+    private var dataBaseLogic: DataBaseLogic ?= null
 
     private var androidView: AndroidView? = null
 
@@ -85,12 +87,13 @@ class AndroidModel {
     }
 
     fun createUser(user: User) {
+        notifyUserLogic(null) // If you register a new user in login, to notify the user the transaction success is necessary start the android notifier with this function
         //if (getUserPrivileges() == "admin")
             getUserLogic().insert(user)
     }
 
     fun deleteUser(user: User) {
-        if (getUserPrivileges() == "admin") {
+        if (getUserPrivileges() == CONSTANTS.USER_PRIVILEGE_ADMIN) {
             getUserLogic().delete(user)
         }
     }
@@ -159,7 +162,6 @@ class AndroidModel {
 
     fun getNewSale(): Sale? {
         if ((newSaleDate == null) || (newSaleCustomer == null)) {
-            showToastMessage(getAndroidView().getString(R.string.emptyData))
             return null
         }
         if (newSale == null)
@@ -283,9 +285,7 @@ class AndroidModel {
      *  this method is only called when user do a register to BD.
      */
     fun getStringFromBitMap(): String {
-        if (getAndroidView().getStringBitMapProductToEdit() != CONSTANTS.STRING_VOID_ELEMENT) // If the user is editing a product this line will get the product to edit string bit map
-            return getAndroidView().getStringBitMapProductToEdit()
-        if (bitMap == null)
+        if (bitMap == null && !getAndroidView().getBooleanUpdate())
             return CONSTANTS.STRING_VOID_ELEMENT
         val stringEncoded = getAdapterClient().encoderBitMapToString(bitMap!!)
         stringBitmap = stringEncoded
@@ -325,14 +325,14 @@ class AndroidModel {
                 if (userLogic == null) {
                     userLogic = listFactory.createUserList()
                     userLogic!!.setListManager(listManager(ListManagerInstances.UserList))
-                    userLogic!!.setUserDao(dataBaseLogic.getUserDao())
+                    userLogic!!.setUserDao(getDataBaseInstance().getUserDao())
                 }
                 userLogic!!
             }
             LogicAbstractionNames.Customer -> {
                 if (customerLogic == null) {
                     customerLogic = listFactory.createCustomerList()
-                    customerLogic!!.setCustomerDao(dataBaseLogic.getCustomerDao())
+                    customerLogic!!.setCustomerDao(getDataBaseInstance().getCustomerDao())
                     customerLogic!!.setListManager(listManager(ListManagerInstances.CustomerList))
                 }
                 customerLogic!!
@@ -340,7 +340,7 @@ class AndroidModel {
             LogicAbstractionNames.Sale -> {
                 if (saleLogic == null) {
                     saleLogic = listFactory.createSaleList()
-                    saleLogic!!.setSaleDao(dataBaseLogic.getSaleDao())
+                    saleLogic!!.setSaleDao(getDataBaseInstance().getSaleDao())
                     saleLogic!!.setListManager(listManager(ListManagerInstances.SaleList))
                 }
                 saleLogic!!
@@ -348,7 +348,7 @@ class AndroidModel {
             LogicAbstractionNames.Product -> {
                 if (productLogic == null) {
                     productLogic = listFactory.createProductList()
-                    productLogic!!.setProductDao(dataBaseLogic.getProductDao())
+                    productLogic!!.setProductDao(getDataBaseInstance().getProductDao())
                     productLogic!!.setListManager(listManager(ListManagerInstances.ProductList))
                 }
                 productLogic!!
@@ -397,6 +397,11 @@ class AndroidModel {
         return adapterClient!!
     }
 
+    private fun getDataBaseInstance(): DataBaseLogic {
+        if(dataBaseLogic==null)
+            dataBaseLogic = ViewModelProvider(getAndroidView().getContext() as ViewModelStoreOwner).get(DataBaseLogic::class.java)
+        return dataBaseLogic!!
+    }
     /**
      * List manager method, returns a LisManager created in a factory method.
      * With de list ID makes a list manager that allows to notify or reload lists.
@@ -469,14 +474,12 @@ class AndroidModel {
     }
 
     internal fun confirmLogin(userName: String, password: String) {
-        dataBaseLogic = ViewModelProvider(getAndroidView().getContext() as ViewModelStoreOwner).get(DataBaseLogic::class.java)
-        val androidModel = this
+        getDataBaseInstance()
         doAsyncResult {
             getUserLogic().confirmLogin(userName, password)
             uiThread {
-                if (getUser().getName() != CONSTANTS.STRING_VOID_ELEMENT) {
+                if (getUser().getUserIdentification() != CONSTANTS.STRING_VOID_ELEMENT) {
                     getAndroidView().showToastMessage(getAndroidView().getString(R.string.welcome) + " " + getUser().getName())
-                    goFromNewUserToLogin()
 
                     userLatitude = getUser().getLatitude()
                     userLongitude = getUser().getLongitude()
@@ -492,24 +495,32 @@ class AndroidModel {
                 } else {
                     user = null // Allows to user to try again inserting a new user and password
                     getAndroidView().showToastMessage("Usuario $userName no encontrado o contraseña incorrecta")
+                    iLauncher.goBackFromNewUser()
                 }
             }
         }
     }
+    fun setILauncher(iLauncher: ILauncher) {
+        this.iLauncher = iLauncher
+    }
+    fun goBackFromNewUser(){
+        iLauncher.goBackFromNewUser()
+    }
 
-    internal fun register(userName: String, password: String) {
-        dataBaseLogic = ViewModelProvider(getAndroidView().getContext() as ViewModelStoreOwner).get(DataBaseLogic::class.java)
+    internal fun register(userIdentification:String,userName: String, password: String) {
+        notifyUserLogic(null) // To start user logic and start android notifier in user logic. List listener don't needed
         getUserLogic().insert(
                 User(
+                        userIdentification,
                         userName,
                         password,
-                        "admin",
+                        CONSTANTS.USER_PRIVILEGE_ADMIN,
                         googleAccount?.photoUrl.toString(),
                         CONSTANTS.DEFAULT_USER_LATITUDE,
                         CONSTANTS.DEFAULT_USER_LONGITUDE
                 )
         )
-        goFromNewUserToLogin()
+        iLauncher.goBackFromNewUser()
     }
 
     fun showMessageLoginFail() {
@@ -518,18 +529,13 @@ class AndroidModel {
 
     fun goFromLoginToNewUser(login: LoginActivity) {
         doAsyncResult {
-            dataBaseLogic = ViewModelProvider(login).get(DataBaseLogic::class.java)
+            getDataBaseInstance()
         }
         getAndroidView().showToastMessage(login.getString(R.string.redirectingToNewUser))
         val transaction = login.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.login_container, NewUserFragment())
         transaction.commit()
         getAndroidView().setAndroidActivityResult(login.getAndroidActivityResult())
-    }
-
-    fun goFromNewUserToLogin() {
-        val login = getAndroidView().getContext() as LoginActivity
-        login.goBackFromNewUser()
     }
 
     fun askSaveLocation() {

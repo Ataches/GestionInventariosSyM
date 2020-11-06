@@ -1,7 +1,5 @@
 package com.example.stockmanagementsym.presentation
 
-import android.app.Activity
-import android.util.Log
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -58,8 +56,7 @@ class AndroidController(private val androidView: AndroidView): View.OnClickListe
                 if(navController!=null)
                     getNavController().navigate(R.id.action_newUserFragment_to_home)
                 else{
-                    androidView.goFromNewUserToLogin()
-                    Log.d("TEST",""+view+view.context+view.context as Activity)
+                    androidView.goBackFromNewUser()
                 }
             }
         }

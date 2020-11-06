@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="20dp"
-            android:text="@string/textViewUser"
+            android:text="@string/userIdentificationLogin"
             android:textColor="@color/tittleColor"
             android:textSize="18sp" />
 
@@ -47,8 +47,8 @@
             android:layout_gravity="start"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
-            android:hint="@string/nameHint"
-            android:inputType="text"
+            android:hint="@string/userIdentificationHint"
+            android:inputType="textEmailAddress"
             android:textColor="@color/subtitleColor" />
 
         <TextView
@@ -82,15 +82,15 @@
 
         <Button
             android:id="@+id/buttonLogin"
-            android:layout_width="169dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="start"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_button"
             android:drawableStart="@drawable/ic_login"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
+            android:padding="8dp"
+            android:drawablePadding="14dp"
             android:text="@string/buttonLogin"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
@@ -102,6 +102,7 @@
             android:layout_gravity="start"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
+            android:drawablePadding="8dp"
             android:background="@drawable/rounded_button"
             android:drawableStart="@drawable/ic_login"
             android:paddingStart="14dp"

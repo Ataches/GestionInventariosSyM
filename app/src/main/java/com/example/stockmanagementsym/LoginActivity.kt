@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity(), ILauncher {
         setContentView(R.layout.activity_login)
         androidModel = AndroidModel()
         androidModel.setContext(this) // Needed to show messages to the user
+        androidModel.setILauncher(this) // To go back from user registration
 
         /**
          * Normal login.
@@ -57,7 +58,6 @@ class LoginActivity : AppCompatActivity(), ILauncher {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("TEST","REQ "+requestCode)
         getAndroidActivityResult().onActivityResult(requestCode, resultCode, data)
     }
 
@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity(), ILauncher {
         }
     }
 
-    fun goBackFromNewUser() {
+    override fun goBackFromNewUser() {
         login_container.visibility = View.GONE
         showLoading(false)
     }

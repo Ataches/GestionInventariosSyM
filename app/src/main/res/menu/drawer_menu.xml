@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/home"
+        android:icon="@drawable/ic_home"
         android:title="@string/home"/>
     <item android:id="@+id/shopFragment"
+        android:icon="@drawable/ic_store"
         android:title="@string/shopFragment"/>
     <item android:id="@+id/customerListFragment"
+        android:icon="@drawable/ic_person"
         android:title="@string/customerList"/>
     <item android:id="@+id/saleList"
+        android:icon="@drawable/ic_done"
         android:title="@string/saleList"/>
     <item android:id="@+id/userFragment"
+        android:icon="@drawable/ic_list"
         android:title="@string/userList"/>
     <item android:id="@+id/locationFragment"
+        android:icon="@drawable/ic_search"
         android:title="@string/location"/>
     <item android:id="@+id/buttonLogOut"
+        android:icon="@drawable/ic_remove"
         android:title="@string/logOut"
         android:onClick="askSaveLocation"/>
 </menu>

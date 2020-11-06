@@ -41,14 +41,26 @@ class DialogView(private var androidView: AndroidView) {
     fun dialogRegisterUser(viewElement: View) {
         view = viewElement
         val newUserFragment: NewUserFragment = viewElement.findFragment()
+
+        val userIdentification = newUserFragment.editTextUserIdentification.text.toString()
+        val userName = newUserFragment.editTextUserName.text.toString()
+        val password = newUserFragment.editTextPassword.text.toString()
+        val privilege = newUserFragment.editTextPrivilege.selectedItem.toString()
+
+        if(userIdentification.isEmpty()||password.isEmpty()||privilege.isEmpty()){
+            androidView.showToastMessage(R.string.emptyData)
+            return
+        }
+
         val user =
                 try{
                     User(
-                        newUserFragment.editTextUserName.text.toString(),
-                        newUserFragment.editTextPassword.text.toString(),
-                        newUserFragment.editTextPrivilege.text.toString(),
+                        userIdentification,
+                        userName,
+                        password,
+                        privilege,
                         androidView.getStringFromBitMap(),
-                        CONSTANTS.DEFAULT_USER_LATITUDE, CONSTANTS.DEFAULT_USER_LONGITUDE,
+                        CONSTANTS.DEFAULT_USER_LATITUDE, CONSTANTS.DEFAULT_USER_LONGITUDE
                     )
                 } catch (e: Exception) {
                     androidView.showToastMessage(R.string.emptyData)
@@ -100,13 +112,16 @@ class DialogView(private var androidView: AndroidView) {
         }
         view.buttonNewSale.setOnClickListener {
             val newSale = androidView.getNewSale()
-            if (newSale != null)
+            if (newSale != null){
                 dialogConfirmRegister(
-                    data = newSale,
-                    title = R.string.titleAlertNewSaleBd,
-                    message = R.string.messageAlertNewSale
+                        data = newSale,
+                        title = R.string.titleAlertNewSaleBd,
+                        message = R.string.messageAlertNewSale
                 )
-            dialog.dismiss()
+                dialog.dismiss()
+            }
+            else
+                androidView.showToastMessage(R.string.emptyData)
         }
         view.buttonNewSaleCancel.setOnClickListener {
             dialog.dismiss()
@@ -179,30 +194,38 @@ class DialogView(private var androidView: AndroidView) {
     }
 
     //New product - Search fragment data and obtains it's information, after asks to create or update product
-    fun dialogRegisterProduct(viewElement: View, updateBoolean: Boolean){
+    fun dialogRegisterProduct(viewElement: View, updateBoolean: Boolean, booleanNewProductREST: Boolean){
         view = viewElement
         val newProductFragment:NewProductFragment = view.findFragment()
+
+        val productName = newProductFragment.editTextProductName.text.toString()
+        val productPrice = newProductFragment.editTextProductPrice.text.toString()
+        val productQuantity = newProductFragment.editTextProductQuantity.text.toString()
+
+        if(productName.isEmpty() || productPrice.isEmpty() || productQuantity.isEmpty()){
+            androidView.showToastMessage(R.string.emptyData)
+            return
+        }
+
         val product =
                 try{
                     Product(
-                            newProductFragment.editTextProductName.text.toString(),
-                            newProductFragment.editTextProductPrice.text.toString().toDouble(),
+                            productName,
+                            productPrice.toDouble(),
                             newProductFragment.editTextProductDesc.text.toString(),
-                            newProductFragment.editTextProductQuantity.text.toString().toInt(),
+                            productQuantity.toInt(),
                             androidView.getStringFromBitMap()
                     )
                 } catch (e: Exception) {
                     androidView.showToastMessage(R.string.emptyData)
                 }
-        androidView.setBitMap(null) //Photo already saved in product data
         androidView.goToProductList()
-        if (updateBoolean) {
+        if (updateBoolean && !booleanNewProductREST) {
             dialogConfirmRegister(
                 product,
                 R.string.titleAlertUpdateProd,
                 R.string.messageAlertUpdateProd
             )
-            androidView.setBooleanUpdate(false)
         } else {
             dialogConfirmRegister(
                 product,
@@ -222,8 +245,18 @@ class DialogView(private var androidView: AndroidView) {
 
         builder.setPositiveButton("Si") { _, _ ->
             when (title) {
-                R.string.titleAlertNewProd -> androidView.createProduct(data as Product)
-                R.string.titleAlertUpdateProd -> androidView.updateProduct(data as Product)
+                R.string.titleAlertNewProd -> {
+                    androidView.createProduct(data as Product)
+                    androidView.setBooleanUpdate(false)
+                    androidView.setBooleanNewProductREST(false)
+                    androidView.setBitMap(null) // If user update or register products or users is needed to remove the picture
+                }
+                R.string.titleAlertUpdateProd -> {
+                    androidView.updateProduct(data as Product)
+                    androidView.setBooleanUpdate(false)
+                    androidView.setBooleanNewProductREST(false)
+                    androidView.setBitMap(null) // If user update or register products or users is needed to remove the picture
+                }
                 R.string.titleAlertDeleteProd -> androidView.deleteProduct(data as Product)
 
                 (R.string.titleAlertNewSale) -> {
@@ -264,8 +297,6 @@ class DialogView(private var androidView: AndroidView) {
             }
         }
         builder.setNegativeButton("No") { _, _ ->
-            androidView.setBooleanUpdate(false)
-            androidView.setBitMap(null) // If user cancel the update of products or users is needed to remove the picture
             when (title) {
                 (R.string.location) -> androidView.askLogOut()
 

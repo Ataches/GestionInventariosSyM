@@ -8,6 +8,7 @@ import com.example.stockmanagementsym.data.CONSTANTS
 
 @Entity
 class User(
+    private var userIdentification:String,
     private var name: String,
     private var password: String,
     private var privilege: String,
@@ -18,6 +19,10 @@ class User(
     @PrimaryKey(autoGenerate = true)
     @NonNull @ColumnInfo(name = "id_user")
     var idSale:Long = CONSTANTS.ID_PRODUCT_DEFAULT
+
+    fun getUserIdentification():String{
+        return userIdentification
+    }
 
     fun getName():String{
         return name

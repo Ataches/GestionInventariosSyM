@@ -30,7 +30,9 @@ class ShopFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewShop.adapter?.notifyDataSetChanged()
+        tabsShop.setupWithViewPager(viewShop)
+        viewShop.adapter = ShopPagerAdapter(parentFragmentManager)
     }
+
 
 }

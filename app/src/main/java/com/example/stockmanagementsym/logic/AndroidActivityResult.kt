@@ -32,7 +32,6 @@ class AndroidActivityResult(private val activity:Activity, private val context: 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val newUserImageView: ImageView? = FragmentData.getNewUserImageView()
         val newProductImageView: ImageView? = FragmentData.getNewProductFragmentView()
-        Log.d("TEST","REQ "+requestCode)
 
         if (requestCode == CONSTANTS.CAMERA_INTENT_CODE && resultCode == RESULT_OK) {
             if (newProductImageView != null)
@@ -82,12 +81,11 @@ class AndroidActivityResult(private val activity:Activity, private val context: 
             account = task.result
             androidModel.setGoogleAccount(account!!)
             androidModel.setGoogleSingInClient(googleSignInClient)
-            Log.d("TEST","REQ "+requestCode+" user "+account!!.displayName)
             if (requestCode == CONSTANTS.GOOGLE_USER_LOGIN_INTENT_CODE) {
                 androidModel.confirmLogin(account!!.displayName.toString(), account!!.id.toString())
             }
             if (requestCode == CONSTANTS.GOOGLE_USER_REGISTER_INTENT_CODE)
-                androidModel.register(account!!.displayName.toString(), account!!.id.toString())
+                androidModel.register(account!!.email.toString(),account!!.displayName.toString(), account!!.id.toString())
         } catch (e: Exception) {
             androidModel.showMessageLoginFail()
         }

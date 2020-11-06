@@ -5,6 +5,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutUserHome"
         android:background="@color/buttonPrimary"
@@ -42,6 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -50,17 +52,22 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@string/shopFragment"
+        android:paddingVertical="90dp"
+        android:drawableBottom="@drawable/ic_store"
         app:layout_constraintTop_toBottomOf="@id/constraintLayoutUserHome"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonHomeToCustomersList"
         app:layout_constraintBottom_toTopOf="@+id/buttonHomeToSaleList"
         />
+
     <Button
         android:id="@+id/buttonHomeToCustomersList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/design_default_color_background"
         android:text="@string/customerList"
+        android:paddingVertical="90dp"
+        android:drawableBottom="@drawable/ic_person"
         app:layout_constraintTop_toBottomOf="@id/constraintLayoutUserHome"
         app:layout_constraintStart_toEndOf="@+id/buttonHomeToShop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,6 +80,8 @@
         android:layout_height="0dp"
         android:background="@color/design_default_color_background"
         android:text="@string/saleList"
+        android:paddingVertical="90dp"
+        android:drawableBottom="@drawable/ic_done"
         app:layout_constraintTop_toBottomOf="@id/buttonHomeToShop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonHomeToUserList"
@@ -84,11 +93,12 @@
         android:layout_height="0dp"
         android:background="@color/buttonSecondaryLight"
         android:text="@string/userList"
+        android:paddingVertical="90dp"
+        android:drawableBottom="@drawable/ic_list"
         app:layout_constraintTop_toBottomOf="@id/buttonHomeToShop"
         app:layout_constraintStart_toEndOf="@+id/buttonHomeToSaleList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

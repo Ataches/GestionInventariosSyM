@@ -5,7 +5,7 @@
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_margin="10dp"
-    android:layout_height="600dp"
+    android:layout_height="wrap_content"
     >
     <TextView
         android:id="@+id/textViewTitleSale"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="@string/selectCustomer"
         android:layout_marginTop="10dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitleSale"
@@ -34,6 +34,7 @@
     <Button
         android:id="@+id/buttonSelectCustomerName"
         android:text="@string/saleCustomerName"
+        android:background="@color/buttonSecondaryLight"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         app:layout_constraintEnd_toStartOf="@+id/buttonNewCustomer"
@@ -44,17 +45,14 @@
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent=".42"
-
         />
 
     <Button
         android:id="@+id/buttonNewCustomer"
         android:text="@string/createCustomer"
+        android:background="@color/buttonSecondaryLight"
         android:layout_marginBottom="10dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonSelectCustomerName"
@@ -63,17 +61,13 @@
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent=".42"
-
         />
 
     <TextView
         android:id="@+id/textViewSaleCustomerNameSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/customerNotSelected"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/selectDate"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewSaleCustomerNameSelected"
@@ -98,6 +92,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/selectDate"
+        android:background="@color/buttonSecondaryLight"
+        android:padding="8dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewDateSelected"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,21 +105,24 @@
         android:id="@+id/textViewDateSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/dateNotSelected"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/buttonNewSale"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNewSale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonDate" />
 
     <Button
         android:id="@+id/buttonNewSale"
-        android:layout_width="180dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_add_quantity"
+        android:drawablePadding="15dp"
+        android:padding="10dp"
         android:text="@string/createSale"
-        android:layout_marginBottom="20dp"
+        android:background="@color/buttonSecondaryLight"
+        android:layout_marginBottom="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewDateSelected"
         app:layout_constraintBottom_toTopOf="@+id/buttonNewSaleCancel"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,7 +132,8 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="@string/cancel"
-        android:layout_marginBottom="70dp"
+        android:background="@color/buttonSecondaryLight"
+        android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@+id/buttonNewSale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

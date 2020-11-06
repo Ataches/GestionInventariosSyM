@@ -23,10 +23,15 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             R.drawable.ic_image
         )
 
-        if (product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT)  //If the id product has a default ID means that comes from REST search
+        if (product.idProduct == CONSTANTS.ID_PRODUCT_DEFAULT) {  //If the id product has a default ID means that comes from REST search
             itemView.constraintLayoutCard.setBackgroundResource(R.color.buttonSecondary) // The product frame changes the color to show to the user the product from REST search
-        else
+            itemView.buttonDeleteProduct.visibility = View.INVISIBLE
+            itemView.buttonCloud.visibility = View.VISIBLE
+        }else{
+            itemView.buttonDeleteProduct.visibility = View.VISIBLE
+            itemView.buttonCloud.visibility = View.GONE
             itemView.constraintLayoutCard.setBackgroundResource(R.color.cardBackground)
+        }
 
         itemView.buttonAddProductToCart.setOnClickListener {
             if (product.idProduct != CONSTANTS.ID_PRODUCT_DEFAULT) {   //If the id product has a default ID means that comes from REST
@@ -43,7 +48,7 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             FragmentData.updateProduct(product, true)
         }
         itemView.buttonDeleteProduct.setOnClickListener {
-            FragmentData.askDeleteProduct(product)
+             FragmentData.askDeleteProduct(product)
         }
     }
 }

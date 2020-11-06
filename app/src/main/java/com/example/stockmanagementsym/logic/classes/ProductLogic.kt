@@ -22,6 +22,7 @@ class ProductLogic : AbstractListLogic() {
             uiThread {
                 iListManager?.reloadList(elementList.toMutableList())
                 iCart.setProductList(elementList)
+                elementList.addAll(getRESTLogic().getProductList())
             }
         }
 

@@ -3,7 +3,7 @@
     <string name="title">Gestion inventarios SyM</string>
 
     <!-- Login -->
-    <string name="textViewUser">Usuario:</string>
+    <string name="userIdentificationLogin">Correo o identificación: </string>
     <string name="textViewPass">Contraseña:</string>
     <string name="buttonLogin">Iniciar sesión</string>
 
@@ -47,7 +47,7 @@
     <string name="titleAlertNewSale">Registrar nueva venta</string>
     <string name="messageAlertNewSale">¿Desea reistrar una nueva venta con los siguientes productos?:</string>
     <string name="saleCustomerName">Seleccionar cliente</string>
-    <string name="saleDate">Fecha de compra:</string>
+    <string name="saleDate">Fecha de compra</string>
     <string name="elementAddedToCart">Producto añadido al carrito</string>
     <string name="elementNotAddedToCart">Producto no añadido al carrito</string>
 
@@ -70,7 +70,7 @@
     <string name="createUser">Crear usuario</string>
 
     <string name="capturePhoto">Capturar foto</string>
-    <string name="getPhotoFromGallery">Foto desde galería</string>
+    <string name="getPhotoFromGallery">Foto de galería</string>
     <string name="userList">Listado de usuarios</string>
 
     <string name="shopFragment">Tienda</string>
@@ -105,7 +105,8 @@
     <!--Alerts-->
     <string name="titleAlertDeleteProd">Eliminar producto</string>
     <string name="messageAlertDeleteProd">¿Desea eliminar el siguiente producto?</string>
-    <string name="messageProductListRestAdded">Lista de productos REST añadida, los items con borde azul no estan en la BD, si los desea agregar en la BD o editar para su registro puede hacerlo</string>
+    <string name="messageProductListRestAdded">Lista de productos REST añadida, los items con borde azul e icono con una nube no
+        estan en la BD, si los desea agregar en la BD o editar para su registro puede hacerlo</string>
     <string name="titleProductListRestAdded">Listado de productos REST</string>
     <string name="messageUserRegistered">Usuario registrado, inicie sesión</string>
     <string name="titleUserRegistered">Registro</string>
@@ -138,9 +139,18 @@
     <string name="redirectingToNewUser">Redirigiendo a crear un nuevo usuario</string>
 
     <!--Messages to adapters or user-->
-    <string name="name">Nombre: </string>
-    <string name="userPrivilege">Privilegio: </string>
+    <string name="name">"Nombre: "</string>
+    <string name="userPrivilege">"Privilegio: "</string>
     <string name="registerUserBD">Opción 2: Registro en BD</string>
     <string name="registerUserGoogle">Opción 1: Registro con Google</string>
+    <string name="userIdentification">Correo o identificación, para el inicio de sesión</string>
+    <string name="userIdentificationHint">Ej: correo@mail.com o 1292812321</string>
+    <string name="identification">"Identificación: "</string>
+
+    <!--New user spinner-->
+    <string-array name="users_list">
+        <item>Admin</item>
+        <item>User</item>
+    </string-array>
 
 </resources>

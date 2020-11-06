@@ -11,6 +11,7 @@ import com.example.stockmanagementsym.logic.business.Product
 import com.example.stockmanagementsym.presentation.adapter.ProductListAdapter
 import kotlinx.android.synthetic.main.fragment_customer_list.view.*
 import kotlinx.android.synthetic.main.fragment_product_list.view.*
+import kotlinx.android.synthetic.main.fragment_shop.*
 
 
 /**
@@ -41,6 +42,11 @@ class ProductListFragment : Fragment(), IListListener {
             FragmentData.setControllerOnClickListener(it)
         }
         view.buttonProductListToNewProduct.setOnClickListener(FragmentData.getController())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 
     override fun reloadList(mutableList: MutableList<Any>) {

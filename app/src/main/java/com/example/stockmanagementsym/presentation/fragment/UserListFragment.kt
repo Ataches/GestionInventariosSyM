@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stockmanagementsym.R
+import com.example.stockmanagementsym.data.CONSTANTS
 import com.example.stockmanagementsym.logic.business.User
 import com.example.stockmanagementsym.presentation.adapter.UserListAdapter
 import kotlinx.android.synthetic.main.fragment_user.view.*
@@ -22,7 +23,7 @@ class UserListFragment : Fragment(), IListListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_user, container, false)
-        if (FragmentData.getUserPrivilege() != "admin") {
+        if (FragmentData.getUserPrivilege() != CONSTANTS.USER_PRIVILEGE_ADMIN) {
             view.buttonUserListToCreateUser.visibility = View.GONE
             view.buttonUserListToCreateUser.isEnabled = false
             view.buttonUserListToCreateUser.isClickable = false

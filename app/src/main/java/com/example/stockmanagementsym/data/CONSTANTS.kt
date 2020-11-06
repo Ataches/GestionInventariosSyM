@@ -1,6 +1,9 @@
 package com.example.stockmanagementsym.data
 
 object CONSTANTS {
+
+    const val USER_PRIVILEGE_ADMIN = "Admin"
+
     const val GOOGLE_USER_LOGIN_INTENT_CODE:Int = 50
     const val GOOGLE_USER_REGISTER_INTENT_CODE:Int = 51
     const val LOCATION_INTENT_CODE = 102
