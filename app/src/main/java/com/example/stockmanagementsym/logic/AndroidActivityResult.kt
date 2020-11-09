@@ -65,7 +65,7 @@ class AndroidActivityResult(private val activity:Activity, private val context: 
         imageView?.setImageURI(imageUri)
         imageView?.visibility = View.VISIBLE
 
-        val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Check android version to decode the image
             ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, imageUri!!))
         } else {
             MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
