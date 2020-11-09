@@ -10,6 +10,7 @@ import com.example.stockmanagementsym.LoginActivity
 import com.example.stockmanagementsym.MainActivity
 import com.example.stockmanagementsym.R
 import com.example.stockmanagementsym.data.CONSTANTS
+import com.example.stockmanagementsym.data.MESSAGES
 import com.example.stockmanagementsym.logic.adapter.AdapterClient
 import com.example.stockmanagementsym.logic.CartLogicFactory
 import com.example.stockmanagementsym.logic.DataBaseLogic
@@ -34,6 +35,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.uiThread
 
+/**
+ * Created by Juan Sebastian Sanchez Mancilla on 30/10/2020
+ * Class to control the logic classes and send results to the view
+ */
 class AndroidModel {
 
     private lateinit var iLauncher: ILauncher
@@ -93,7 +98,7 @@ class AndroidModel {
     }
 
     fun deleteUser(user: User) {
-        if (getUserPrivileges() == CONSTANTS.USER_PRIVILEGE_ADMIN) {
+        if (getUserPrivileges() == CONSTANTS.USER_PRIVILEGE_ADMIN) { // Only an admin can delete user data
             getUserLogic().delete(user)
         }
     }
@@ -140,7 +145,7 @@ class AndroidModel {
     }
 
     //Sale
-    fun insertSale() {
+    fun insertSale() { // Method to register new sale data in data base and remove the data showed to the user view
         val saleNew = getNewSale()
         if (saleNew == null) {
             showToastMessage(getAndroidView().getString(R.string.emptyData))
@@ -183,9 +188,9 @@ class AndroidModel {
 
     fun getSaleToString(sale: Sale): String {
         getAdapterClient().setBooleanStringToUser(true)
-        return "Fecha: " + sale.getDate() + "\n\n" +
-                "Cliente: \n\n" + getCustomerToString(sale.getCustomer()) + "\n\n" +
-                "Listado de productos: \n\n" + getAdapterClient().productListToString(sale.getProductList())
+        return MESSAGES.STRING_DATE + sale.getDate() + "\n\n" +
+                MESSAGES.STRING_USER_CUSTOMER+ "\n\n" + getCustomerToString(sale.getCustomer()) + "\n\n" +
+                MESSAGES.STRING_PRODUCT_LIST+ "\n\n" + getAdapterClient().productListToString(sale.getProductList())
     }
 
     //Cart
@@ -196,15 +201,6 @@ class AndroidModel {
     fun getTotalPriceCart(): String {
         return getCartLogic().getTotalPrice()
     }
-
-    private fun getCartLogic(): AbstractCartLogic {
-        if (cartLogic == null) {
-            cartLogic = cartFactory.createCartList()
-            cartLogic!!.setListManager(listManager(ListManagerInstances.CartList))
-        }
-        return cartLogic!!
-    }
-
 
     fun getCartListToString(mutableList: MutableList<Product>): String {
         getAdapterClient().setBooleanStringToUser(true)
@@ -358,8 +354,7 @@ class AndroidModel {
 
     /**
      * Logic classes, they do the transactions with the database and have the logic of each fragment
-     * Needs a corresponding dao to get transactions from BD.
-     * Need a list manager who notifies the changes to the view and the result of transactions.
+     * They are made in an abstract factory
      */
     private fun getUserLogic(): AbstractListLogic {
         if (userLogic == null)
@@ -385,6 +380,21 @@ class AndroidModel {
         return productLogic!!
     }
 
+    /**
+     * Creates a cart object logic from a cart factory, puts an list manager.
+     * List manager who will receive a notifier class and list listener to notify the user
+     */
+    private fun getCartLogic(): AbstractCartLogic {
+        if (cartLogic == null) {
+            cartLogic = cartFactory.createCartList()
+            cartLogic!!.setListManager(listManager(ListManagerInstances.CartList))
+        }
+        return cartLogic!!
+    }
+
+    /**
+     * To communicate the user needs an android view instance
+     */
     private fun getAndroidView(): AndroidView {
         if (androidView == null)
             androidView = AndroidView(this)

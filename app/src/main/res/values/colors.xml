@@ -14,4 +14,5 @@
     <color name="buttonSecondary">#DBE9EE</color>
     <color name="buttonSecondaryLight">#F1F7F8</color>
     <color name="cardBackground">#f5f5f5</color>
+    <color name="white">#ffffff</color>
 </resources>

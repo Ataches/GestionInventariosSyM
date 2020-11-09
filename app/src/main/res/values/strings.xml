@@ -9,7 +9,6 @@
 
     <!-- Fragment home -->
     <string name="welcome">Bienvenid@</string>
-    <string name="productList">Listado de productos y registro de ventas</string>
     <string name="saleList">Ventas registradas</string>
     <string name="customerList">Listado clientes</string>
 
@@ -34,6 +33,7 @@
 
     <!-- Customer -->
     <string name="customer">Cliente</string>
+    <string name="userCustomer">"Cliente :"</string>
     <string name="customerName">Nombre del cliente: </string>
     <string name="nameHint">Ejemplo: Carlos Perez</string>
     <string name="address">Dirección: </string>
@@ -63,7 +63,7 @@
     <!-- Dialogs/new_sale-->
     <string name="selectCustomer">Seleccione el cliente para la venta</string>
     <string name="customerNotSelected">No se ha seleccionado cliente para la venta</string>
-    <string name="date">Fecha</string>
+    <string name="date">"Fecha: "</string>
     <string name="selectDate">Seleccionar fecha</string>
     <string name="dateNotSelected">No se ha seleccionado fecha de venta</string>
     <string name="titleAlertNewSaleBd">Registrar nueva venta en la base de datos</string>
@@ -146,6 +146,7 @@
     <string name="userIdentification">Correo o identificación, para el inicio de sesión</string>
     <string name="userIdentificationHint">Ej: correo@mail.com o 1292812321</string>
     <string name="identification">"Identificación: "</string>
+    <string name="productList">"Listado de productos: "</string>
 
     <!--New user spinner-->
     <string-array name="users_list">
