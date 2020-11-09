@@ -56,6 +56,9 @@ class LoginActivity : AppCompatActivity(), ILauncher {
         }
     }
 
+    /**
+     * On activity result calls another class that do this task
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         getAndroidActivityResult().onActivityResult(requestCode, resultCode, data)
